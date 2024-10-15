@@ -19,15 +19,15 @@
         <el-menu router :default-active="$route.path" background-color="#545c64" text-color="#fff"
           active-text-color="#ffd04b" unique-opened>
           <!-- <RouterLink to="/index/home" active-class="btn">首页</RouterLink> -->
-          <el-menu-item index="/index/home">
+          <el-menu-item index="/adminIndex/home">
             <i class="el-icon-s-home"></i>
             <span slot="title">首页</span>
           </el-menu-item>
-          <el-menu-item index="/index/orders">
+          <el-menu-item index="/adminIndex/orders">
             <i class="el-icon-s-order"></i>
             <span slot="title">订单管理</span>
           </el-menu-item>
-          <el-menu-item index="/index/users">
+          <el-menu-item index="/adminIndex/users">
             <i class="el-icon-user-solid"></i>
             <span slot="title">用户管理</span>
           </el-menu-item>
@@ -42,7 +42,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="Index">
+<script setup lang="ts" name="AdminIndex">
 import { RouterView } from 'vue-router';
 import { onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';

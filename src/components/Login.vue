@@ -50,7 +50,9 @@ function toLogin(email: string, pwd: string) {
 				localStorage.setItem("token",response.data.data.jwt)
 				localStorage.setItem("userInfo",JSON.stringify(response.data.data))
 				if(response.data.data.isAdmin == 1){
-				router.push('/index')
+				router.push('/adminIndex')
+				}else if (response.data.data.isAdmin == 0){
+					router.push('/userIndex')
 				}
 			}
 			else{
