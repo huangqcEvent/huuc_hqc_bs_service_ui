@@ -2,9 +2,9 @@ import { createWebHistory, createRouter } from "vue-router";
 import Login from "@/components/Login.vue";
 import AdminIndex from "@/components/AdminIndex.vue";
 import Register from "@/components/Register.vue";
-import Home from "@/pages/Home.vue";
-import User from "@/pages/User.vue";
-import Order from "@/pages/Order.vue";
+import Home from "@/pages/admin/Home.vue";
+import User from "@/pages/admin/User.vue";
+import Order from "@/pages/admin/Order.vue";
 import UserIndex from "@/components/UserIndex.vue";
 export default createRouter({
     history: createWebHistory(),
