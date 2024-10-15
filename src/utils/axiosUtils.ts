@@ -11,7 +11,6 @@ instance.interceptors.request.use(
   function (config) {
     //在发送请求之前
     const token = localStorage.getItem('token');
-    console.log("*****************",token)
     config.headers['Content-Type'] = 'application/json';
     if (token) {
       config.headers['Authorization'] = `${token}`;

@@ -50,7 +50,7 @@ function toRegister(email: string, pwd: string, head: string) {
 	};
 
 	console.log(email, pwd);
-	axios.post('/api/admin/register', data)
+	axios.post('/api/common/register', data)
 		.then(response => {
 			if (response.data.code === 200) {
 				alert(response.data.msg);

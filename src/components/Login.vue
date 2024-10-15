@@ -43,7 +43,7 @@ function toLogin(email: string, pwd: string) {
 		password: pwd
 	};
 	console.log(email, pwd);
-	axios.post('/api/admin/login', data	
+	axios.post('/api/common/login', data	
 	) // 修正 URL 并传递 data 参数
 		.then(response => {
 			if(response.data.code == 200){
