@@ -1,11 +1,11 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Login from "@/components/Login.vue";
-import AdminIndex from "@/components/AdminIndex.vue";
+import AdminIndex from "@/components/views/AdminIndex.vue";
 import Register from "@/components/Register.vue";
 import Home from "@/pages/admin/Home.vue";
 import User from "@/pages/admin/User.vue";
 import Order from "@/pages/admin/Order.vue";
-import UserIndex from "@/components/UserIndex.vue";
+import UserIndex from "@/components/views/UserIndex.vue";
 export default createRouter({
     history: createWebHistory(),
     routes: [
