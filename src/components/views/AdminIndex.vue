@@ -86,6 +86,7 @@ onBeforeMount(() => {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden; /* 防止整个页面滚动 */
 }
 
 .banner {

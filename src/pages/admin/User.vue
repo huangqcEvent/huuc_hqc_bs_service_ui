@@ -1,13 +1,45 @@
 <template>
   <div class="container">
-    <!-- 其他内容 -->
+    <!-- 过滤条件表单 -->
+    <div class="filter-form">
+      <el-form :model="filterForm" inline>
+        <el-form-item label="用户名">
+          <el-input v-model="filterForm.userName" placeholder="请输入用户名"></el-input>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-select v-model="filterForm.state" placeholder="全部" style="width: 100px;">
+            <el-option label="全部" value=""></el-option>
+            <el-option label="正常" value="1"></el-option>
+            <el-option label="停用" value="0"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="身份">
+          <el-select v-model="filterForm.identity" placeholder="全部" style="width: 100px;">
+            <el-option label="全部" value=""></el-option>
+            <el-option label="普通用户" value="0"></el-option>
+            <el-option label="管理员" value="1"></el-option>
+            <el-option label="社团账号" value="2"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="创建时间">
+          <el-date-picker v-model="filterForm.createTimeRange" type="daterange" range-separator="至"
+            start-placeholder="开始日期" end-placeholder="结束日期" value-format="YYYY-MM-DD"
+            style="width: 300px;"></el-date-picker>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button type="primary" @click="search">搜索</el-button>
+          <el-button type="defult" @click="clearFilters">清空</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+
+    <!-- 用户列表 -->
     <div class="content">
-      <!-- 用户列表等其他内容 -->
-      <el-table :data="userList" style="width: 100%">
+      <el-table :data="filteredUserList" style="width: 100%">
         <el-table-column prop="head" label="头像" width="100">
           <template #default="scope">
             <el-avatar :src="scope.row.head" size="medium"></el-avatar>
-            <!-- <Image :src="scope.row.head" :width="80"></Image> -->
           </template>
         </el-table-column>
         <el-table-column prop="userName" label="用户名" width="180"></el-table-column>
@@ -24,83 +56,156 @@
           </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width="220"></el-table-column>
-        <el-table-column prop="downTime" label="停用时间" width="220"></el-table-column>
-        <el-table-column prop="downReason" label="停用原因" width="220"></el-table-column>
+        <el-table-column prop="downTime" label="停用时间" width="220">
+          <template #default="scope">
+            {{ scope.row.downTime || '空' }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="downReason" label="停用原因" width="220">
+          <template #default="scope">
+            {{ scope.row.downReason || '空' }}
+          </template>
+        </el-table-column>
       </el-table>
     </div>
+
     <div class="pagination">
       <Page :total="total" :pageChange="pageChange" />
     </div>
   </div>
 </template>
 
+
 <script setup lang="ts" name="User">
 import Page from '@/common/Page.vue';
 import { onMounted, ref } from 'vue';
 import request from '@/utils/axiosUtils';
-import Image from '@/common/Image.vue';
-let total = ref(100);
-let pageNumber = ref(1);
-let pageSize = ref(10);
+import { ElMessage } from 'element-plus';
+
 interface User {
-  id: string,
+  id: string;
   userName: string;
-  state: string;
+  state: boolean;
   identity: number;
   createTime: string;
 }
 
-//接受数据
-let userList = ref<User[]>([])
+// 接受数据
+let userList = ref<User[]>([]);
+let filteredUserList = ref<User[]>([]);
+let total = ref(0);
+let pageNumber = ref(1);
+let pageSize = ref(10);
+
+// 过滤条件表单
+const filterForm = ref({
+  userName: '',
+  state: '',
+  identity: '',
+  createTimeRange: ['',''] as [string, string]
+});
+
+// 初始加载数据
+onMounted(() => {
+  fetchData();
+});
+
+// 获取数据
+function fetchData() {
+  const params = {
+    pageSize: pageSize.value,
+    pageNumber: pageNumber.value,
+    userName: filterForm.value.userName,
+    state: filterForm.value.state,
+    identity: filterForm.value.identity,
+    startTime: formatDateTime(filterForm.value.createTimeRange[0]),
+    endTime: formatDateTime(filterForm.value.createTimeRange[1])
+  };
+
+  request.get('/admin/userPage', {
+    params
+  }).then(response => {
+    total.value = response.data.data.total;
+    userList.value = response.data.data.list;
+    filteredUserList.value = userList.value;
+    console.log(response.data.data);
+  });
+}
+
+// 搜索功能
+function search() {
+  fetchData();
+}
+
+// 分页变化
 function pageChange(number: number, size: number) {
   pageNumber.value = number;
   pageSize.value = size;
-  console.log(pageNumber.value, pageSize.value);
-  // 发起接口请求数据，请求参数中使用 number 作为查询当前页码
-  request.get("/admin/userPage", {
-    params: {
-      pageSize: pageSize.value,
-      pageNumber: pageNumber.value
-    }
-  }
-  ).then(response => {
-    total.value = response.data.data.total
-    userList.value = response.data.data.list
-    console.log(response.data.data)
-  })
+  fetchData();
 }
+
+// 格式化日期时间
+function formatDateTime(dateStr: string | undefined): string {
+  if (!dateStr) return '';
+  return `${dateStr} 00:00:00`;
+}
+
+// 获取类型
 function getType(row: number) {
-  if (row == 2) {
-    return 'primary'; // 假设超级管理员用 'primary' 类型
-  } else if (row == 1) {
+  if (row === 2) {
+    return 'primary'; 
+  } else if (row === 1) {
     return 'success';
   } else {
     return 'danger';
   }
 }
+
+// 获取显示名称
 function getDisplayName(row: number) {
-  if (row == 2) {
+  if (row === 2) {
     return '社团账号';
-  } else if (row == 1) {
+  } else if (row === 1) {
     return '管理员';
   } else {
     return '普通用户';
   }
 }
-//刚加载的时候先发请求
-onMounted(() => {
-  pageChange(pageNumber.value, pageSize.value)
-})
-
-
+// 清空所有过滤项
+function clearFilters() {
+  filterForm.value = {
+    userName: '',
+    state: '',
+    identity: '',
+    createTimeRange: ["", ""] 
+  };
+  fetchData();
+}
 </script>
 
 <style scoped>
 .container {
-  height: 100%;
-  /* 设置容器高度为父容器高度 */
+  height: 100vh;
+  /* 占据整个视口高度 */
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  /* 防止整个页面滚动 */
+}
+
+.filter-form {
+  padding: 0px;
+  background-color: #f8f9fa;
+  margin-bottom: 0px;
+  /* 减小过滤框和表格之间的间距 */
+}
+
+.el-form-item {
+  margin-right: 16px;
+}
+
+.el-button {
+  margin-left: 16px;
 }
 
 .content {
@@ -108,8 +213,9 @@ onMounted(() => {
   /* 占据剩余空间 */
   overflow-y: auto;
   /* 启用垂直滚动条 */
-  padding: 16px;
-  max-height: 80vh; /* 设置最大高度，可以根据需要调整 */
+  padding: 0px;
+  max-height: calc(100vh - 224px);
+  /* 调整 max-height 以适应新的间距 */
 }
 
 .pagination {
@@ -117,6 +223,8 @@ onMounted(() => {
   justify-content: center;
   margin-top: 16px;
   /* 使分页组件位于底部 */
+  margin-bottom: 16px;
+  /* 确保分页条与底部有一定距离 */
 }
 
 /* 使表格适应屏幕宽度 */
@@ -129,31 +237,5 @@ onMounted(() => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-/* 响应式布局 */
-@media (max-width: 768px) {
-  .el-table {
-    font-size: 12px;
-  }
-
-  .el-table__header-wrapper th {
-    width: 100%;
-    display: block;
-    text-align: left;
-  }
-
-  .el-table__body-wrapper td {
-    display: block;
-    text-align: left;
-  }
-
-  .el-table__body-wrapper tr {
-    border-bottom: 1px solid #ebeef5;
-  }
-
-  .el-table__body-wrapper td:first-child {
-    font-weight: bold;
-  }
 }
 </style>

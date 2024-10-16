@@ -35,7 +35,7 @@ instance.interceptors.response.use(
   function (error) {
     // 响应错误
     // 可以在这里处理全局的错误
-    console.error('请求失败:', error);
+    alert("接口错误")
     return Promise.reject(error);
   }
 );
