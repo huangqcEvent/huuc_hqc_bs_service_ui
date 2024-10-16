@@ -48,6 +48,7 @@ import request from '@/utils/axiosUtils';
 import type { userInfo } from '@/types/userInfo';
 import Image from '@/common/Image.vue';
 import { confirm } from '@/utils/confirmUtils';
+
 const router = useRouter();
 let userInfo: userInfo = {
   id: '',
