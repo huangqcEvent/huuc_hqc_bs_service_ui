@@ -4,31 +4,32 @@
     <el-header class="banner">
       <div class="banner-content">
         <div class="user-info">
-          <Image :src="userInfo.head" :width="110"></Image>
-          {{ userInfo.username }}
+          <Image :src="userInfo.head" :width="60"></Image>
+          <span>{{ userInfo.username }}</span>
         </div>
         <h1>欢迎来到管理后台</h1>
-        <el-button type="text" @click="logout">退出登录</el-button>
+        <el-button type="text" @click="logout" class="logout-button">退出登录</el-button>
       </div>
     </el-header>
 
     <!-- 左侧导航 -->
     <el-container>
-      <el-aside class="sidebar" width="200px">
-        <el-menu router :default-active="$route.path" background-color="#545c64" text-color="#fff"
-          active-text-color="#ffd04b" unique-opened>
-          <el-menu-item index="/adminIndex/home">
-            <i class="el-icon-s-home"></i>
-            <span slot="title">首页</span>
-          </el-menu-item>
-          <el-menu-item index="/adminIndex/orders">
-            <i class="el-icon-s-order"></i>
-            <span slot="title">订单管理</span>
-          </el-menu-item>
-          <el-menu-item index="/adminIndex/users">
-            <i class="el-icon-user-solid"></i>
-            <span slot="title">用户管理</span>
-          </el-menu-item>
+      <el-aside width="200px" class="sidebar">
+        <el-menu :default-openeds="['1']" class="custom-menu" active-text-color="#42b983" background-color="#ffffff" text-color="#333333">
+          <el-sub-menu index="1">
+            <template #title>
+              <i class="el-icon-user"></i>
+              <span>用户管理</span>
+            </template>
+            <el-menu-item index="1-1" @click="router.push('/adminIndex/users')">
+              <i class="el-icon-user"></i>
+              <span>用户列表</span>
+            </el-menu-item>
+            <el-menu-item index="1-2" @click="router.push('/adminIndex/downLog')">
+              <i class="el-icon-lock"></i>
+              <span>账号封禁记录</span>
+            </el-menu-item>
+          </el-sub-menu>
         </el-menu>
       </el-aside>
 
@@ -87,16 +88,18 @@ onBeforeMount(() => {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* 防止整个页面滚动 */
+  overflow: hidden;
+  background-color: #f0f2f5;
 }
 
 .banner {
-  background-color: #42b983;
+  background: #42b983;
   color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .banner-content {
@@ -111,45 +114,120 @@ onBeforeMount(() => {
   align-items: center;
 }
 
-.user-info span {
+.user-info img {
+  border-radius: 50%;
   margin-right: 0.5rem;
-  font-size: 1rem;
+}
+
+.user-info span {
+  font-size: 1.1rem;
   font-weight: bold;
 }
 
+.logout-button {
+  background: none;
+  border: none;
+  color: #dfe6e9;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.logout-button:hover {
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
 .sidebar {
-  background-color: #545c64;
-  color: white;
+  background-color: #ffffff;
+  color: #333333;
   padding: 1rem;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.custom-menu {
+  border-right: none;
+  background: transparent;
+  color: #333333;
+}
+
+.custom-menu .el-menu-item,
+.custom-menu .el-sub-menu__title {
+  height: 48px;
+  line-height: 48px;
+  font-size: 14px;
+  padding-left: 20px !important;
+  transition: background-color 0.3s, color 0.3s;
+  display: flex;
+  align-items: center;
+}
+
+.custom-menu .el-menu-item i,
+.custom-menu .el-sub-menu__title i {
+  margin-right: 10px;
+  font-size: 18px;
+  color: #333333;
+}
+
+.custom-menu .el-menu-item.is-active,
+.custom-menu .el-sub-menu__title.is-active {
+  background-color: #e1f5fe;
+  color: #42b983;
+  border-left: 4px solid #42b983;
+}
+
+.custom-menu .el-menu-item:hover,
+.custom-menu .el-sub-menu__title:hover {
+  background-color: #f0f8ff;
+  color: #42b983;
+}
+
+.custom-menu .el-menu-item-group__title {
+  display: none;
+}
+
+.custom-menu .el-menu-item span {
+  vertical-align: middle;
 }
 
 .content {
-  flex: 1; /* 占据剩余空间 */
-  padding: 20px; /* 内容容器的内边距 */
+  flex: 1;
+  padding: 20px;
+  background-color: #f0f2f5;
+  overflow-y: auto;
 }
 
-.el-menu {
-  border-right: none;
-}
+@media (max-width: 768px) {
+  .admin-layout {
+    flex-direction: column;
+  }
 
-.el-menu-item {
-  height: 60px;
-  line-height: 60px;
-}
+  .el-aside {
+    width: 100%;
+    height: auto;
+  }
 
-.el-menu-item i {
-  margin-right: 10px;
-}
+  .el-main {
+    padding: 1rem;
+  }
 
-.el-menu-item.is-active {
-  background-color: #409eff !important;
-  color: white;
-}
+  .banner {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 
-.el-button {
-  background-color: black;
-  padding: 1rem 1rem;
-  font-size: 1rem;
-  color: chocolate;
+  .banner-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .user-info {
+    margin-bottom: 1rem;
+  }
+
+  .logout-button {
+    margin-top: 1rem;
+  }
 }
 </style>

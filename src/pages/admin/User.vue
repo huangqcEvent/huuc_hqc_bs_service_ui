@@ -40,47 +40,42 @@
 
     <!-- 用户列表 -->
     <div class="content">
-      <el-table :data="userList" style="width: 100%">
+      <el-table :data="userList" style="width: 100%;">
 
-        <el-table-column prop="head" label="头像" width="100">
+        <el-table-column prop="head" label="头像" width="80">
           <template #default="scope">
-            <el-avatar :src="scope.row.head" size="medium"></el-avatar>
+            <el-avatar :src="scope.row.head" size="80px"></el-avatar>
           </template>
         </el-table-column>
 
-        <el-table-column prop="userName" label="用户名" width="180"></el-table-column>
+        <el-table-column prop="userName" label="用户名" width="150"></el-table-column>
 
-        <el-table-column prop="state" label="状态" width="180">
+        <el-table-column prop="state" label="状态" width="120">
           <template #default="scope">
             <el-tag :type="scope.row.state ? 'success' : 'danger'">{{ scope.row.state ? '正常' : '停用' }}</el-tag>
-            <!-- <el-switch  v-model="state" @change="updateState()" class="ml-2"
-              style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949" /> -->
           </template>
         </el-table-column>
 
-        <el-table-column prop="identity" label="身份" width="180">
-          <template #default="scope"> 
+        <el-table-column prop="identity" label="身份" width="120">
+          <template #default="scope">
             <el-tag :type="getType(scope.row.identity)">
               {{ getDisplayName(scope.row.identity) }}
             </el-tag>
           </template>
         </el-table-column>
 
-        <el-table-column prop="createTime" label="创建时间" width="220"></el-table-column>
-
-        <el-table-column prop="downTime" label="停用时间" width="220">
-          <template #default="scope">
-            {{ scope.row.downTime || '空' }}
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="downReason" label="停用原因" width="220">
-          <template #default="scope">
-            {{ scope.row.downReason || '空' }}
-          </template>
-        </el-table-column>
-
+        <el-table-column prop="createTime" label="创建时间" width="180"></el-table-column>
+            <!-- 添加操作列 -->
+            <el-table-column label="操作" width="150">
+            <template #default="scope">
+              <el-button type="primary" plain @click="handledownEndChange(scope.row.id, scope.row.userName,scope.row.state == 0 ? 1 : 0)">
+                {{ scope.row.state == 1 ? '封禁' : '解封' }}
+              </el-button>
+            </template>
+          </el-table-column>
       </el-table>
+
+        
     </div>
 
     <div class="pagination">
@@ -94,8 +89,7 @@
 import Page from '@/common/Page.vue';
 import { onMounted, ref } from 'vue';
 import request from '@/utils/axiosUtils';
-
-// const state = ref(false); // 初始状态为 false
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 interface User {
   id: string;
@@ -196,10 +190,51 @@ function clearFilters() {
   fetchData();
 }
 
-//切换zhuangtai
-// function updateState() {
-//    alert(state.value);
-// }
+// 更改用户封禁状态
+function handledownEndChange(id: number,userName:string, downEnd: number) {
+    if(downEnd == 0){
+    ElMessageBox.prompt('请输入封禁原因', '封禁用户:'+userName, {
+      confirmButtonText: '封禁',
+      cancelButtonText: '取消',
+    })
+      .then(({ value }) => {
+        const params = {
+          id:id,
+          state:downEnd,
+          downReason:value
+        }
+        request.post("/admin/downUser",
+          params
+        ).then(() =>{
+          ElMessage({
+          type: 'success',
+          message: '封禁用户:'+userName+'<br>'+'封禁原因:'+value,
+          dangerouslyUseHTMLString: true, // 允许使用 HTML 字符串
+        })
+        window.location.reload();
+        })
+      })
+    }else{
+      ElMessageBox.confirm('确认解封用户:'+userName+'?', {
+      confirmButtonText: '解封',
+      cancelButtonText: '取消',
+      type:'warning'
+    })
+      .then(() => {
+        request.post("/admin/downEnd",{
+            id:id,
+            state:downEnd
+        }).then(()=>{
+          ElMessage({
+          type: 'success',
+          message: '成功解封用户:'+userName,
+          dangerouslyUseHTMLString: true, // 允许使用 HTML 字符串
+        })
+        window.location.reload();
+        })
+      })
+    }
+  }
 </script>
 
 <style scoped>
@@ -221,6 +256,10 @@ function clearFilters() {
 
 .el-form-item {
   margin-right: 16px;
+}
+
+.el-table .cell {
+  text-align: center;
 }
 
 .el-button {
