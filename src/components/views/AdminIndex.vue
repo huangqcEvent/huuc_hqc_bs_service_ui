@@ -5,6 +5,7 @@
       <div class="banner-content">
         <div class="user-info">
           <!-- <Image :src="adminInfo.head" :width="60"></Image> -->
+           <Image src="https://www.huuc.edu.cn/hncj/images/logo.png" :width="60"></Image>
           <span>{{ adminInfo.username }}</span>
         </div>
         <h1>欢迎来到管理后台</h1>

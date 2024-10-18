@@ -45,6 +45,7 @@
         <el-table-column prop="head1" label="头像" width="80">
           <template #default="scope">
             <!-- <el-avatar :src="scope.row.head" size="80px"></el-avatar> -->
+              <el-avatar src="https://www.huuc.edu.cn/hncj/images/logo.png" size="80px"></el-avatar>
           </template>
         </el-table-column>
 
@@ -242,7 +243,7 @@ function handledownEndChange(id: number, userName: string, downEnd: number) {
       type: 'warning'
     })
       .then(() => {
-        request.put("/admin/downEnd", {
+        request.put("/admin/downUser", {
           id: id,
           state: downEnd
         }, { userType: 'admin' }).then(() => {
