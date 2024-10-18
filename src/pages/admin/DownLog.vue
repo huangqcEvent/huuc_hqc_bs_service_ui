@@ -16,7 +16,7 @@
             </el-select>
           </el-form-item>
   
-          <el-form-item label="创建时间">
+          <el-form-item label="封禁时间">
             <el-date-picker v-model="filterForm.downTimeRange" type="daterange" range-separator="至"
               start-placeholder="开始日期" end-placeholder="结束日期" value-format="YYYY-MM-DD"
               style="width: 300px;"></el-date-picker>
@@ -33,8 +33,6 @@
         <el-table :data="downLogList" style="width: 100%;">
           <el-table-column prop="userName" label="用户名" width="150"></el-table-column>
 
-          <el-table-column prop="downTime" label="封禁时间" width="180"></el-table-column>
-
           <el-table-column prop="downAdminName" label="封禁人" width="180"></el-table-column>
 
           <el-table-column prop="downReason" label="封禁原因" width="180">
@@ -43,6 +41,8 @@
             </template>
           </el-table-column>
   
+          <el-table-column prop="downTime" label="封禁时间" width="180"></el-table-column>
+
           <el-table-column prop="downEnd" label="是否已解封" width="120">
             <template #default="scope">
               <el-tag :type="scope.row.downEnd ? 'success' : 'danger'">{{ scope.row.downEnd ? '已解封' : '封禁中' }}</el-tag>

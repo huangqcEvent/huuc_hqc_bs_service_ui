@@ -25,7 +25,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="创建时间">
+        <el-form-item label="注册时间">
           <el-date-picker v-model="filterForm.createTimeRange" type="daterange" range-separator="至"
             start-placeholder="开始日期" end-placeholder="结束日期" value-format="YYYY-MM-DD"
             style="width: 300px;"></el-date-picker>
@@ -64,7 +64,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="createTime" label="创建时间" width="180"></el-table-column>
+        <el-table-column prop="createTime" label="注册时间" width="180"></el-table-column>
             <!-- 添加操作列 -->
             <el-table-column label="操作" width="150">
             <template #default="scope">
