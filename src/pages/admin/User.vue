@@ -42,9 +42,9 @@
     <div class="content">
       <el-table :data="userList" style="width: 100%;">
 
-        <el-table-column prop="head" label="头像" width="80">
+        <el-table-column prop="head1" label="头像" width="80">
           <template #default="scope">
-            <el-avatar :src="scope.row.head" size="80px"></el-avatar>
+            <!-- <el-avatar :src="scope.row.head" size="80px"></el-avatar> -->
           </template>
         </el-table-column>
 

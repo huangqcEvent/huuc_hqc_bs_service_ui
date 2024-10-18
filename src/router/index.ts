@@ -5,6 +5,7 @@ import Register from "@/components/Register.vue";
 import User from "@/pages/admin/User.vue";
 import UserIndex from "@/components/views/UserIndex.vue";
 import DownLog from "@/pages/admin/DownLog.vue";
+import Home from "@/pages/user/Home.vue";
 export default createRouter({
     history: createWebHistory(),
     routes: [
@@ -14,7 +15,14 @@ export default createRouter({
         },
         {
             path: '/userIndex',
-            component: UserIndex
+            component: UserIndex,
+            redirect:'/userIndex/home',
+            children:[
+                {
+                    path: 'home',
+                    component:Home
+                }
+            ]
         },
         {
             path: '/login',
