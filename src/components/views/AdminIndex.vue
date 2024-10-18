@@ -4,8 +4,8 @@
     <el-header class="banner">
       <div class="banner-content">
         <div class="user-info">
-          <Image :src="userInfo.head" :width="60"></Image>
-          <span>{{ userInfo.username }}</span>
+          <Image :src="adminInfo.head" :width="60"></Image>
+          <span>{{ adminInfo.username }}</span>
         </div>
         <h1>欢迎来到管理后台</h1>
         <el-button type="text" @click="logout" class="logout-button">退出登录</el-button>
@@ -43,28 +43,28 @@
 
 <script setup lang="ts" name="AdminIndex">
 import { RouterView } from 'vue-router';
-import { onBeforeMount } from 'vue';
+import { onBeforeMount,reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import request from '@/utils/axiosUtils';
-import type { userInfo } from '@/types/userInfo';
+
 import Image from '@/common/Image.vue';
 import { confirm } from '@/utils/confirmUtils';
 
 const router = useRouter();
-let userInfo: userInfo = {
+const adminInfo = reactive({
   id: '',
   username: '',
   head: ''
-};
+});
 
 const logout = () => {
   confirm("确认要退出登录吗?", () => {
-    request.get("/common/logout").then(
+    request.get("/common/logout",{userType:'admin'}).then(
       response => {
         console.log(response.data.msg);
         // 清除登录状态
-        localStorage.removeItem('userInfo');
-        localStorage.removeItem('token');
+        localStorage.removeItem('adminInfo');
+        localStorage.removeItem('adminToken');
       }
     );
     // 跳转到登录页面
@@ -76,9 +76,9 @@ const logout = () => {
 
 // 挂载前 调用onBeforeMount()指定的函数
 onBeforeMount(() => {
-  const storedUserInfo = localStorage.getItem('userInfo');
+  const storedUserInfo = localStorage.getItem('adminInfo');
   if (storedUserInfo) {
-    userInfo = JSON.parse(storedUserInfo);
+    Object.assign(adminInfo, JSON.parse(storedUserInfo));
   }
 });
 </script>

@@ -136,7 +136,8 @@ function fetchData() {
   };
 
   request.get('/admin/userPage', {
-    params
+    params: params,
+    userType: 'admin'
   }).then(response => {
     total.value = response.data.data.total;
     userList.value = response.data.data.list;
@@ -210,7 +211,7 @@ function handledownEndChange(id: number, userName: string, downEnd: number) {
             state: downEnd,
             downReason: value
           };
-          request.put("/admin/downUser", params)
+          request.put("/admin/downUser", params, { userType: 'admin' })
             .then(() => {
               ElMessage({
                 type: 'success',
@@ -244,7 +245,7 @@ function handledownEndChange(id: number, userName: string, downEnd: number) {
         request.put("/admin/downEnd", {
           id: id,
           state: downEnd
-        }).then(() => {
+        }, { userType: 'admin' }).then(() => {
           ElMessage({
             type: 'success',
             message: '成功解封用户:' + userName,

@@ -48,11 +48,13 @@ function toLogin(email: string, pwd: string) {
 	) // 修正 URL 并传递 data 参数
 		.then(response => {
 			if (response.data.code == 200) {
-				localStorage.setItem("token", response.data.data.jwt)
-				localStorage.setItem("userInfo", JSON.stringify(response.data.data))
 				if (response.data.data.identity == 1) {
+					localStorage.setItem("adminToken",response.data.data.jwt)
+					localStorage.setItem("adminInfo", JSON.stringify(response.data.data))
 					router.push('/adminIndex')
 				} else if (response.data.data.identity == 0 || response.data.data.identity == 2) {
+					localStorage.setItem("userToken",response.data.data.jwt)
+					localStorage.setItem("userInfo", JSON.stringify(response.data.data))
 					router.push('/userIndex')
 				}
 			}

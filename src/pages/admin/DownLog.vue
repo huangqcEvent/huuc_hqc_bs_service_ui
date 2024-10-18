@@ -111,8 +111,9 @@
       downTimeEnd: formatDateTime(filterForm.value.downTimeRange[1])
     };
   
-    request.get('/admin/downLogPage', {
-      params
+    request.get('/admin/downLogPage',{
+      params,
+      userType:'admin'
     }).then(response => {
       total.value = response.data.data.total;
       downLogList.value = response.data.data.list;
