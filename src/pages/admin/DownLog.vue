@@ -42,7 +42,7 @@
           </el-table-column>
   
           <el-table-column prop="downTime" label="封禁时间" width="180"></el-table-column>
-
+          
           <el-table-column prop="downEnd" label="是否已解封" width="120">
             <template #default="scope">
               <el-tag :type="scope.row.downEnd ? 'success' : 'danger'">{{ scope.row.downEnd ? '已解封' : '封禁中' }}</el-tag>
@@ -52,9 +52,7 @@
           <el-table-column prop="downEndTime" label="解封时间" width="180"></el-table-column>
 
           <el-table-column prop="downEndAdminName" label="解封人" width="180"></el-table-column>
-  
-    
-  
+
         </el-table>
       </div>
   
@@ -69,7 +67,6 @@
   import Page from '@/common/Page.vue';
   import { onMounted, ref } from 'vue';
   import request from '@/utils/axiosUtils';
-  import { ElMessage, ElMessageBox } from 'element-plus'
 
 
   interface downLog {
@@ -145,9 +142,6 @@
     };
     fetchData();
   }
-  
-  
-  
   </script>
   
   <style scoped>

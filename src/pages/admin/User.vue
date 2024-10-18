@@ -65,17 +65,18 @@
         </el-table-column>
 
         <el-table-column prop="createTime" label="注册时间" width="180"></el-table-column>
-            <!-- 添加操作列 -->
-            <el-table-column label="操作" width="150">
-            <template #default="scope">
-              <el-button type="primary" plain @click="handledownEndChange(scope.row.id, scope.row.userName,scope.row.state == 0 ? 1 : 0)">
-                {{ scope.row.state == 1 ? '封禁' : '解封' }}
-              </el-button>
-            </template>
-          </el-table-column>
+        <!-- 添加操作列 -->
+        <el-table-column label="操作" width="150">
+          <template #default="scope">
+            <el-button type="primary" plain
+              @click="handledownEndChange(scope.row.id, scope.row.userName, scope.row.state == 0 ? 1 : 0)">
+              {{ scope.row.state == 1 ? '封禁' : '解封' }}
+            </el-button>
+          </template>
+        </el-table-column>
       </el-table>
 
-        
+
     </div>
 
     <div class="pagination">
@@ -191,50 +192,75 @@ function clearFilters() {
 }
 
 // 更改用户封禁状态
-function handledownEndChange(id: number,userName:string, downEnd: number) {
-    if(downEnd == 0){
-    ElMessageBox.prompt('请输入封禁原因', '封禁用户:'+userName, {
+function handledownEndChange(id: number, userName: string, downEnd: number) {
+  if (downEnd == 0) {
+    ElMessageBox.prompt('请输入封禁原因', '封禁用户:' + userName, {
       confirmButtonText: '封禁',
       cancelButtonText: '取消',
     })
       .then(({ value }) => {
-        const params = {
-          id:id,
-          state:downEnd,
-          downReason:value
-        }
-        request.post("/admin/downUser",
-          params
-        ).then(() =>{
+        if (!value || value.trim() === '') {
           ElMessage({
-          type: 'success',
-          message: '封禁用户:'+userName+'<br>'+'封禁原因:'+value,
-          dangerouslyUseHTMLString: true, // 允许使用 HTML 字符串
-        })
-        window.location.reload();
-        })
+            type: 'error',
+            message: '封禁原因不能为空',
+          });
+        } else {
+          const params = {
+            id: id,
+            state: downEnd,
+            downReason: value
+          };
+          request.put("/admin/downUser", params)
+            .then(() => {
+              ElMessage({
+                type: 'success',
+                message: '封禁用户:' + userName + '<br>' + '封禁原因:' + value,
+                dangerouslyUseHTMLString: true, // 允许使用 HTML 字符串
+              });
+              window.location.reload();
+            })
+            .catch((error) => {
+              ElMessage({
+                type: 'error',
+                message: '封禁失败: ' + error.message,
+              });
+            });
+        }
       })
-    }else{
-      ElMessageBox.confirm('确认解封用户:'+userName+'?', {
+      .catch(() => {
+        ElMessage({
+          type: 'info',
+          message: '封禁操作已取消',
+        });
+      });
+
+  } else {
+    ElMessageBox.confirm('确认解封用户:' + userName + '?', {
       confirmButtonText: '解封',
       cancelButtonText: '取消',
-      type:'warning'
+      type: 'warning'
     })
       .then(() => {
-        request.post("/admin/downEnd",{
-            id:id,
-            state:downEnd
-        }).then(()=>{
+        request.put("/admin/downEnd", {
+          id: id,
+          state: downEnd
+        }).then(() => {
           ElMessage({
-          type: 'success',
-          message: '成功解封用户:'+userName,
-          dangerouslyUseHTMLString: true, // 允许使用 HTML 字符串
+            type: 'success',
+            message: '成功解封用户:' + userName,
+            dangerouslyUseHTMLString: true, // 允许使用 HTML 字符串
+          })
+          window.location.reload();
         })
-        window.location.reload();
-        })
+      }).catch(() => {
+        ElMessage({
+          type: 'info',
+          message: '解封操作已取消',
+        });
       })
-    }
   }
+}
+
 </script>
 
 <style scoped>

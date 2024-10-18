@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { ElMessage, ElNotification } from 'element-plus'
 // 创建一个新的 axios 实例
 const instance = axios.create({
   baseURL: '/api',
@@ -28,14 +28,21 @@ instance.interceptors.response.use(
   function (response) {
      // 如果响应数据中的 code 为 500，则返回错误信息
      if (response.data.code === 500 || response.data.code === 401) {
-      alert(response.data.msg);
+      ElMessage({
+        message: response.data.msg,
+        type: 'error',
+        dangerouslyUseHTMLString: true, // 允许使用 HTML 字符串
+      })
     }
     return response;
   },
   function (error) {
     // 响应错误
     // 可以在这里处理全局的错误
-    alert("接口错误")
+    ElMessage({
+      message: '服务器错误',
+      type: 'error',
+    })
     return Promise.reject(error);
   }
 );

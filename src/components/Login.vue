@@ -16,7 +16,7 @@
 						<el-button type="primary" class="m-l-20"
 							@click.prevent="toLogin(loginForm.email, loginForm.pwd)">登录</el-button>
 						<el-button type="default" class="m-l-20"
-						    @click.prevent="()=>{router.push('/register')}">去注册</el-button>
+							@click.prevent="() => { router.push('/register') }">去注册</el-button>
 					</el-form-item>
 				</el-form>
 			</el-col>
@@ -28,6 +28,7 @@
 import axios from 'axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus'
 // Data
 const loginForm = ref({
 	email: "",
@@ -43,24 +44,32 @@ function toLogin(email: string, pwd: string) {
 		password: pwd
 	};
 	console.log(email, pwd);
-	axios.post('/api/common/login', data	
+	axios.post('/api/common/login', data
 	) // 修正 URL 并传递 data 参数
 		.then(response => {
-			if(response.data.code == 200){
-				localStorage.setItem("token",response.data.data.jwt)
-				localStorage.setItem("userInfo",JSON.stringify(response.data.data))
-				if(response.data.data.identity == 1){
-				router.push('/adminIndex')
-				}else if (response.data.data.identity == 0 || response.data.data.identity == 2){
+			if (response.data.code == 200) {
+				localStorage.setItem("token", response.data.data.jwt)
+				localStorage.setItem("userInfo", JSON.stringify(response.data.data))
+				if (response.data.data.identity == 1) {
+					router.push('/adminIndex')
+				} else if (response.data.data.identity == 0 || response.data.data.identity == 2) {
 					router.push('/userIndex')
 				}
 			}
-			else{
-				alert(response.data.msg)
+			else {
+				ElMessage({
+					message: response.data.msg,
+					type: 'error',
+					dangerouslyUseHTMLString: true, // 允许使用 HTML 字符串
+				})
+
 			}
 		})
-		.catch(error => {
-			console.error('Error during login:', error);
+		.catch(() => {
+			ElMessage({
+				message: '服务器接口错误',
+				type: 'error',
+			})
 		});
 }
 </script>
