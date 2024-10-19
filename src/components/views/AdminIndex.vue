@@ -34,6 +34,10 @@
               <i class="el-icon-lock"></i>
               <span>账号封禁记录</span>
             </el-menu-item>
+            <el-menu-item index="1-3" @click="router.push('/adminIndex/identityLog')">
+              <i class="el-icon-lock"></i>
+              <span>账号身份变更记录</span>
+            </el-menu-item>
           </el-sub-menu>
         </el-menu>
       </el-aside>

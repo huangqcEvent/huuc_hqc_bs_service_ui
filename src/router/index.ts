@@ -9,6 +9,7 @@ import Home from "@/pages/user/Home.vue";
 import Notice from "@/pages/user/Notice.vue";
 import Club from "@/pages/user/Club.vue";
 import ConfessionWall from "@/pages/user/ConfessionWall.vue";
+import IdentityLog from "@/pages/admin/IdentityLog.vue";
 export default createRouter({
     history: createWebHistory(),
     routes: [
@@ -54,6 +55,10 @@ export default createRouter({
                 {
                     path: 'downLog',
                     component: DownLog
+                },
+                {
+                    path: 'identityLog',
+                    component: IdentityLog
                 }
             ]
         },
