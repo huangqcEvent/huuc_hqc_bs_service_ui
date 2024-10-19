@@ -27,7 +27,7 @@
 
 <script setup lang="ts" name="Register">
 import axios from 'axios';
-import { ref,onUnmounted } from 'vue';
+import { ref, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Upload from '@/common/Upload.vue';
 // Data
@@ -64,13 +64,13 @@ function toRegister(email: string, pwd: string, head: string) {
 		});
 }
 const handleUploadSuccess = (result: string) => {
-    console.log('上传成功结果:', result);
-    loginForm.value.head = result;
+	console.log('上传成功结果:', result);
+	loginForm.value.head = result;
 };
 //卸载时取消监听
 //卸载完毕
-onUnmounted(()=>{
-  console.log('卸载完毕,取消监听')
+onUnmounted(() => {
+	console.log('卸载完毕,取消监听')
 
 })
 

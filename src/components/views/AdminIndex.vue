@@ -5,7 +5,7 @@
       <div class="banner-content">
         <div class="user-info">
           <!-- <Image :src="adminInfo.head" :width="60"></Image> -->
-           <Image src="https://www.huuc.edu.cn/hncj/images/logo.png" :width="60"></Image>
+          <Image src="https://www.huuc.edu.cn/hncj/images/logo.png" :width="60"></Image>
           <span>{{ adminInfo.username }}</span>
         </div>
         <h1>欢迎来到管理后台</h1>
@@ -16,13 +16,17 @@
     <!-- 左侧导航 -->
     <el-container>
       <el-aside width="200px" class="sidebar">
-        <el-menu :default-openeds="['1']" class="custom-menu" active-text-color="#42b983" background-color="#ffffff" text-color="#333333">
+        <el-menu :default-openeds="['1']" class="custom-menu" active-text-color="#42b983" background-color="#ffffff"
+          text-color="#333333">
           <el-sub-menu index="1">
             <template #title>
               <i class="el-icon-user"></i>
               <span>用户管理</span>
             </template>
-            <el-menu-item index="1-1" @click="router.push('/adminIndex/users')">
+            <el-menu-item type="defult" index="1-1" @click="router.push({
+              path: '/adminIndex/users',
+              query: { identity: adminInfo.identity }
+            })">
               <i class="el-icon-user"></i>
               <span>用户列表</span>
             </el-menu-item>
@@ -44,7 +48,7 @@
 
 <script setup lang="ts" name="AdminIndex">
 import { RouterView } from 'vue-router';
-import { onBeforeMount,reactive } from 'vue';
+import { onBeforeMount, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import request from '@/utils/axiosUtils';
 
@@ -55,12 +59,13 @@ const router = useRouter();
 const adminInfo = reactive({
   id: '',
   username: '',
-  head: ''
+  head: '',
+  identity: ''
 });
 
 const logout = () => {
   confirm("确认要退出登录吗?", () => {
-    request.get("/common/logout",{userType:'admin'}).then(
+    request.get("/common/logout", { userType: 'admin' }).then(
       response => {
         console.log(response.data.msg);
         // 清除登录状态

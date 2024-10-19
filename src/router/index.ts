@@ -6,6 +6,9 @@ import User from "@/pages/admin/User.vue";
 import UserIndex from "@/components/views/UserIndex.vue";
 import DownLog from "@/pages/admin/DownLog.vue";
 import Home from "@/pages/user/Home.vue";
+import Notice from "@/pages/user/Notice.vue";
+import Club from "@/pages/user/Club.vue";
+import ConfessionWall from "@/pages/user/ConfessionWall.vue";
 export default createRouter({
     history: createWebHistory(),
     routes: [
@@ -21,6 +24,18 @@ export default createRouter({
                 {
                     path: 'home',
                     component:Home
+                },
+                {
+                    path: 'notice',
+                    component: Notice
+                },
+                {
+                    path: 'club',
+                    component: Club
+                },
+                {
+                    path: 'confessionWall',
+                    component: ConfessionWall
                 }
             ]
         },

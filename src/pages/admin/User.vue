@@ -22,6 +22,7 @@
             <el-option label="普通用户" value="0"></el-option>
             <el-option label="管理员" value="1"></el-option>
             <el-option label="社团账号" value="2"></el-option>
+            <el-option label="超级管理员" value="99"></el-option>
           </el-select>
         </el-form-item>
 
@@ -45,7 +46,7 @@
         <el-table-column prop="head1" label="头像" width="80">
           <template #default="scope">
             <!-- <el-avatar :src="scope.row.head" size="80px"></el-avatar> -->
-              <el-avatar src="https://www.huuc.edu.cn/hncj/images/logo.png" size="80px"></el-avatar>
+            <el-avatar src="https://www.huuc.edu.cn/hncj/images/logo.png" size="80px"></el-avatar>
           </template>
         </el-table-column>
 
@@ -69,10 +70,11 @@
         <!-- 添加操作列 -->
         <el-table-column label="操作" width="150">
           <template #default="scope">
-            <el-button type="primary" plain
+            <el-button v-if="canBanUser(scope.row.identity)" type="primary" plain
               @click="handledownEndChange(scope.row.id, scope.row.userName, scope.row.state == 0 ? 1 : 0)">
               {{ scope.row.state == 1 ? '封禁' : '解封' }}
             </el-button>
+            <el-tag v-else type="danger">无权限</el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -92,6 +94,11 @@ import Page from '@/common/Page.vue';
 import { onMounted, ref } from 'vue';
 import request from '@/utils/axiosUtils';
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { useRoute } from 'vue-router';
+
+//获取用户身份参数
+const route = useRoute();
+let identity = ref(Number(route.query.identity)); // 确保 identity 是数字
 
 interface User {
   id: string;
@@ -165,9 +172,11 @@ function getType(row: number) {
   if (row === 2) {
     return 'primary';
   } else if (row === 1) {
+    return 'danger';
+  } else if (row === 0) {
     return 'success';
   } else {
-    return 'danger';
+    return 'danger'
   }
 }
 
@@ -177,8 +186,10 @@ function getDisplayName(row: number) {
     return '社团账号';
   } else if (row === 1) {
     return '管理员';
-  } else {
+  } else if (row === 0) {
     return '普通用户';
+  } else {
+    return '超级管理员'
   }
 }
 
@@ -260,6 +271,17 @@ function handledownEndChange(id: number, userName: string, downEnd: number) {
           message: '解封操作已取消',
         });
       })
+  }
+}
+
+//用户封禁权限检测
+function canBanUser(userIdentity: number): boolean {
+  if (identity.value === 99) {
+    return [0, 1, 2].includes(userIdentity);
+  } else if (identity.value === 1) {
+    return [0, 2].includes(userIdentity);
+  } else {
+    return false;
   }
 }
 

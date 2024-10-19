@@ -48,7 +48,7 @@ function toLogin(email: string, pwd: string) {
 	) // 修正 URL 并传递 data 参数
 		.then(response => {
 			if (response.data.code == 200) {
-				if (response.data.data.identity == 1) {
+				if (response.data.data.identity == 1 || response.data.data.identity == 99) {
 					localStorage.setItem("adminToken",response.data.data.jwt)
 					localStorage.setItem("adminInfo", JSON.stringify(response.data.data))
 					router.push('/adminIndex')

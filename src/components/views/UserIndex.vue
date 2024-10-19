@@ -6,11 +6,11 @@
           <img src="https://www.huuc.edu.cn/images/logo.png" alt="Logo" />
         </el-col>
         <el-col :span="8" class="nav">
-          <el-menu mode="horizontal" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-            <el-menu-item index="1"><router-link to="/userIndex/home">首页</router-link></el-menu-item>
-            <el-menu-item index="2"><router-link to="/userIndex/about">关于我们</router-link></el-menu-item>
-            <el-menu-item index="3"><router-link to="/userIndex/services">服务</router-link></el-menu-item>
-            <el-menu-item index="4"><router-link to="/userIndex/contact">联系我们</router-link></el-menu-item>
+          <el-menu mode="horizontal" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" :router="true">
+            <el-menu-item index="/userIndex/home">首页</el-menu-item>
+            <el-menu-item index="/userIndex/confessionWall">校园表白墙</el-menu-item>
+            <el-menu-item index="/userIndex/notice">校园寻物</el-menu-item>
+            <el-menu-item index="/userIndex/club">社团咨询</el-menu-item>
           </el-menu>
         </el-col>
         <el-col :span="8" class="user">
@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, onBeforeUnmount } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import request from '@/utils/axiosUtils';
 import { confirm } from '@/utils/confirmUtils';
@@ -126,9 +126,33 @@ onMounted(() => {
   border-bottom: none;
   display: flex;
   justify-content: center; /* 导航菜单居中 */
+  transition: background-color 0.3s ease; /* 添加背景颜色过渡效果 */
+}
+
+.nav .el-menu-item {
+  height: 60px;
+  line-height: 50px;
+  padding: 0 20px;
+  transition: background-color 0.3s ease, color 0.3s ease; /* 添加背景颜色和文字颜色过渡效果 */
+}
+
+.nav .el-menu-item:hover {
+  background-color: #4a5058; /* 悬停时的背景颜色 */
+  color: #ffd04b; /* 悬停时的文字颜色 */
+}
+
+.nav .el-menu-item.is-active {
+  background-color: #4a5058; /* 激活时的背景颜色 */
+  color: #ffd04b; /* 激活时的文字颜色 */
 }
 
 /* 登录按钮样式 */
+.login-button {
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  height: 100%; /* 使按钮高度与 banner 一致 */
+}
+
 .login-button .login-btn {
   background-color: #409eff;
   border: none;
@@ -196,25 +220,6 @@ onMounted(() => {
 /* 滚动条样式 */
 .scrollbar {
   height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-/* 自定义滚动条样式 */
-.scrollbar ::-webkit-scrollbar {
-  width: 10px;
-}
-
-.scrollbar ::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-.scrollbar ::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 5px;
-}
-
-.scrollbar ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  scrollbar-color: #888 #f1f1f1; /* Firefox 滚动条颜色 */
 }
 </style>
