@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ElMessage} from 'element-plus';
+import { ElMessage } from 'element-plus';
 
 // 创建一个新的 axios 实例
 const instance = axios.create({
@@ -39,10 +39,13 @@ instance.interceptors.response.use(
     // 如果响应数据中的 code 为 500 或 401，则返回错误信息
     if (response.data.code === 500 || response.data.code === 401) {
       ElMessage({
-        message: response.data.msg,
+        message: response.data.msg || '服务器错误',
         type: 'error',
         dangerouslyUseHTMLString: true, // 允许使用 HTML 字符串
       });
+
+      // 抛出错误以中断后续处理
+      return Promise.reject(new Error(response.data.msg || '服务器错误'));
     }
     return response;
   },

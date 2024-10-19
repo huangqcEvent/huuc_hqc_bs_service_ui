@@ -68,7 +68,7 @@
 
         <el-table-column prop="createTime" label="注册时间" width="180"></el-table-column>
         <!-- 添加操作列 -->
-        <el-table-column label="操作" width="150">
+        <el-table-column label="操作1" width="150">
           <template #default="scope">
             <el-button v-if="canBanUser(scope.row.identity)" type="primary" plain
               @click="handledownEndChange(scope.row.id, scope.row.userName, scope.row.state == 0 ? 1 : 0)">
@@ -77,6 +77,17 @@
             <el-tag v-else type="danger">无权限</el-tag>
           </template>
         </el-table-column>
+
+        <el-table-column label="操作2" width="150">
+          <template #default="scope">
+            <el-button v-if="canBanUser(scope.row.identity)" type="primary" plain
+              @click="updateIdentity(scope.row.id, scope.row.identity)">
+              转化身份
+            </el-button>
+            <el-tag v-else type="danger">无权限</el-tag>
+          </template>
+        </el-table-column>
+
       </el-table>
 
 
@@ -91,11 +102,10 @@
 
 <script setup lang="ts" name="User">
 import Page from '@/common/Page.vue';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, h } from 'vue';
 import request from '@/utils/axiosUtils';
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRoute } from 'vue-router';
-
 //获取用户身份参数
 const route = useRoute();
 let identity = ref(Number(route.query.identity)); // 确保 identity 是数字
@@ -273,6 +283,66 @@ function handledownEndChange(id: number, userName: string, downEnd: number) {
       })
   }
 }
+
+//转化身份
+function updateIdentity(userId: string, oldIndentity: number) {
+  ElMessageBox({
+    title: '提示',
+    message: h('div', [
+      h('select', { class: 'custom-select' }, [
+        h('option', { value: '' }, '请选择新的身份'),
+        h('option', { value: 1 }, '管理员'),
+        h('option', { value: 0 }, '普通用户'),
+        h('option', { value: 2 }, '社团账号'),
+      ]),
+      h('input', { class: 'custom-input', placeholder: '请输入更改原因' }),
+    ]),
+    showCancelButton: true,
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    beforeClose: (action, instance, done) => {
+      if (action === 'confirm') {
+        const selectElement = document.querySelector('.custom-select') as HTMLSelectElement;
+        const inputElement = document.querySelector('.custom-input') as HTMLInputElement;
+
+        if (selectElement && inputElement) {
+          const newIndentity = selectElement.value.trim();
+          const updateReason = inputElement.value.trim();
+
+          if (newIndentity && updateReason) {
+            let params = {
+              userId: userId,
+              oldIdentity: oldIndentity,
+              newIdentity: newIndentity,
+              updateReason: updateReason
+            }
+            //发送请求
+            request.put("/admin/updateIdentity", params, { userType: 'admin' }).then(() => {
+              ElMessage({
+                type: 'success',
+                message: '成功转化',
+              })
+              window.location.reload();
+            })
+            done();
+          } else {
+            ElMessage({
+              type: 'warning',
+              message: '请选择选项并输入内容',
+            });
+          }
+        } else {
+          ElMessage({
+            type: 'error',
+            message: '选择器或输入框未找到',
+          });
+        }
+      } else {
+        done();
+      }
+    },
+  });
+};
 
 //用户封禁权限检测
 function canBanUser(userIdentity: number): boolean {
