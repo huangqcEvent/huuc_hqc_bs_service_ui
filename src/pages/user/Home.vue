@@ -1,34 +1,36 @@
 <template>
-    <div class="home">
-      <h1>首页</h1>
-      <p>欢迎来到首页！</p>
-    </div>
+    <div class="block text-center">
+    <el-carousel height="400px" motion-blur>
+      <el-carousel-item v-for="item in 4" :key="item">
+        <h3 class="small justify-center" text="2xl">{{ item }}</h3>
+      </el-carousel-item>
+    </el-carousel>
+  </div>
   </template>
   
   <script setup lang="ts" name="Home">
   // 这里可以添加一些逻辑，例如获取数据等
   </script>
-  
-  <style scoped>
-  .home {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* 占据整个视口高度 */
-    background-color: #f0f2f5; /* 背景颜色 */
-    color: #333;
-    text-align: center;
-  }
-  
-  h1 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-  }
-  
-  p {
-    font-size: 1.5em;
-    color: #666;
-  }
-  </style>
+
+<style scoped>
+.demonstration {
+  color: var(--el-text-color-secondary);
+}
+
+.el-carousel__item h3 {
+  color: #475669;
+  opacity: 0.75;
+  line-height: 200px;
+  margin: 0;
+  text-align: center;
+}
+
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
+}
+
+.el-carousel__item:nth-child(2n + 1) {
+  background-color: #d3dce6;
+}
+</style>
   
