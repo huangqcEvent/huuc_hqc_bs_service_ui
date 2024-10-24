@@ -29,7 +29,6 @@
                 <el-button type="danger" @click="logout" class="logout-btn">退出登录</el-button>
               </div>
               <template #reference>
-                <!-- <el-avatar :size="50" :src="userInfo.head" /> -->
                 <el-avatar :size="40" src="https://www.huuc.edu.cn/hncj/images/logo.png" />
               </template>
             </el-popover>
@@ -38,8 +37,10 @@
       </el-row>
     </el-header>
     <el-main>
-      <el-scrollbar class="scrollbar">
-        <router-view></router-view>
+      <el-scrollbar class="scrollbar" style="height: 100%;">
+        <div class="content">
+          <router-view></router-view>
+        </div>
       </el-scrollbar>
     </el-main>
   </el-container>
@@ -212,14 +213,44 @@ onMounted(() => {
 
 /* 主体内容样式 */
 .el-main {
-  padding: 20px;
+  padding: 0;
   height: calc(100vh - 60px); /* 调整高度以适应屏幕 */
   overflow: hidden; /* 隐藏默认滚动条 */
+  position: relative;
+}
+
+/* 内容容器样式 */
+.content {
+  padding: 20px; /* 内容内边距 */
+  min-height: 100%; /* 确保内容容器高度至少为 el-main 的高度 */
 }
 
 /* 滚动条样式 */
 .scrollbar {
   height: 100%;
+  overflow-y: auto; /* 确保内容可以滚动 */
+  scrollbar-width: thin; /* Firefox 滚动条宽度 */
   scrollbar-color: #888 #f1f1f1; /* Firefox 滚动条颜色 */
 }
-</style>
+
+/* 滚动条轨道样式 */
+.scrollbar::-webkit-scrollbar {
+  width: 10px; /* 滚动条宽度 */
+}
+
+/* 滚动条滑块样式 */
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #888; /* 滑块颜色 */
+  border-radius: 5px; /* 滑块圆角 */
+}
+
+/* 滚动条滑块悬停样式 */
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* 滑块悬停颜色 */
+}
+
+/* 滚动条轨道背景样式 */
+.scrollbar::-webkit-scrollbar-track {
+  background-color: #f1f1f1; 
+}
+</style>  
