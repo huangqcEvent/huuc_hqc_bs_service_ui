@@ -1,5 +1,8 @@
 <template>
   <el-card class="confession-card" @click="goToDetail">
+    <div class="time">
+      <small>{{ createTime }}</small>
+    </div>
     <div slot="header" class="card-header">
       <span>{{ title }}</span>
     </div>
@@ -20,7 +23,8 @@ const props = defineProps({
   title: String,
   content: String,
   author: String,
-  id: String // 新增 id 属性，用于标识卡片
+  id: String, // 新增 id 属性，用于标识卡片
+  createTime:String
 });
 
 const router = useRouter();
@@ -73,5 +77,13 @@ const goToDetail = () => {
   right: 16px; /* 距离右侧 16px */
   text-align: right;
   color: #999;
+}
+
+.time {
+  position: absolute;
+  top: 5px;
+  left: 16px;
+  text-align: left;
+  color:aqua;
 }
 </style>

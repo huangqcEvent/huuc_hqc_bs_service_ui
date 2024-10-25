@@ -1,39 +1,41 @@
 <template>
   <div class="wall">
     <div class="confession-wall">
-     
       <button class="arrow left" @click="prevPage" :disabled="currentPage === 1">
         <i class="el-icon-arrow-left">上</i>
       </button>
       <transition name="slide-fade" mode="out-in">
         <el-card class="large-card" key="current-page">
           <div class="filter-form">
-        <el-form :model="filterForm" inline>
-          <el-form-item label="用户名">
-            <el-input v-model="filterForm.userName" placeholder="请输入用户名"></el-input>
-          </el-form-item>
-          <el-form-item label="状态">
-            <el-select v-model="filterForm.downEnd" placeholder="全部" style="width: 100px;">
-              <el-option label="全部" value=""></el-option>
-              <el-option label="已解封" value="1"></el-option>
-              <el-option label="封禁中" value="0"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="封禁时间">
-            <el-date-picker v-model="filterForm.downTimeRange" type="daterange" range-separator="至"
-              start-placeholder="开始日期" end-placeholder="结束日期" value-format="YYYY-MM-DD"
-              style="width: 300px;"></el-date-picker>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="fetchData">搜索</el-button>
-            <el-button type="default" @click="clearFilters">清空</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
+            <el-form :model="filterForm" inline>
+              <el-form-item label="标题">
+                <el-input v-model="filterForm.title" placeholder="请输入标题"></el-input>
+              </el-form-item>
+              <el-form-item label="状态">
+                <el-select v-model="filterForm.type" placeholder="全部" style="width: 100px;">
+                  <el-option label="全部" value=""></el-option>
+                  <el-option label="表白" value="1"></el-option>
+                  <el-option label="找对象" value="0"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="发布时间">
+                <el-date-picker v-model="filterForm.createTimeRange" type="daterange" range-separator="至"
+                  start-placeholder="开始日期" end-placeholder="结束日期" value-format="YYYY-MM-DD"
+                  style="width: 300px;"></el-date-picker>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="fetchData">搜索</el-button>
+                <el-button type="default" @click="clearFilters">清空</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
           <div class="confession-grid">
-            <el-col :span="8" v-for="(confession, index) in currentConfessions" :key="index">
-              <ConfessionCard :title="confession.title" :content="confession.content" :author="confession.author" />
+            <el-col :span="8" v-for="confession in confessions " :key="confession.id">
+              <ConfessionCard :title="confession.title" :content="confession.summary" :author="confession.userName" :id="confession.id" :createTime="confession.createTime" />
             </el-col>
+          </div>
+          <div class="page">
+            {{ currentPage }} / {{ totalPages }}  共{{ total }}条 
           </div>
         </el-card>
       </transition>
@@ -45,112 +47,94 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { ElCard, ElCol } from 'element-plus';
 import ConfessionCard from './ConfessionCard.vue';
+import { cardQuery } from '@/api/user/ConfessionWallApi'
 
+//接口返回格式
+interface Card {
+  id: string,
+  title: string,
+  userName: string,
+  summary: string,
+  createTime:string
+}
+
+//接受返回
+const confessions = ref<Card[]>([]);
+
+//当前页
+const currentPage = ref(1);
+
+//每页多少条，固定为9
+const itemsPerPage = 9;
+
+//总数量
+const total = ref(0);
+
+//过滤条件表单
 const filterForm = ref({
-  userName: '',
-  downEnd: '',
-  downTimeRange: ['', ''] as [string, string]
+  title: '',
+  type: '',
+  createTimeRange: ['', ''] as [string, string]
 });
 
-function fetchData() { }
+//请求数据
+function fetchData() {
+  const params = {
+    pageSize: itemsPerPage,
+    pageNumber: currentPage.value,
+    startTime: formatDateTime(filterForm.value.createTimeRange[0]),
+    endTime: formatDateTime(filterForm.value.createTimeRange[1]),
+    title: filterForm.value.title,
+    type: filterForm.value.type
+  }
+  cardQuery(params).then((response) => {
+    confessions.value = response.data.data.list
+    total.value = response.data.data.total
+  })
+}
 
+// 格式化日期时间
+function formatDateTime(dateStr: string | undefined): string {
+  if (!dateStr) return '';
+  return `${dateStr} 00:00:00`;
+}
+
+//清空过滤框
 function clearFilters() {
   filterForm.value = {
-    userName: '',
-    downEnd: '',
-    downTimeRange: ["", ""]
+    title: '',
+    type: '',
+    createTimeRange: ["", ""]
   };
   fetchData();
 }
 
-const confessions = ref([
-  {
-    title: '致我心中的女神',
-    content: '你是我的梦中情人，愿与你共度每一个明天。',
-    author: '匿名'
-  },
-  {
-    title: '给最爱的你',
-    content: '你的笑容如阳光般温暖，愿你幸福快乐每一天。',
-    author: '小明'
-  },
-  {
-    title: '新的表白1',
-    content: '这是一条新的表白内容1。',
-    author: '匿名'
-  },
-  {
-    title: '新的表白2',
-    content: '这是一条新的表白内容2。',
-    author: '匿名'
-  },
-  {
-    title: '新的表白3',
-    content: '这是一条新的表白内容3。',
-    author: '匿名'
-  },
-  {
-    title: '新的表白4',
-    content: '这是一条新的表白内容4。',
-    author: '匿名'
-  },
-  {
-    title: '新的表白5',
-    content: '这是一条新的表白内容5。',
-    author: '匿名'
-  },
-  {
-    title: '新的表白6',
-    content: '这是一条新的表白内容6。',
-    author: '匿名'
-  },
-  {
-    title: '新的表白7',
-    content: '这是一条新的表白内容7。',
-    author: '匿名'
-  },
-  {
-    title: '新的表白8',
-    content: '这是一条新的表白内容8。',
-    author: '匿名'
-  },
-  {
-    title: '新的表白9',
-    content: '这是一条新的表白内容9。',
-    author: '匿名'
-  },
-  {
-    title: '新的表白10',
-    content: '这是一条新的表白内容10。',
-    author: '匿名'
-  }
-]);
+//计算总共多少页
+const totalPages = computed(() => Math.ceil(total.value / itemsPerPage));
 
-const currentPage = ref(1);
-const itemsPerPage = 9;
-
-const totalPages = computed(() => Math.ceil(confessions.value.length / itemsPerPage));
-
-const currentConfessions = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  return confessions.value.slice(start, end);
-});
-
+//点击上一页
 function prevPage() {
   if (currentPage.value > 1) {
     currentPage.value--;
+    fetchData();
   }
 }
 
+//点击下一页
 function nextPage() {
   if (currentPage.value < totalPages.value) {
     currentPage.value++;
+    fetchData();
   }
 }
+
+//初始化是调用接口
+onMounted(() => {
+  fetchData();
+})
 </script>
 
 <style scoped>
@@ -185,7 +169,8 @@ function nextPage() {
   flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
-  height: 670px; /* 增加高度 */
+  height: 670px;
+  /* 增加高度 */
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -201,7 +186,8 @@ function nextPage() {
 }
 
 .filter-form {
-  margin-top: -15px; /* 减少顶部间距 */
+  margin-top: -15px;
+  /* 减少顶部间距 */
 }
 
 .confession-grid {
@@ -254,5 +240,12 @@ function nextPage() {
 .slide-fade-leave-to {
   transform: translateX(20px);
   opacity: 0;
+}
+.page{
+  position: absolute;
+  bottom: 50px;
+  left: 535px;
+  text-align: center;
+  color:aqua;
 }
 </style>
