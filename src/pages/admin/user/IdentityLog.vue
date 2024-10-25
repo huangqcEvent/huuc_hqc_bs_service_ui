@@ -83,7 +83,7 @@
 import Page from '@/common/Page.vue';
 import { onMounted, ref } from 'vue';
 import request from '@/utils/axiosUtils';
-
+import { fetchIdentityLog } from '@/api/admin/user/userApi';
 
 interface identityLog {
     id: string;
@@ -106,8 +106,8 @@ let pageSize = ref(10);
 // 过滤条件表单
 const filterForm = ref({
     userName: '',
-    oldIdentity:ref(),
-    newIdentity:ref(),
+    oldIdentity: ref(),
+    newIdentity: ref(),
     downTimeRange: ['', ''] as [string, string]
 });
 
@@ -128,14 +128,14 @@ function fetchData() {
         downTimeEnd: formatDateTime(filterForm.value.downTimeRange[1])
     };
 
-    request.get('/admin/identityPage', {
+    fetchIdentityLog(
         params,
-        userType: 'admin'
-    }).then(response => {
-        total.value = response.data.data.total;
-        identityLog.value = response.data.data.list;
-        console.log(response.data.data);
-    });
+    )
+        .then(response => {
+            total.value = response.data.data.total;
+            identityLog.value = response.data.data.list;
+            console.log(response.data.data);
+        });
 }
 
 // 分页变化
@@ -164,28 +164,28 @@ function clearFilters() {
 
 // 获取类型
 function getType(row: number) {
-  if (row === 2) {
-    return 'primary';
-  } else if (row === 1) {
-    return 'danger';
-  } else if (row === 0) {
-    return 'success';
-  } else {
-    return 'danger'
-  }
+    if (row === 2) {
+        return 'primary';
+    } else if (row === 1) {
+        return 'danger';
+    } else if (row === 0) {
+        return 'success';
+    } else {
+        return 'danger'
+    }
 }
 
 // 获取显示名称
 function getDisplayName(row: number) {
-  if (row === 2) {
-    return '社团账号';
-  } else if (row === 1) {
-    return '管理员';
-  } else if (row === 0) {
-    return '普通用户';
-  } else {
-    return '超级管理员'
-  }
+    if (row === 2) {
+        return '社团账号';
+    } else if (row === 1) {
+        return '管理员';
+    } else if (row === 0) {
+        return '普通用户';
+    } else {
+        return '超级管理员'
+    }
 }
 </script>
 

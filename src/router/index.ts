@@ -1,15 +1,15 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Login from "@/components/Login.vue";
-import AdminIndex from "@/components/views/AdminIndex.vue";
+import AdminIndex from "@/components/AdminIndex.vue";
 import Register from "@/components/Register.vue";
-import User from "@/pages/admin/User.vue";
-import UserIndex from "@/components/views/UserIndex.vue";
-import DownLog from "@/pages/admin/DownLog.vue";
-import Home from "@/pages/user/Home.vue";
-import Notice from "@/pages/user/Notice.vue";
-import Club from "@/pages/user/Club.vue";
-import ConfessionWall from "@/pages/user/ConfessionWall.vue";
-import IdentityLog from "@/pages/admin/IdentityLog.vue";
+import User from "@/pages/admin/user/User.vue";
+import UserIndex from "@/components/UserIndex.vue";
+import DownLog from "@/pages/admin/user/DownLog.vue";
+import Home from "@/pages/user/Homes/Home.vue";
+import Notice from "@/pages/user/Notices/Notice.vue";
+import Club from "@/pages/user/Clubs/Club.vue";
+import ConfessionWall from "@/pages/user/ConfessionWalls/ConfessionWall.vue"
+import IdentityLog from "@/pages/admin/user/IdentityLog.vue";
 export default createRouter({
     history: createWebHistory(),
     routes: [

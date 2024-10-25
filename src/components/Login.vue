@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts" name="Login">
-import axios from 'axios';
+import {login} from '@/api/commonApi/commonApi'
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus'
@@ -44,8 +44,7 @@ function toLogin(email: string, pwd: string) {
 		password: pwd
 	};
 	console.log(email, pwd);
-	axios.post('/api/common/login', data
-	) // 修正 URL 并传递 data 参数
+	login(data) // 修正 URL 并传递 data 参数
 		.then(response => {
 			if (response.data.code == 200) {
 				if (response.data.data.identity == 1 || response.data.data.identity == 99) {

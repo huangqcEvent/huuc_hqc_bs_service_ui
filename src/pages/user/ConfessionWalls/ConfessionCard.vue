@@ -40,7 +40,7 @@ const goToDetail = () => {
   flex-direction: column;
   justify-content: space-between; /* 垂直居中对齐 */
   padding: 16px;
-  background-color: #fff;
+  background-color:rgba(255, 255, 255, 0.7);
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   overflow: hidden;

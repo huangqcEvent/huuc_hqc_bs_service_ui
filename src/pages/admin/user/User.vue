@@ -34,30 +34,26 @@
 
         <el-form-item>
           <el-button type="primary" @click="fetchData">搜索</el-button>
-          <el-button type="defult" @click="clearFilters">清空</el-button>
+          <el-button type="default" @click="clearFilters">清空</el-button>
         </el-form-item>
+        
       </el-form>
     </div>
 
     <!-- 用户列表 -->
     <div class="content">
       <el-table :data="userList" style="width: 100%;">
-
         <el-table-column prop="head1" label="头像" width="80">
           <template #default="scope">
-            <!-- <el-avatar :src="scope.row.head" size="80px"></el-avatar> -->
             <el-avatar src="https://www.huuc.edu.cn/hncj/images/logo.png" size="80px"></el-avatar>
           </template>
         </el-table-column>
-
         <el-table-column prop="userName" label="用户名" width="150"></el-table-column>
-
         <el-table-column prop="state" label="状态" width="120">
           <template #default="scope">
             <el-tag :type="scope.row.state ? 'success' : 'danger'">{{ scope.row.state ? '正常' : '停用' }}</el-tag>
           </template>
         </el-table-column>
-
         <el-table-column prop="identity" label="身份" width="120">
           <template #default="scope">
             <el-tag :type="getType(scope.row.identity)">
@@ -65,9 +61,7 @@
             </el-tag>
           </template>
         </el-table-column>
-
         <el-table-column prop="createTime" label="注册时间" width="180"></el-table-column>
-        <!-- 添加操作列 -->
         <el-table-column label="操作1" width="150">
           <template #default="scope">
             <el-button v-if="canBanUser(scope.row.identity)" type="primary" plain
@@ -77,7 +71,6 @@
             <el-tag v-else type="danger">无权限</el-tag>
           </template>
         </el-table-column>
-
         <el-table-column label="操作2" width="150">
           <template #default="scope">
             <el-button v-if="canBanUser(scope.row.identity)" type="primary" plain
@@ -87,10 +80,7 @@
             <el-tag v-else type="danger">无权限</el-tag>
           </template>
         </el-table-column>
-
       </el-table>
-
-
     </div>
 
     <div class="pagination">
@@ -99,14 +89,14 @@
   </div>
 </template>
 
-
 <script setup lang="ts" name="User">
 import Page from '@/common/Page.vue';
 import { onMounted, ref, h } from 'vue';
-import request from '@/utils/axiosUtils';
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus';
 import { useRoute } from 'vue-router';
-//获取用户身份参数
+import { fetchUsers, banOrUnbanUser, updateUserIdentity } from '@/api/admin/user/userApi';
+
+// 获取用户身份参数
 const route = useRoute();
 let identity = ref(Number(route.query.identity)); // 确保 identity 是数字
 
@@ -124,7 +114,7 @@ interface User {
 let userList = ref<User[]>([]);
 let total = ref(0);
 
-//请求参数
+// 请求参数
 let pageNumber = ref(1);
 let pageSize = ref(10);
 
@@ -153,13 +143,9 @@ function fetchData() {
     endTime: formatDateTime(filterForm.value.createTimeRange[1])
   };
 
-  request.get('/admin/userPage', {
-    params: params,
-    userType: 'admin'
-  }).then(response => {
+  fetchUsers(params).then(response => {
     total.value = response.data.data.total;
     userList.value = response.data.data.list;
-
     console.log(response.data.data);
   });
 }
@@ -186,7 +172,7 @@ function getType(row: number) {
   } else if (row === 0) {
     return 'success';
   } else {
-    return 'danger'
+    return 'danger';
   }
 }
 
@@ -199,7 +185,7 @@ function getDisplayName(row: number) {
   } else if (row === 0) {
     return '普通用户';
   } else {
-    return '超级管理员'
+    return '超级管理员';
   }
 }
 
@@ -233,7 +219,7 @@ function handledownEndChange(id: number, userName: string, downEnd: number) {
             state: downEnd,
             downReason: value
           };
-          request.put("/admin/downUser", params, { userType: 'admin' })
+          banOrUnbanUser(params)
             .then(() => {
               ElMessage({
                 type: 'success',
@@ -264,27 +250,35 @@ function handledownEndChange(id: number, userName: string, downEnd: number) {
       type: 'warning'
     })
       .then(() => {
-        request.put("/admin/downUser", {
+        const params = {
           id: id,
           state: downEnd
-        }, { userType: 'admin' }).then(() => {
-          ElMessage({
-            type: 'success',
-            message: '成功解封用户:' + userName,
-            dangerouslyUseHTMLString: true, // 允许使用 HTML 字符串
+        }
+        banOrUnbanUser(params)
+          .then(() => {
+            ElMessage({
+              type: 'success',
+              message: '成功解封用户:' + userName,
+              dangerouslyUseHTMLString: true, // 允许使用 HTML 字符串
+            });
+            window.location.reload();
           })
-          window.location.reload();
-        })
+          .catch((error) => {
+            ElMessage({
+              type: 'error',
+              message: '解封失败: ' + error.message,
+            });
+          });
       }).catch(() => {
         ElMessage({
           type: 'info',
           message: '解封操作已取消',
         });
-      })
+      });
   }
 }
 
-//转化身份
+// 转化身份
 function updateIdentity(userId: string, oldIndentity: number) {
   ElMessageBox({
     title: '提示',
@@ -310,20 +304,26 @@ function updateIdentity(userId: string, oldIndentity: number) {
           const updateReason = inputElement.value.trim();
 
           if (newIndentity && updateReason) {
-            let params = {
+            const params = {
               userId: userId,
               oldIdentity: oldIndentity,
-              newIdentity: newIndentity,
+              newIdentity: parseInt(newIndentity),
               updateReason: updateReason
-            }
-            //发送请求
-            request.put("/admin/updateIdentity", params, { userType: 'admin' }).then(() => {
-              ElMessage({
-                type: 'success',
-                message: '成功转化',
+            };
+            updateUserIdentity(params)
+              .then(() => {
+                ElMessage({
+                  type: 'success',
+                  message: '成功转化',
+                });
+                window.location.reload();
               })
-              window.location.reload();
-            })
+              .catch((error) => {
+                ElMessage({
+                  type: 'error',
+                  message: '转化失败: ' + error.message,
+                });
+              });
             done();
           } else {
             ElMessage({
@@ -344,7 +344,7 @@ function updateIdentity(userId: string, oldIndentity: number) {
   });
 };
 
-//用户封禁权限检测
+// 用户封禁权限检测
 function canBanUser(userIdentity: number): boolean {
   if (identity.value === 99) {
     return [0, 1, 2].includes(userIdentity);
@@ -354,7 +354,6 @@ function canBanUser(userIdentity: number): boolean {
     return false;
   }
 }
-
 </script>
 
 <style scoped>

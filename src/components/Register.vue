@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts" name="Register">
-import axios from 'axios';
+import { register } from '@/api/commonApi/commonApi';
 import { ref, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Upload from '@/common/Upload.vue';
@@ -49,16 +49,14 @@ function toRegister(email: string, pwd: string, head: string) {
 		head: head
 	};
 
-	console.log(email, pwd);
-	axios.post('/api/common/register', data)
-		.then(response => {
-			if (response.data.code === 200) {
-				alert(response.data.msg);
-				router.push('/login');
-			} else {
-				alert(response.data.msg);
-			}
-		})
+	register(data).then(response => {
+		if (response.data.code === 200) {
+			alert(response.data.msg);
+			router.push('/login');
+		} else {
+			alert(response.data.msg);
+		}
+	})
 		.catch(error => {
 			console.error('Error during registration:', error);
 		});

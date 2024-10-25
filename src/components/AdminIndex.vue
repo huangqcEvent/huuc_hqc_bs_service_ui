@@ -9,7 +9,7 @@
           <span>{{ adminInfo.username }}</span>
         </div>
         <h1>欢迎来到管理后台</h1>
-        <el-button type="text" @click="logout" class="logout-button">退出登录</el-button>
+        <el-button type="text" @click="logout1" class="logout-button">退出登录</el-button>
       </div>
     </el-header>
 
@@ -54,9 +54,8 @@
 import { RouterView } from 'vue-router';
 import { onBeforeMount, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import request from '@/utils/axiosUtils';
-
 import Image from '@/common/Image.vue';
+import { logout } from '@/api/commonApi/commonApi'
 import { confirm } from '@/utils/confirmUtils';
 
 const router = useRouter();
@@ -67,9 +66,9 @@ const adminInfo = reactive({
   identity: ''
 });
 
-const logout = () => {
+const logout1 = () => {
   confirm("确认要退出登录吗?", () => {
-    request.get("/common/logout", { userType: 'admin' }).then(
+    logout('admin').then(
       response => {
         console.log(response.data.msg);
         // 清除登录状态

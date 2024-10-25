@@ -1,11 +1,35 @@
 <template>
   <div class="wall">
     <div class="confession-wall">
+     
       <button class="arrow left" @click="prevPage" :disabled="currentPage === 1">
         <i class="el-icon-arrow-left">上</i>
       </button>
       <transition name="slide-fade" mode="out-in">
         <el-card class="large-card" key="current-page">
+          <div class="filter-form">
+        <el-form :model="filterForm" inline>
+          <el-form-item label="用户名">
+            <el-input v-model="filterForm.userName" placeholder="请输入用户名"></el-input>
+          </el-form-item>
+          <el-form-item label="状态">
+            <el-select v-model="filterForm.downEnd" placeholder="全部" style="width: 100px;">
+              <el-option label="全部" value=""></el-option>
+              <el-option label="已解封" value="1"></el-option>
+              <el-option label="封禁中" value="0"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="封禁时间">
+            <el-date-picker v-model="filterForm.downTimeRange" type="daterange" range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期" value-format="YYYY-MM-DD"
+              style="width: 300px;"></el-date-picker>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="fetchData">搜索</el-button>
+            <el-button type="default" @click="clearFilters">清空</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
           <div class="confession-grid">
             <el-col :span="8" v-for="(confession, index) in currentConfessions" :key="index">
               <ConfessionCard :title="confession.title" :content="confession.content" :author="confession.author" />
@@ -20,13 +44,27 @@
   </div>
 </template>
 
-<script setup lang="ts" name="ConfessionWall">
+<script setup lang="ts">
 import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
 import { ElCard, ElCol } from 'element-plus';
-import ConfessionCard from './ConfessionWalls.vue/ConfessionCard.vue';
+import ConfessionCard from './ConfessionCard.vue';
 
-const router = useRouter();
+const filterForm = ref({
+  userName: '',
+  downEnd: '',
+  downTimeRange: ['', ''] as [string, string]
+});
+
+function fetchData() { }
+
+function clearFilters() {
+  filterForm.value = {
+    userName: '',
+    downEnd: '',
+    downTimeRange: ["", ""]
+  };
+  fetchData();
+}
 
 const confessions = ref([
   {
@@ -39,7 +77,6 @@ const confessions = ref([
     content: '你的笑容如阳光般温暖，愿你幸福快乐每一天。',
     author: '小明'
   },
-  // 添加更多表白内容
   {
     title: '新的表白1',
     content: '这是一条新的表白内容1。',
@@ -122,17 +159,25 @@ function nextPage() {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #f0f2f5;
+  background-image: url('./../../../assets/表白墙背景.jpg');
+  background-size: 1400px;
+  background-position: center;
+  background-repeat: no-repeat;
   color: #333;
   text-align: center;
   padding: 0px;
+  height: 100vh;
+  margin: 0;
 }
 
 .confession-wall {
   position: relative;
   width: 100%;
+  height: 800px;
   max-width: 1200px;
   margin: 0 auto;
+  margin-top: 0;
+  margin-bottom: 30px;
 }
 
 .large-card {
@@ -140,18 +185,23 @@ function nextPage() {
   flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
-  height: 620px;
-  background-color: #fff;
+  height: 670px; /* 增加高度 */
+  background-color: rgba(255, 255, 255, 0.5);
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   border: 2px solid #e0e0e0;
   transition: box-shadow 0.3s, border-color 0.3s;
+  margin-top: 0;
 }
 
 .large-card:hover {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   border-color: #c0c0c0;
+}
+
+.filter-form {
+  margin-top: -15px; /* 减少顶部间距 */
 }
 
 .confession-grid {
