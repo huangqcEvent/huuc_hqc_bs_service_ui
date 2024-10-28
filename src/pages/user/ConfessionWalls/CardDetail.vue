@@ -1,9 +1,15 @@
 <template>
+    <el-page-header @back="goBack">
+        <template #content>
+            <span class="text-large font-600 mr-3">来自 {{ confessionDetail?.userName }} 的 {{ confessionDetail?.typeStr=='找对象'?'找对象':'表白' }}贴 </span>
+        </template>
+    </el-page-header>
     <div class="card-detail-container">
         <div v-if="confessionDetail" class="card-detail">
             <h1>{{ confessionDetail.title }}</h1>
             <div class="user-info">
-                <img v-if="confessionDetail.userHead" :src="confessionDetail.userHead" alt="User Head" class="user-head">
+                <img v-if="confessionDetail.userHead" :src="confessionDetail.userHead" alt="User Head"
+                    class="user-head">
                 <p><strong>用户名:</strong> {{ confessionDetail.userName }}</p>
             </div>
             <p><strong>内容:</strong> {{ confessionDetail.content }}</p>
@@ -11,13 +17,14 @@
             <p><strong>概要:</strong> {{ confessionDetail.summary }}</p>
             <p><strong>描述:</strong> {{ confessionDetail.toUserInfo }}</p>
             <p><strong>类型:</strong> {{ confessionDetail.typeStr }}</p>
-            <div class="images">
-                <img v-if="confessionDetail.image1" :src="confessionDetail.image1" alt="Image 1" class="image">
-                <img v-if="confessionDetail.image2" :src="confessionDetail.image2" alt="Image 2" class="image">
-                <img v-if="confessionDetail.image3" :src="confessionDetail.image3" alt="Image 3" class="image">
+            <div>
+                <Image v-if="confessionDetail.image1" :src="confessionDetail.image1" :width="500" />
+                <Image v-if="confessionDetail.image2" :src="confessionDetail.image2" :width="500" />
+                <Image v-if="confessionDetail.image3" :src="confessionDetail.image3" :width="500" />
             </div>
         </div>
         <div v-else class="loading">
+            <div class="spinner"></div>
             <p>Loading...</p>
         </div>
     </div>
@@ -25,8 +32,9 @@
 
 <script setup lang="ts" name="CardDetail">
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute,useRouter } from 'vue-router';
 import { getDetailById } from '@/api/user/ConfessionWallApi';
+import Image from '@/common/Image.vue';
 
 interface ConfessionDetail {
     content: string;
@@ -44,8 +52,12 @@ interface ConfessionDetail {
 }
 
 const route = useRoute();
+const router = useRouter();
 const id = ref<string>('');
 const confessionDetail = ref<ConfessionDetail | null>(null);
+const goBack = () => {
+    router.push({path:'/userIndex/confessionWall'})
+}
 
 onMounted(() => {
     id.value = route.params.id as string;
@@ -66,7 +78,7 @@ onMounted(() => {
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
 }
 
 .card-detail {
@@ -102,19 +114,6 @@ onMounted(() => {
     height: 40px;
     border-radius: 50%;
     margin-right: 10px;
-}
-
-.images {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.images .image {
-    max-width: 100px;
-    height: auto;
-    border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -123,5 +122,21 @@ onMounted(() => {
     padding: 20px;
     font-size: 18px;
     color: #777;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #333;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 10px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 </style>

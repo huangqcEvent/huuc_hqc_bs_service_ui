@@ -1,11 +1,11 @@
 <template>
-  <div class="wall">
+  <div v-if="confessions !== null" class="wall">
     <div class="confession-wall">
       <button class="arrow left" @click="prevPage" :disabled="currentPage === 1">
         <i class="el-icon-arrow-left">上</i>
       </button>
       <transition name="slide-fade" mode="out-in">
-        <el-card class="large-card" key="current-page">
+        <el-card class="large-card" key="currentPage">
           <div class="filter-form">
             <el-form :model="filterForm" inline>
               <el-form-item label="标题">
@@ -30,12 +30,13 @@
             </el-form>
           </div>
           <div class="confession-grid">
-            <el-col :span="8" v-for="confession in confessions " :key="confession.id">
-              <ConfessionCard :title="confession.title" :content="confession.summary" :author="confession.userName" :id="confession.id" :createTime="confession.createTime" />
+            <el-col :span="8" v-for="confession in confessions" :key="confession.id">
+              <ConfessionCard :title="confession.title" :content="confession.summary" :author="confession.userName"
+                :id="confession.id" :createTime="confession.createTime" />
             </el-col>
           </div>
           <div class="page">
-            {{ currentPage }} / {{ totalPages }}  共{{ total }}条 
+            {{ currentPage }} / {{ totalPages }} 共{{ total }}条
           </div>
         </el-card>
       </transition>
@@ -44,43 +45,48 @@
       </button>
     </div>
   </div>
+  <div v-else class="loading">
+    <div class="spinner"></div>
+    <p v-if="confessions === null">出错了,请稍后再试...........</p>
+    <p v-else>加载失败，请重试。</p>
+  </div>
 </template>
 
 <script setup lang="ts" name="ConfessionWall">
 import { ref, computed, onMounted } from 'vue';
 import { ElCard, ElCol } from 'element-plus';
 import ConfessionCard from './ConfessionCard.vue';
-import { cardQuery } from '@/api/user/ConfessionWallApi'
+import { cardQuery } from '@/api/user/ConfessionWallApi';
 
-//接口返回格式
+// 接口返回格式
 interface Card {
-  id: string,
-  title: string,
-  userName: string,
-  summary: string,
-  createTime:string
+  id: string;
+  title: string;
+  userName: string;
+  summary: string;
+  createTime: string;
 }
 
-//接受返回
-const confessions = ref<Card[]>([]);
+// 接受返回
+const confessions = ref<Card[] | null>(null);
 
-//当前页
+// 当前页
 const currentPage = ref(1);
 
-//每页多少条，固定为9
+// 每页多少条，固定为9
 const itemsPerPage = 9;
 
-//总数量
+// 总数量
 const total = ref(0);
 
-//过滤条件表单
+// 过滤条件表单
 const filterForm = ref({
   title: '',
   type: '',
   createTimeRange: ['', ''] as [string, string]
 });
 
-//请求数据
+// 请求数据
 function fetchData() {
   const params = {
     pageSize: itemsPerPage,
@@ -89,11 +95,16 @@ function fetchData() {
     createTimeEnd: formatDateTime(filterForm.value.createTimeRange[1]),
     title: filterForm.value.title,
     type: filterForm.value.type
-  }
-  cardQuery(params).then((response) => {
-    confessions.value = response.data.data.list
-    total.value = response.data.data.total
-  })
+  };
+  cardQuery(params)
+    .then((response) => {
+      confessions.value = response.data.data.list;
+      total.value = response.data.data.total;
+    })
+    .catch((error) => {
+      console.error('请求失败:', error);
+      confessions.value = null;
+    });
 }
 
 // 格式化日期时间
@@ -102,20 +113,20 @@ function formatDateTime(dateStr: string | undefined): string {
   return `${dateStr} 00:00:00`;
 }
 
-//清空过滤框
+// 清空过滤框
 function clearFilters() {
   filterForm.value = {
     title: '',
     type: '',
-    createTimeRange: ["", ""]
+    createTimeRange: ['', '']
   };
   fetchData();
 }
 
-//计算总共多少页
+// 计算总共多少页
 const totalPages = computed(() => Math.ceil(total.value / itemsPerPage));
 
-//点击上一页
+// 点击上一页
 function prevPage() {
   if (currentPage.value > 1) {
     currentPage.value--;
@@ -123,7 +134,7 @@ function prevPage() {
   }
 }
 
-//点击下一页
+// 点击下一页
 function nextPage() {
   if (currentPage.value < totalPages.value) {
     currentPage.value++;
@@ -131,10 +142,10 @@ function nextPage() {
   }
 }
 
-//初始化是调用接口
+// 初始化时调用接口
 onMounted(() => {
   fetchData();
-})
+});
 </script>
 
 <style scoped>
@@ -170,7 +181,6 @@ onMounted(() => {
   gap: 20px;
   padding: 20px;
   height: 670px;
-  /* 增加高度 */
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -187,7 +197,6 @@ onMounted(() => {
 
 .filter-form {
   margin-top: -15px;
-  /* 减少顶部间距 */
 }
 
 .confession-grid {
@@ -241,11 +250,20 @@ onMounted(() => {
   transform: translateX(20px);
   opacity: 0;
 }
-.page{
+
+.page {
   position: absolute;
   bottom: 50px;
-  left: 535px;
+  left: 50%;
+  transform: translateX(-50%);
   text-align: center;
-  color:aqua;
+  color: aqua;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  font-size: 18px;
+  color: #f50505;
 }
 </style>
