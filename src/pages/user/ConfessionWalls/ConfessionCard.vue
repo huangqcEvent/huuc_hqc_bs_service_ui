@@ -15,7 +15,7 @@
   </el-card>
 </template>
 
-<script setup>
+<script setup lang="ts" name="ConfessionCard">
 import { defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -32,6 +32,7 @@ const router = useRouter();
 const goToDetail = () => {
   router.push({ name: 'CardDetail', params: { id: props.id } });
 };
+
 </script>
 
 <style scoped>

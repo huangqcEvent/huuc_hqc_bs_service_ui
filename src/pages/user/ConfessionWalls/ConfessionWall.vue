@@ -46,7 +46,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" name="ConfessionWall">
 import { ref, computed, onMounted } from 'vue';
 import { ElCard, ElCol } from 'element-plus';
 import ConfessionCard from './ConfessionCard.vue';
@@ -85,8 +85,8 @@ function fetchData() {
   const params = {
     pageSize: itemsPerPage,
     pageNumber: currentPage.value,
-    startTime: formatDateTime(filterForm.value.createTimeRange[0]),
-    endTime: formatDateTime(filterForm.value.createTimeRange[1]),
+    createTimeStart: formatDateTime(filterForm.value.createTimeRange[0]),
+    createTimeEnd: formatDateTime(filterForm.value.createTimeRange[1]),
     title: filterForm.value.title,
     type: filterForm.value.type
   }

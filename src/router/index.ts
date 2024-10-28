@@ -10,6 +10,7 @@ import Notice from "@/pages/user/Notices/Notice.vue";
 import Club from "@/pages/user/Clubs/Club.vue";
 import ConfessionWall from "@/pages/user/ConfessionWalls/ConfessionWall.vue"
 import IdentityLog from "@/pages/admin/user/IdentityLog.vue";
+import CardDetail from "@/pages/user/ConfessionWalls/CardDetail.vue";
 export default createRouter({
     history: createWebHistory(),
     routes: [
@@ -37,6 +38,11 @@ export default createRouter({
                 {
                     path: 'confessionWall',
                     component: ConfessionWall
+                },
+                {
+                    path: 'cardDetail/:id',
+                    name:'CardDetail',
+                    component: CardDetail
                 }
             ]
         },

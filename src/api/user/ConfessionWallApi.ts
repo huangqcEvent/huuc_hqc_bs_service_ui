@@ -4,3 +4,8 @@ import request from '@/utils/axiosUtils';
 export function cardQuery(params:any){
     return request.get("/user/confessionLog",{params})
 }
+
+//表白信息详情查询
+export function getDetailById(id: string) {
+    return request.get(`/user/getDetail/${id}`);
+}

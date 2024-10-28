@@ -53,7 +53,7 @@ instance.interceptors.response.use(
     // 响应错误
     // 可以在这里处理全局的错误
     ElMessage({
-      message: '服务器错误',
+      message: '服务器错误,'+error.code,
       type: 'error',
     });
     return Promise.reject(error);
