@@ -12,7 +12,7 @@
 					<el-form-item label="密码" prop="password">
 						<el-input type="password" v-model="loginForm.pwd" placeholder="密码"></el-input>
 					</el-form-item>
-					<Upload @upload-success="handleUploadSuccess"></Upload>
+					头像：<Upload @upload-success="handleUploadSuccess"></Upload>
 					<el-form-item class="text-center">
 						<el-button type="primary" class="m-l-20"
 							@click.prevent="toRegister(loginForm.email, loginForm.pwd, loginForm.head)">注册</el-button>

@@ -19,6 +19,7 @@
             <el-button type="primary" @click="login" class="login-btn">登录</el-button>
           </div>
           <div v-else class="user-info">
+            <el-button type="success" @click="goToPost" class="post-button">我要发贴</el-button>
             <el-popover placement="bottom" width="200" trigger="hover" popper-class="user-popover">
               <div class="popover-content">
                 <h1>{{ userInfo.username }}</h1>
@@ -41,6 +42,7 @@
     </el-main>
   </el-container>
 </template>
+
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
@@ -84,6 +86,11 @@ const logout1 = () => {
   });
 };
 
+const goToPost = () => {
+  // 这里可以添加跳转到发帖页面的逻辑
+  router.push('/userIndex/post');
+};
+
 onMounted(() => {
   const storedUserInfo = localStorage.getItem('userInfo');
   if (storedUserInfo) {
@@ -92,6 +99,7 @@ onMounted(() => {
   }
 });
 </script>
+
 
 <style scoped>
 /* 顶部横幅样式 */
@@ -158,6 +166,7 @@ onMounted(() => {
 .login-button {
   display: flex;
   align-items: center;
+  margin-top: -5px;
   /* 垂直居中 */
   height: 100%;
   /* 使按钮高度与 banner 一致 */
@@ -186,10 +195,39 @@ onMounted(() => {
 /* 用户信息样式 */
 .user {
   display: flex;
-  align-items: center;
-  /* 垂直居中 */
-  justify-content: flex-end;
-  /* 右对齐 */
+  justify-content: flex-end; /* 右对齐 */
+  margin-top: 10px;
+}
+
+/* 发贴按钮样式 */
+.post-button {
+  background-color: #67c23a;
+  border: none;
+  border-radius: 20px; /* 更圆润的圆角 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+  padding: 10px 20px;
+  color: #fff;
+  font-size: 16px;
+  margin-right: 20px; /* 增加右边距 */
+  margin-top: -30px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  display: inline-flex;
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+}
+
+/* 发贴按钮悬停样式 */
+.post-button:hover {
+  background-color: #85ce61;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  /* 悬停时增加阴影效果 */
+}
+
+/* 用户头像样式 */
+.el-avatar {
+  margin-left: 20px; /* 增加左边距 */
+  cursor: pointer; /* 鼠标悬停时显示指针 */
+  align-self: center; /* 垂直居中 */
 }
 
 /* 弹出框样式 */

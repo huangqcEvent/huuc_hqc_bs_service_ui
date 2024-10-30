@@ -1,7 +1,6 @@
 <template>
     <div class="upload">
-        <div class="text">选择你的个人头像</div>
-        <el-upload name="file" class="avatar-uploader" action="api/common/upload" :show-file-list="false"
+        <el-upload name="file" class="avatar-uploader" action="/api/common/upload" :show-file-list="false"
             :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
             <img v-if="image" :src="image" class="avatar" />
             <el-icon v-else class="avatar-uploader-icon">

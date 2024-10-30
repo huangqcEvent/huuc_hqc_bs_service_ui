@@ -47,7 +47,7 @@
   </div>
   <div v-else class="loading">
     <div class="spinner"></div>
-    <p v-if="confessions === null">出错了,请稍后再试...........</p>
+    <p v-if="confessions === null">Loading...</p>
     <p v-else>加载失败，请重试。</p>
   </div>
 </template>
@@ -264,6 +264,6 @@ onMounted(() => {
   text-align: center;
   padding: 20px;
   font-size: 18px;
-  color: #f50505;
+  color: #777;
 }
 </style>

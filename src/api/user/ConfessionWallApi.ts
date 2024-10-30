@@ -9,3 +9,8 @@ export function cardQuery(params:any){
 export function getDetailById(id: string) {
     return request.get(`/user/getDetail/${id}`);
 }
+
+//新增表白接口
+export function saveConfession(params:any){
+    return request.post("/user/saveConfession",params);
+}
