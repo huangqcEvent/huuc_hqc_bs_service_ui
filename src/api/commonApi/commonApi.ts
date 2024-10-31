@@ -19,4 +19,17 @@ export function logout(type: string) {
         { userType: type }
     )
 }
-//文件上传接口
+// 文件上传接口
+export function upload(file: File) {
+    // 使用FormData对象来封装文件数据
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // 发送POST请求到服务器的/api/common/upload接口
+    return axios.post("/api/common/upload", formData, {
+        // 设置请求头，指定Content-Type为multipart/form-data
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+}

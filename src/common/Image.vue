@@ -27,7 +27,7 @@
     </div>
   </div>
   <div class="fullImg" v-if="isScreen">
-    <img :src="props.src" alt="img" />
+    <img :src="props.src" alt="img" class="fullImg-img" />
     <div class="toSmall" @click="showImg">
       <svg
         t="1718433997569"
@@ -87,11 +87,19 @@ const showImg = () => {
   justify-content: center;
   align-items: center;
 }
+
+.fullImg-img {
+  max-width: 80%; /* 设置最大宽度 */
+  max-height: 80%; /* 设置最大高度 */
+  object-fit: contain; /* 保持图片比例 */
+}
+
 .norImg {
   position: relative;
   width: auto;
   height: auto;
 }
+
 .toBig {
   display: none;
   position: absolute;
@@ -99,18 +107,22 @@ const showImg = () => {
   top: 5px;
   cursor: pointer;
 }
+
 .norImg:hover .toBig {
   display: block;
 }
+
 .toSmall {
   display: block;
   position: absolute;
   top: 100px;
-  right:50px;
+  right: 50px;
   transform: translate(-50%, -50%);
   cursor: pointer;
 }
+
 .icon2:hover path {
   fill: #fff;
 }
 </style>
+
