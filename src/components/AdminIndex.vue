@@ -40,6 +40,24 @@
             </el-menu-item>
           </el-sub-menu>
         </el-menu>
+
+        <el-menu :default-openeds="['2']" class="custom-menu" active-text-color="#42b983" background-color="#ffffff"
+          text-color="#333333">
+          <el-sub-menu index="2">
+            <template #title>
+              <i class="el-icon-user"></i>
+              <span>表白墙管理</span>
+            </template>
+            <el-menu-item type="defult" index="1-1" @click="router.push({
+              path: '/adminIndex/confession',
+              query: { identity: adminInfo.identity }
+            })">
+              <i class="el-icon-user"></i>
+              <span>表白贴列表</span>
+            </el-menu-item>
+          </el-sub-menu>
+        </el-menu>
+        
       </el-aside>
 
       <!-- 主要内容区域 -->

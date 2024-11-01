@@ -12,6 +12,7 @@ import ConfessionWall from "@/pages/user/ConfessionWalls/ConfessionWall.vue"
 import IdentityLog from "@/pages/admin/user/IdentityLog.vue";
 import CardDetail from "@/pages/user/ConfessionWalls/CardDetail.vue";
 import Publish from "@/pages/user/Forms/Publish.vue";
+import Confession from '@/pages/admin/confessionWall/Confession.vue'
 export default createRouter({
     history: createWebHistory(),
     routes: [
@@ -70,6 +71,10 @@ export default createRouter({
                 {
                     path: 'identityLog',
                     component: IdentityLog
+                },
+                {
+                    path: 'confession',
+                    component: Confession
                 }
             ]
         },
