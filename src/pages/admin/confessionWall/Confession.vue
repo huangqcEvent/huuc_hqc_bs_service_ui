@@ -39,7 +39,7 @@
         <!-- 表白墙列表 -->
         <div class="content">
             <el-table :data="confessionList" style="width: 100%;">
-                <el-table-column prop="userName" label="用户名" width="150"></el-table-column>
+                <el-table-column prop="realName" label="用户名" width="150"></el-table-column>
 
                 <el-table-column prop="type" label="类型" width="180">
                     <template #default="scope">
@@ -67,7 +67,7 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="createTime" label="发布时间" width="150"></el-table-column>
+                <el-table-column prop="createTime" label="发布时间" width="300"></el-table-column>
             </el-table>
         </div>
 
@@ -80,10 +80,11 @@
 <script setup lang="ts" name="DownLog">
 import Page from '@/common/Page.vue';
 import { onMounted, ref } from 'vue';
+import { cardQuery } from '@/api/user/ConfessionWallApi';
 
 interface Confession {
     id: string;
-    userName: string;
+    realName: string;
     type: number;
     isAnonymous: number;
     isTop: number;
@@ -123,7 +124,10 @@ function fetchData() {
         createTimeStart: formatDateTime(filterForm.value.createTimeRange[0]),
         createTimeEnd: formatDateTime(filterForm.value.createTimeRange[1])
     };
-    
+    cardQuery(params,'admin').then((resopnse)=>{
+        confessionList.value = resopnse.data.data.list
+        total.value = resopnse.data.data.total 
+    })
     
 }
 

@@ -94,7 +94,8 @@ function fetchData() {
     createTimeStart: formatDateTime(filterForm.value.createTimeRange[0]),
     createTimeEnd: formatDateTime(filterForm.value.createTimeRange[1]),
     title: filterForm.value.title,
-    type: filterForm.value.type
+    type: filterForm.value.type,
+    status:1
   };
   cardQuery(params)
     .then((response) => {
