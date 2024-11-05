@@ -14,3 +14,13 @@ export function getDetailById(id: string) {
 export function saveConfession(params:any){
     return request.post("/user/saveConfession",params);
 }
+
+//修改表白墙贴状态
+export function updateConfessionStatus(params:any,type:string){
+   return request.put("/admin/updateConfessionStatus",params,{userType:type});
+}
+
+//修改置顶
+export function updateTopService(params:any,type:string){
+    return request.put("/admin/updateTop",params,{userType:type})
+}

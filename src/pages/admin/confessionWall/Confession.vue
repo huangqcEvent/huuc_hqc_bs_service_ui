@@ -43,13 +43,15 @@
 
                 <el-table-column prop="type" label="类型" width="180">
                     <template #default="scope">
-                        <el-tag :type="scope.row.type ? 'success' : 'danger'">{{ scope.row.type === 1 ? '表白贴' : '找对象贴' }}</el-tag>
+                        <el-tag :type="scope.row.type ? 'success' : 'danger'">{{ scope.row.type === 1 ? '表白贴' : '找对象贴'
+                            }}</el-tag>
                     </template>
                 </el-table-column>
 
                 <el-table-column prop="isAnonymous" label="是否匿名" width="150">
                     <template #default="scope">
-                        <el-tag :type="scope.row.isAnonymous ? 'success' : 'danger'">{{ scope.row.isAnonymous === 1 ? '是' : '否' }}</el-tag>
+                        <el-tag :type="scope.row.isAnonymous ? 'success' : 'danger'">{{ scope.row.isAnonymous === 1 ?
+                            '是' : '否' }}</el-tag>
                     </template>
                 </el-table-column>
 
@@ -63,11 +65,31 @@
 
                 <el-table-column prop="isTop" label="是否置顶" width="100">
                     <template #default="scope">
-                        <el-tag :type="scope.row.isTop ? 'success' : 'danger'">{{ scope.row.isTop === 1 ? '是' : '否' }}</el-tag>
+                        <el-tag :type="scope.row.isTop ? 'success' : 'danger'">{{ scope.row.isTop === 1 ? '是' : '否'
+                            }}</el-tag>
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="createTime" label="发布时间" width="300"></el-table-column>
+                <el-table-column prop="createTime" label="发布时间" width="180"></el-table-column>
+
+                <el-table-column label="操作1" width="100">
+                    <template #default="scope">
+                        <el-button v-if="canBanUser(scope.row.identity)" type="primary" plain
+                            @click="updateStatus(scope.row.id, scope.row.status, scope.row.status === 1 ? 2 : 1)">
+                            {{ scope.row.status === 1 ? '设为私密' : scope.row.status === 2 ? '正常显示' : '已删除' }}
+                        </el-button>
+                        <el-tag v-else type="danger">无权限</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作2" width="100">
+                    <template #default="scope">
+                        <el-button v-if="canBanUser(scope.row.identity)" type="primary" plain
+                            @click="updateTop(scope.row.id, scope.row.isTop === 1 ? 0 : 1)">
+                            {{ scope.row.isTop === 1 ? "取消置顶" : "设为置顶" }}
+                        </el-button>
+
+                    </template>
+                </el-table-column>
             </el-table>
         </div>
 
@@ -77,10 +99,17 @@
     </div>
 </template>
 
+
 <script setup lang="ts" name="DownLog">
 import Page from '@/common/Page.vue';
 import { onMounted, ref } from 'vue';
-import { cardQuery } from '@/api/user/ConfessionWallApi';
+import { useRoute } from 'vue-router';
+import { cardQuery, updateConfessionStatus, updateTopService } from '@/api/user/ConfessionWallApi';
+import { ElMessage, ElMessageBox } from 'element-plus';
+
+// 获取用户身份参数
+const route = useRoute();
+let identity = ref(Number(route.query.identity)); // 确保 identity 是数字
 
 interface Confession {
     id: string;
@@ -90,6 +119,7 @@ interface Confession {
     isTop: number;
     createTime: string;
     status: number;
+    identity: number; // 添加 identity 字段
 }
 
 // 接受数据
@@ -124,11 +154,12 @@ function fetchData() {
         createTimeStart: formatDateTime(filterForm.value.createTimeRange[0]),
         createTimeEnd: formatDateTime(filterForm.value.createTimeRange[1])
     };
-    cardQuery(params,'admin').then((resopnse)=>{
-        confessionList.value = resopnse.data.data.list
-        total.value = resopnse.data.data.total 
-    })
-    
+    cardQuery(params, 'admin').then((response) => {
+        confessionList.value = response.data.data.list;
+        total.value = response.data.data.total;
+    }).catch((error) => {
+        console.error('请求失败:', error);
+    });
 }
 
 // 分页变化
@@ -154,7 +185,79 @@ function clearFilters() {
     };
     fetchData();
 }
+
+// 用户封禁权限检测
+function canBanUser(userIdentity: number): boolean {
+    if (identity.value === 99) {
+        return [0, 1, 2].includes(userIdentity);
+    } else if (identity.value === 1) {
+        return [0, 2].includes(userIdentity);
+    } else {
+        return false;
+    }
+}
+
+// 修改表白墙状态
+function updateStatus(id: string, oldStatus: number, newStatus: number) {
+    ElMessageBox.prompt(
+        `确定要将此表白贴的状态修改为${newStatus === 1 ? '正常' : newStatus === 2 ? '私密' : '删除'}吗？`,
+        '请输入原因并确定',
+        {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        }
+    ).then((value) => {
+        const params = {
+            confessionId: id,
+            oldStatus: oldStatus,
+            newStatus: newStatus,
+            updateReason: value.value
+        }
+        updateConfessionStatus(params, 'admin').then(() => {
+            ElMessage.success('状态修改成功');
+            fetchData();
+        })
+    }).catch(() => {
+        ElMessage.info('已取消操作');
+    });
+}
+// 置顶/取消置顶
+function updateTop(id: string, newTop: number) {
+    const params = {
+        confessionId: id,
+        newTop: newTop
+    }
+    ElMessageBox.confirm(
+        '确定要'+ (newTop == 1 ? '设为置顶吗':'取消置顶吗'),
+        'Warning',
+        {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+        }
+    )
+        .then(() => {
+            updateTopService(params, 'admin').then(() => {
+                ElMessage.success("设置成功");
+                fetchData();
+                ElMessage({
+                    type: 'success',
+                    message: '更改成功',
+                })
+            })
+        })
+        .catch(() => {
+            ElMessage({
+                type: 'info',
+                message: '操作取消',
+            })
+        })
+
+}
 </script>
+
+
 
 <style scoped>
 .container {
@@ -180,6 +283,7 @@ function clearFilters() {
 
 .el-button {
     margin-left: 16px;
+    width: 60px;
 }
 
 .content {
