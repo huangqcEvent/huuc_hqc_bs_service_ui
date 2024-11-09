@@ -6,8 +6,8 @@ export function cardQuery(params:any,type?:any){
 }
 
 //表白信息详情查询
-export function getDetailById(id: string) {
-    return request.get(`/user/getDetail/${id}`);
+export function getDetailById(id: string,type?:string) {
+    return request.get(`/user/getDetail/${id}`,{userType:type});
 }
 
 //新增表白接口

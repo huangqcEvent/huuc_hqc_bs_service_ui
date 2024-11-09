@@ -72,7 +72,7 @@ import type { CommentParams } from '@/types/comment'
 import { saveComment,getComments } from '@/api/user/CommentApi';
 
 // 详情接口类型
-interface ConfessionDetail {
+export interface ConfessionDetail {
     content: string;
     createTime: string;
     image1: string;

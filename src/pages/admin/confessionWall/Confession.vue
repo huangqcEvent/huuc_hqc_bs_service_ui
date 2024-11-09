@@ -38,7 +38,7 @@
         </div>
         <!-- 表白墙列表 -->
         <div class="content">
-            <el-table :data="confessionList" style="width: 100%;">
+            <el-table :data="confessionList" style="width: 100%;" @row-click="showDetails">
                 <el-table-column prop="realName" label="用户名" width="150"></el-table-column>
 
                 <el-table-column prop="type" label="类型" width="180">
@@ -75,7 +75,7 @@
                 <el-table-column label="操作1" width="100">
                     <template #default="scope">
                         <el-button v-if="canBanUser(scope.row.identity)" type="primary" plain
-                            @click="updateStatus(scope.row.id, scope.row.status, scope.row.status === 1 ? 2 : 1)">
+                            @click.stop="updateStatus(scope.row.id, scope.row.status, scope.row.status === 1 ? 2 : 1)">
                             {{ scope.row.status === 1 ? '设为私密' : scope.row.status === 2 ? '正常显示' : '已删除' }}
                         </el-button>
                         <el-tag v-else type="danger">无权限</el-tag>
@@ -84,13 +84,40 @@
                 <el-table-column label="操作2" width="100">
                     <template #default="scope">
                         <el-button v-if="canBanUser(scope.row.identity)" type="primary" plain
-                            @click="updateTop(scope.row.id, scope.row.isTop === 1 ? 0 : 1)">
+                            @click.stop="updateTop(scope.row.id, scope.row.isTop === 1 ? 0 : 1)">
                             {{ scope.row.isTop === 1 ? "取消置顶" : "设为置顶" }}
                         </el-button>
-
                     </template>
                 </el-table-column>
             </el-table>
+            <!-- 自定义模态框 -->
+            <div v-if="dialogVisible" class="modal-overlay">
+                <div class="modal-content">
+                    <div v-if="confessionDetail">
+                        <h3>{{ confessionDetail.title }}</h3>
+                        <p><strong>用户名:</strong> {{ confessionDetail.userName }}</p>
+                        <p><strong>用户头像:</strong> <img :src="confessionDetail.userHead" alt="User Head"
+                                style="max-width: 50px;"></p>
+                        <p><strong>内容:</strong> {{ confessionDetail.content }}</p>
+                        <p><strong>摘要:</strong> {{ confessionDetail.summary }}</p>
+                        <p><strong>创建时间:</strong> {{ confessionDetail.createTime }}</p>
+                        <p><strong>类型:</strong> {{ confessionDetail.typeStr }}</p>
+                        <p><strong>接收者信息:</strong> {{ confessionDetail.toUserInfo }}</p>
+                        <div v-if="confessionDetail.image1">
+                            <img :src="confessionDetail.image1" alt="Image 1" style="max-width: 100%;">
+                        </div>
+                        <div v-if="confessionDetail.image2">
+                            <img :src="confessionDetail.image2" alt="Image 2" style="max-width: 100%;">
+                        </div>
+                        <div v-if="confessionDetail.image3">
+                            <img :src="confessionDetail.image3" alt="Image 3" style="max-width: 100%;">
+                        </div>
+                    </div>
+                    <span class="modal-footer">
+                        <el-button @click="dialogVisible = false">关闭</el-button>
+                    </span>
+                </div>
+            </div>
         </div>
 
         <div class="pagination">
@@ -106,11 +133,14 @@ import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { cardQuery, updateConfessionStatus, updateTopService } from '@/api/user/ConfessionWallApi';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import type { ConfessionDetail } from '@/pages/user/ConfessionWalls/CardDetail.vue';
+import { getDetailById } from '@/api/user/ConfessionWallApi';
 
 // 获取用户身份参数
 const route = useRoute();
 let identity = ref(Number(route.query.identity)); // 确保 identity 是数字
 
+// 列表数据
 interface Confession {
     id: string;
     realName: string;
@@ -137,6 +167,10 @@ const filterForm = ref({
     type: '',
     createTimeRange: ['', ''] as [string, string]
 });
+
+// 详情模态框相关
+let dialogVisible = ref(false);
+let confessionDetail = ref<ConfessionDetail | null>(null);
 
 // 初始加载数据
 onMounted(() => {
@@ -222,6 +256,7 @@ function updateStatus(id: string, oldStatus: number, newStatus: number) {
         ElMessage.info('已取消操作');
     });
 }
+
 // 置顶/取消置顶
 function updateTop(id: string, newTop: number) {
     const params = {
@@ -229,7 +264,7 @@ function updateTop(id: string, newTop: number) {
         newTop: newTop
     }
     ElMessageBox.confirm(
-        '确定要'+ (newTop == 1 ? '设为置顶吗':'取消置顶吗'),
+        '确定要' + (newTop == 1 ? '设为置顶吗' : '取消置顶吗'),
         'Warning',
         {
             confirmButtonText: '确定',
@@ -241,25 +276,41 @@ function updateTop(id: string, newTop: number) {
             updateTopService(params, 'admin').then(() => {
                 ElMessage.success("设置成功");
                 fetchData();
-                ElMessage({
-                    type: 'success',
-                    message: '更改成功',
-                })
             })
         })
         .catch(() => {
-            ElMessage({
-                type: 'info',
-                message: '操作取消',
-            })
+            ElMessage.info('操作取消');
         })
+}
 
+// 显示详细信息
+function showDetails(row: Confession) {
+    console.log('Row clicked:', row); // 调试日志
+    getDetailById(row.id, 'admin').then((response) => {
+        console.log('Detail fetched:', response.data.data); // 调试日志
+        confessionDetail.value = response.data.data;
+        dialogVisible.value = true;
+    }).catch((error) => {
+        console.error('Error fetching detail:', error);
+        ElMessage.error('加载详情失败，请稍后再试。');
+    });
+}
+
+// 模态框关闭时的回调
+function onDialogClose() {
+    console.log('Dialog closed'); // 调试日志
+    dialogVisible.value = false;
+    confessionDetail.value = null;
 }
 </script>
 
 
-
 <style scoped>
+.el-table__row:hover {
+    background-color: #f0f9eb;
+    cursor: pointer;
+}
+
 .container {
     height: 100vh;
     display: flex;
@@ -310,4 +361,34 @@ function updateTop(id: string, newTop: number) {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+/* 自定义模态框样式 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 80%;
+    max-height: 80%;
+    overflow-y: auto;
+}
+
+.modal-footer {
+    margin-top: 20px;
+    text-align: right;
+}
 </style>
+
