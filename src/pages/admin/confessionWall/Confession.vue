@@ -38,7 +38,7 @@
         </div>
         <!-- 表白墙列表 -->
         <div class="content">
-            <el-table :data="confessionList" style="width: 100%;" @row-click="showDetails">
+            <el-table :data="confessionList" style="width: 100%;">
                 <el-table-column prop="realName" label="用户名" width="150"></el-table-column>
 
                 <el-table-column prop="type" label="类型" width="180">
@@ -89,6 +89,13 @@
                         </el-button>
                     </template>
                 </el-table-column>
+                <el-table-column label="操作3" width="100">
+                    <template #default="scope">
+                        <el-button type="primary" plain @click.stop="showDetails(scope.row.id)">
+                            查看详情
+                        </el-button>
+                    </template>
+                </el-table-column>
             </el-table>
             <!-- 自定义模态框 -->
             <div v-if="dialogVisible" class="modal-overlay">
@@ -97,20 +104,17 @@
                         <h3>{{ confessionDetail.title }}</h3>
                         <p><strong>用户名:</strong> {{ confessionDetail.userName }}</p>
                         <p><strong>用户头像:</strong> <img :src="confessionDetail.userHead" alt="User Head"
-                                style="max-width: 50px;"></p>
+                                style="max-width: 50px;">
+                        </p>
                         <p><strong>内容:</strong> {{ confessionDetail.content }}</p>
                         <p><strong>摘要:</strong> {{ confessionDetail.summary }}</p>
                         <p><strong>创建时间:</strong> {{ confessionDetail.createTime }}</p>
                         <p><strong>类型:</strong> {{ confessionDetail.typeStr }}</p>
                         <p><strong>接收者信息:</strong> {{ confessionDetail.toUserInfo }}</p>
-                        <div v-if="confessionDetail.image1">
-                            <img :src="confessionDetail.image1" alt="Image 1" style="max-width: 100%;">
-                        </div>
-                        <div v-if="confessionDetail.image2">
-                            <img :src="confessionDetail.image2" alt="Image 2" style="max-width: 100%;">
-                        </div>
-                        <div v-if="confessionDetail.image3">
-                            <img :src="confessionDetail.image3" alt="Image 3" style="max-width: 100%;">
+                        <div class="image-container">
+                            <img v-if="confessionDetail.image1" :src="confessionDetail.image1" alt="Image 1">
+                            <img v-if="confessionDetail.image2" :src="confessionDetail.image2" alt="Image 2">
+                            <img v-if="confessionDetail.image3" :src="confessionDetail.image3" alt="Image 3">
                         </div>
                     </div>
                     <span class="modal-footer">
@@ -284,10 +288,8 @@ function updateTop(id: string, newTop: number) {
 }
 
 // 显示详细信息
-function showDetails(row: Confession) {
-    console.log('Row clicked:', row); // 调试日志
-    getDetailById(row.id, 'admin').then((response) => {
-        console.log('Detail fetched:', response.data.data); // 调试日志
+function showDetails(id: string) {
+    getDetailById(id, 'admin').then((response) => {
         confessionDetail.value = response.data.data;
         dialogVisible.value = true;
     }).catch((error) => {
@@ -295,15 +297,7 @@ function showDetails(row: Confession) {
         ElMessage.error('加载详情失败，请稍后再试。');
     });
 }
-
-// 模态框关闭时的回调
-function onDialogClose() {
-    console.log('Dialog closed'); // 调试日志
-    dialogVisible.value = false;
-    confessionDetail.value = null;
-}
 </script>
-
 
 <style scoped>
 .el-table__row:hover {
@@ -374,6 +368,7 @@ function onDialogClose() {
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    /* 确保模态框在最上层 */
 }
 
 .modal-content {
@@ -381,14 +376,51 @@ function onDialogClose() {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    max-width: 80%;
-    max-height: 80%;
-    overflow-y: auto;
+    width: 80%;
+    max-width: 600px;
+    z-index: 1001;
+    /* 确保模态框内容也在最上层 */
+}
+
+.modal-content h3 {
+    margin-top: 0;
+}
+
+.modal-content p {
+    margin: 10px 0;
+}
+
+.modal-content img {
+    max-width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+    /* 平滑过渡效果 */
+}
+
+.modal-content img:hover {
+    transform: scale(5);
+    /* 放大5倍 */
+}
+
+.modal-content .image-container {
+    display: flex;
+    gap: 10px;
+    /* 图片之间的间距 */
+}
+
+.modal-content .image-container img {
+    max-width: 32%;
+    /* 每张图片占总宽度的32%，留出8%的间距 */
+    height: auto;
 }
 
 .modal-footer {
+    display: flex;
+    justify-content: flex-end;
     margin-top: 20px;
-    text-align: right;
+}
+
+.modal-footer .el-button {
+    margin-left: 10px;
 }
 </style>
-

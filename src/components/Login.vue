@@ -29,12 +29,14 @@ import {login} from '@/api/commonApi/commonApi'
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus'
+import { useWebSocketStore } from '@/stores/webSocket';
 // Data
 const loginForm = ref({
 	email: "",
 	pwd: ""
 });
-
+//pinia管理 webSocket
+const webSocketStore = useWebSocketStore();
 //拿到路由器
 const router = useRouter()
 // Methods
@@ -43,7 +45,7 @@ function toLogin(email: string, pwd: string) {
 		username: email,
 		password: pwd
 	};
-	console.log(email, pwd);
+	
 	login(data) // 修正 URL 并传递 data 参数
 		.then(response => {
 			if (response.data.code == 200) {
@@ -55,6 +57,8 @@ function toLogin(email: string, pwd: string) {
 					localStorage.setItem("userToken",response.data.data.jwt)
 					localStorage.setItem("userInfo", JSON.stringify(response.data.data))
 					router.push('/userIndex')
+					//登陆后建立webSocket连接
+					webSocketStore.connectWebSocket(response.data.data.id);
 				}
 			}
 			else {

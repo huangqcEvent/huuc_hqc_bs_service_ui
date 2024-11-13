@@ -19,6 +19,23 @@
             <el-button type="primary" @click="login" class="login-btn">登录</el-button>
           </div>
           <div v-else class="user-info">
+            <el-popover placement="bottom" width="300" trigger="click" popper-class="message-popover">
+              <ul class="message-list">
+                <li v-if="messages.length === 0">
+                  无消息
+                </li>
+                <li v-else v-for="(message, index) in messages" :key="index">
+                  <span :class="{ read: message }">{{ message }}</span>
+                </li>
+              </ul>
+              <template #reference>
+                <el-badge :value="msgTotal" class="item" @click="getmsg">
+                  <el-icon style="font-size: 25px;">
+                    <Message />
+                  </el-icon>
+                </el-badge>
+              </template>
+            </el-popover>
             <el-button type="success" @click="goToPost" class="post-button">我要发贴</el-button>
             <el-popover placement="bottom" width="200" trigger="hover" popper-class="user-popover">
               <div class="popover-content">
@@ -43,14 +60,19 @@
   </el-container>
 </template>
 
-
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted,computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { logout } from '@/api/commonApi/commonApi'
+import { logout } from '@/api/commonApi/commonApi';
 import { confirm } from '@/utils/confirmUtils';
+import { useWebSocketStore } from '@/stores/webSocket';
 
 const router = useRouter();
+const webSocketStore = useWebSocketStore();
+const messages = ref<string[]>([
+]);
+// 计算消息总数
+const msgTotal = computed(() => messages.value.length);
 const userInfo = reactive({
   id: '',
   username: '',
@@ -79,15 +101,18 @@ const logout1 = () => {
         localStorage.removeItem('userToken');
       }
     ).finally(() => {
+      webSocketStore.closeScoket();
       router.push('/login');
     });
   }, () => {
     console.log('取消退出');
   });
 };
-
+function getmsg(){
+  messages.value = webSocketStore.getMessages
+  console.log("**********"+webSocketStore.getMessages)
+}
 const goToPost = () => {
-  // 这里可以添加跳转到发帖页面的逻辑
   router.push('/userIndex/post');
 };
 
@@ -96,12 +121,18 @@ onMounted(() => {
   if (storedUserInfo) {
     Object.assign(userInfo, JSON.parse(storedUserInfo));
     isLoggedIn.value = true;
+    messages.value = webSocketStore.getMessages
   }
 });
 </script>
 
-
 <style scoped>
+.item {
+  margin-top: -20px;
+  margin-right: 30px;
+  cursor: pointer;
+}
+
 /* 顶部横幅样式 */
 .banner {
   background-color: #545c64;
@@ -114,16 +145,13 @@ onMounted(() => {
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 0;
-  /* 移除底部间距 */
 }
 
 /* Logo 样式 */
 .logo {
   display: flex;
   align-items: center;
-  /* 垂直居中 */
   justify-content: flex-start;
-  /* 左对齐 */
 }
 
 .logo img {
@@ -135,9 +163,7 @@ onMounted(() => {
   border-bottom: none;
   display: flex;
   justify-content: center;
-  /* 导航菜单居中 */
   transition: background-color 0.3s ease;
-  /* 添加背景颜色过渡效果 */
 }
 
 .nav .el-menu-item {
@@ -145,21 +171,16 @@ onMounted(() => {
   line-height: 50px;
   padding: 0 20px;
   transition: background-color 0.3s ease, color 0.3s ease;
-  /* 添加背景颜色和文字颜色过渡效果 */
 }
 
 .nav .el-menu-item:hover {
   background-color: #4a5058;
-  /* 悬停时的背景颜色 */
   color: #ffd04b;
-  /* 悬停时的文字颜色 */
 }
 
 .nav .el-menu-item.is-active {
   background-color: #4a5058;
-  /* 激活时的背景颜色 */
   color: #ffd04b;
-  /* 激活时的文字颜色 */
 }
 
 /* 登录按钮样式 */
@@ -167,18 +188,14 @@ onMounted(() => {
   display: flex;
   align-items: center;
   margin-top: -5px;
-  /* 垂直居中 */
   height: 100%;
-  /* 使按钮高度与 banner 一致 */
 }
 
 .login-button .login-btn {
   background-color: #409eff;
   border: none;
   border-radius: 20px;
-  /* 更圆润的圆角 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  /* 添加阴影效果 */
   padding: 10px 20px;
   color: #fff;
   font-size: 16px;
@@ -189,13 +206,12 @@ onMounted(() => {
 .login-button .login-btn:hover {
   background-color: #66b1ff;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-  /* 悬停时增加阴影效果 */
 }
 
 /* 用户信息样式 */
 .user {
   display: flex;
-  justify-content: flex-end; /* 右对齐 */
+  justify-content: flex-end;
   margin-top: 10px;
 }
 
@@ -203,31 +219,30 @@ onMounted(() => {
 .post-button {
   background-color: #67c23a;
   border: none;
-  border-radius: 20px; /* 更圆润的圆角 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 10px 20px;
   color: #fff;
   font-size: 16px;
-  margin-right: 20px; /* 增加右边距 */
+  margin-right: 20px;
   margin-top: -30px;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
   display: inline-flex;
-  align-items: center; /* 垂直居中 */
-  justify-content: center; /* 水平居中 */
+  align-items: center;
+  justify-content: center;
 }
 
 /* 发贴按钮悬停样式 */
 .post-button:hover {
   background-color: #85ce61;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-  /* 悬停时增加阴影效果 */
 }
 
 /* 用户头像样式 */
 .el-avatar {
-  margin-left: 20px; /* 增加左边距 */
-  cursor: pointer; /* 鼠标悬停时显示指针 */
-  align-self: center; /* 垂直居中 */
+  margin-left: 20px;
+  cursor: pointer;
+  align-self: center;
 }
 
 /* 弹出框样式 */
@@ -263,54 +278,70 @@ onMounted(() => {
   color: #fff;
 }
 
+/* 消息弹出框样式 */
+.message-popover {
+  background-color: #fff;
+  color: #333;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.message-popover .message-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.message-popover .message-list li {
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.message-popover .message-list li:last-child {
+  border-bottom: none;
+}
+
+.message-popover .message-list span.read {
+  color: #999;
+}
+
 /* 主体内容样式 */
 .el-main {
   padding: 0;
   height: calc(100vh - 60px);
-  /* 调整高度以适应屏幕 */
   overflow: hidden;
-  /* 隐藏默认滚动条 */
   position: relative;
   margin-top: 0;
-  /* 移除顶部间距 */
 }
 
 /* 内容容器样式 */
 .content {
   padding: 0px;
-  /* 内容内边距 */
   min-height: 100%;
-  /* 确保内容容器高度至少为 el-main 的高度 */
 }
 
 /* 滚动条样式 */
 .scrollbar {
   height: 100%;
   overflow-y: auto;
-  /* 确保内容可以滚动 */
   scrollbar-width: thin;
-  /* Firefox 滚动条宽度 */
   scrollbar-color: #888 #f1f1f1;
-  /* Firefox 滚动条颜色 */
 }
 
 /* 滚动条轨道样式 */
 .scrollbar::-webkit-scrollbar {
   width: 10px;
-  /* 滚动条宽度 */
 }
 
 /* 滚动条滑块样式 */
 .scrollbar::-webkit-scrollbar-thumb {
   background-color: #888;
-  /* 滑块颜色 */
   border-radius: 5px;
-  /* 滑块圆角 */
 }
 
 /* 滚动条滑块悬停样式 */
 .scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: #555;
-  /* 滑块悬停时的颜色 */
 }
 </style>
