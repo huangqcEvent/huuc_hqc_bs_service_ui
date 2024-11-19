@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-//pinia管理 webSocket
 
 interface WebSocketState {
   socket: WebSocket | null;
@@ -22,10 +21,11 @@ export const useWebSocketStore = defineStore('webSocket', {
       this.messages.push(message);
     },
     closeScoket(){
-      this.socket = null;
+        this.socket = null;
     }
   },
   getters: {
+    // 获取所有信息
     getMessages(state: WebSocketState): string[] {
       return state.messages;
     },

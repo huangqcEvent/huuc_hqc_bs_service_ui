@@ -101,7 +101,6 @@ const logout1 = () => {
         localStorage.removeItem('userToken');
       }
     ).finally(() => {
-      webSocketStore.closeScoket();
       router.push('/login');
     });
   }, () => {
@@ -110,7 +109,6 @@ const logout1 = () => {
 };
 function getmsg(){
   messages.value = webSocketStore.getMessages
-  console.log("**********"+webSocketStore.getMessages)
 }
 const goToPost = () => {
   router.push('/userIndex/post');

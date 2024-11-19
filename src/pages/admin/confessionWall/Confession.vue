@@ -75,7 +75,7 @@
                 <el-table-column label="操作1" width="100">
                     <template #default="scope">
                         <el-button v-if="canBanUser(scope.row.identity)" type="primary" plain
-                            @click.stop="updateStatus(scope.row.id, scope.row.status, scope.row.status === 1 ? 2 : 1)">
+                            @click.stop="updateStatus(scope.row.id, scope.row.status, scope.row.status === 1 ? 2 : 1,scope.row.userId)">
                             {{ scope.row.status === 1 ? '设为私密' : scope.row.status === 2 ? '正常显示' : '已删除' }}
                         </el-button>
                         <el-tag v-else type="danger">无权限</el-tag>
@@ -147,6 +147,7 @@ let identity = ref(Number(route.query.identity)); // 确保 identity 是数字
 // 列表数据
 interface Confession {
     id: string;
+    userId:string;
     realName: string;
     type: number;
     isAnonymous: number;
@@ -236,7 +237,7 @@ function canBanUser(userIdentity: number): boolean {
 }
 
 // 修改表白墙状态
-function updateStatus(id: string, oldStatus: number, newStatus: number) {
+function updateStatus(id: string, oldStatus: number, newStatus: number,userId:string) {
     ElMessageBox.prompt(
         `确定要将此表白贴的状态修改为${newStatus === 1 ? '正常' : newStatus === 2 ? '私密' : '删除'}吗？`,
         '请输入原因并确定',
@@ -249,6 +250,7 @@ function updateStatus(id: string, oldStatus: number, newStatus: number) {
         const params = {
             confessionId: id,
             oldStatus: oldStatus,
+            userId:userId,
             newStatus: newStatus,
             updateReason: value.value
         }

@@ -1,5 +1,5 @@
 <template>
-  <div class="norImg">
+  <div v-bind="$attrs" class="norImg">
     <img
       :src="props.src"
       alt="img"
@@ -125,4 +125,3 @@ const showImg = () => {
   fill: #fff;
 }
 </style>
-
