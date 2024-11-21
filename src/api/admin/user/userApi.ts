@@ -42,3 +42,10 @@ export function fetchDownLog(params: any) {
     userType: 'admin'
   })
 }
+
+//获得违禁词接口
+export function getProhibitedWords() {
+  return request.get('/admin/getProhibitedWords', {
+    userType: 'admin'
+  })
+}
