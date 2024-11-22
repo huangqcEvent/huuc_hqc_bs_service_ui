@@ -4,7 +4,6 @@
       <el-carousel-item v-for="item in images" :key="item.id">
         <img :src="item.src" alt="carousel image" class="carousel-image" />
       </el-carousel-item>
-      <button class="custom-next-button" @click="nextSlide">下一张</button>
     </el-carousel>
   </div>
 </template>
@@ -20,10 +19,6 @@ const images = ref([
   { id: 4, src: 'https://www.huuc.edu.cn/images/logo.png' }
 ]);
 
-
-// 下一张
-const nextSlide = () => {;
-};
 </script>
 
 <style scoped>

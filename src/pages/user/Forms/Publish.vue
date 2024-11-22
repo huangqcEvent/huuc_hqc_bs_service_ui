@@ -1,13 +1,10 @@
 <template>
   <div class="publish-page">
     <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-      <el-tab-pane label="表白贴" name="first">
+      <el-tab-pane label="表白墙贴" name="first">
         <ConfessionForm />
       </el-tab-pane>
-      <el-tab-pane label="找对象贴" name="second">
-        <DatingForm />
-      </el-tab-pane>
-      <el-tab-pane label="寻物贴" name="third">
+      <el-tab-pane label="拾金寻物贴" name="third">
         <LostItemForm />
       </el-tab-pane>
       <el-tab-pane label="社团公告贴" name="fourth">
@@ -21,7 +18,6 @@
 import { ref } from 'vue'
 import type { TabsPaneContext } from 'element-plus'
 import ConfessionForm from './ConfessionForm.vue';
-import DatingForm from './DatingForm.vue';
 import LostItemForm from './LostItemForm.vue';
 import ClubAnnouncementForm from './ClubAnnouncementForm.vue';
 const activeName = ref('first')
