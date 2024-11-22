@@ -12,6 +12,6 @@ export interface LostItem{
 
 //新增寻物贴接口
 export function saveLostItem(params:LostItem){
-    return request.post("/lostItem/save",params)
+    return request.post("user/saveLostItem",params)
 
 }
