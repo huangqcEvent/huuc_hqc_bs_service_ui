@@ -9,7 +9,7 @@
             <div class="comment-content">
               <p class="username">{{ comment.userName }}</p>
               <p class="content">{{ comment.content }}</p>
-              <Image v-if="comment.imageUrl" :src="comment.imageUrl" :width="200" class="image" />
+              <Image v-if="comment.imageUrl" :src="comment.imageUrl" :width="200"/>
               <p class="comment-time">{{ comment.createTime }}</p>
             </div>
           </div>
@@ -35,6 +35,7 @@ import { ref, watch } from 'vue';
 import { ElScrollbar, ElMessage } from 'element-plus';
 import { upload } from '@/api/commonApi/commonApi';
 import { saveComment, getComments } from '@/api/user/CommentApi';
+import Image from './Image.vue';
 import type { CommentParams } from '@/types/comment';
 
 // 评论接口类型
