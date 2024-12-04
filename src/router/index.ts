@@ -6,6 +6,7 @@ import User from "@/pages/admin/user/User.vue";
 import UserIndex from "@/components/UserIndex.vue";
 import DownLog from "@/pages/admin/user/DownLog.vue";
 import Home from "@/pages/user/Homes/Home.vue";
+import Notices from "@/pages/admin/notices/Notices.vue";
 import Notice from "@/pages/user/Notices/Notice.vue";
 import Club from "@/pages/user/Clubs/Club.vue";
 import ConfessionWall from "@/pages/user/ConfessionWalls/ConfessionWall.vue"
@@ -75,6 +76,10 @@ export default createRouter({
                 {
                     path: 'confession',
                     component: Confession
+                },
+                {
+                    path: 'notices',
+                    component: Notices
                 }
             ]
         },

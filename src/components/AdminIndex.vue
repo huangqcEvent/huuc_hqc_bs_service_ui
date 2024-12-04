@@ -62,6 +62,24 @@
             </el-menu-item>
           </el-sub-menu>
         </el-menu>
+
+        <el-menu :default-openeds="['3']" class="custom-menu" active-text-color="#42b983" background-color="#ffffff"
+          text-color="#333333">
+          <el-sub-menu index="3">
+            <template #title>
+              <i class="el-icon-user"></i>
+              <span>寻物贴管理</span>
+            </template>
+            <el-menu-item type="defult" index="3-1" @click="router.push({
+              path: '/adminIndex/notices',
+              query: { identity: adminInfo.identity }
+            })">
+              <i class="el-icon-user"></i>
+              <span>寻物贴列表</span>
+            </el-menu-item>
+          </el-sub-menu>
+        </el-menu>
+
       </el-aside>
 
       <!-- 主要内容区域 -->

@@ -8,6 +8,8 @@ export interface LostItem {
     location: string;
     phone: string;
     createTime?: string;
+    status?:number;
+    isTop?:number;
     image1?: string;
     image2?: string;
     image3?: string;
@@ -19,6 +21,7 @@ export interface Params {
     itemName: string;
     createTimeStart: string;
     createTimeEnd: string;
+    status?:number;
     pageSize: number;
     pageNumber: number;
     dateRange: [string, string] | ['','']; // 日期范围数组
@@ -30,6 +33,6 @@ export function saveLostItem(params: LostItem) {
 }
 
 // 分页查询寻物贴
-export function lostItemPage(params: Params) {
-    return request.post("user/lostItem/page", params, { userType: 'user' });
+export function lostItemPage(params: Params,userType?:string) {
+    return request.post("user/lostItem/page", params, { userType });
 }
