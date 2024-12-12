@@ -37,7 +37,7 @@
                 </el-form-item>
             </el-form>
         </div>
-        <!-- 表白墙列表 -->
+        <!-- 寻物列表 -->
         <div class="content">
             <el-table :data="noticeList" style="width: 100%;">
                 <el-table-column prop="itemName" label="物品名称" width="150"></el-table-column>

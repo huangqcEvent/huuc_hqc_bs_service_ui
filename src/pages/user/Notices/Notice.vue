@@ -151,7 +151,7 @@ const goToDetail = (id: number | undefined) => {
 }
 
 .box-card {
-  margin-bottom: 30px;
+  margin-bottom: 20px; /* 减少底部外边距 */
   cursor: pointer;
   transition: transform 0.3s ease;
   background-color: #fff;
@@ -159,6 +159,8 @@ const goToDetail = (id: number | undefined) => {
   border-radius: 12px;
   box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  max-height: 250px; /* 设置最大高度 */
+  padding: 10px; /* 减少内边距 */
 }
 
 .box-card:hover {
@@ -167,7 +169,7 @@ const goToDetail = (id: number | undefined) => {
 }
 
 .card-header {
-  padding: 20px;
+  padding: 10px; /* 减少内边距 */
   background-color: #f5f7fa;
   border-bottom: 1px solid #ebeef5;
   font-weight: bold;
@@ -177,40 +179,13 @@ const goToDetail = (id: number | undefined) => {
 }
 
 .card-body {
-  padding: 20px;
+  padding: 10px; /* 减少内边距 */
   display: flex;
   align-items: center;
 }
 
-.item-image {
-  width: 120px;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 12px;
-  margin-right: 20px;
-}
-
-.item-info {
-  flex: 1;
-  text-align: left;
-}
-
-.item-name {
-  font-size: 1.4em;
-  margin: 0;
-  color: #303133;
-  font-weight: 600;
-}
-
-.location {
-  color: #909399;
-  margin: 0;
-  font-size: 1em;
-  margin-top: 5px;
-}
-
 .card-footer {
-  padding: 20px;
+  padding: 10px; /* 减少内边距 */
   border-top: 1px solid #ebeef5;
   text-align: left;
   color: #909399;
@@ -220,18 +195,44 @@ const goToDetail = (id: number | undefined) => {
   align-items: center;
 }
 
-.phone {
+.item-image {
+  width: 100px; /* 减小图片宽度 */
+  height: 100px; /* 减小图片高度 */
+  object-fit: cover;
+  border-radius: 12px;
+  margin-right: 10px; /* 减少右边距 */
+}
+
+.item-info {
+  flex: 1;
+  text-align: left;
+}
+
+.item-name {
+  font-size: 1.2em; /* 减小字体大小 */
+  margin: 0;
+  color: #303133;
+  font-weight: 600;
+}
+
+.location {
+  color: #909399;
+  margin: 0;
+  font-size: 0.9em; /* 减小字体大小 */
+  margin-top: 5px;
+}
+
+.card-footer .phone {
   margin: 0;
   font-weight: 500;
 }
 
-.time {
+.card-footer .time {
   margin: 0;
-  font-size: 0.9em;
+  font-size: 0.8em; /* 减小字体大小 */
 }
 
 .pagination {
-  margin-top: 30px;
-  text-align: center;
+  margin-top: -30px;
 }
 </style>
