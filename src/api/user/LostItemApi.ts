@@ -36,3 +36,8 @@ export function saveLostItem(params: LostItem) {
 export function lostItemPage(params: Params,userType?:string) {
     return request.post("user/lostItem/page", params, { userType });
 }
+
+// 修改状态
+export function updateStatus(params:any,userType?:string) {
+    return request.put("/admin/lostItem/updateStatus",params,{ userType })
+}

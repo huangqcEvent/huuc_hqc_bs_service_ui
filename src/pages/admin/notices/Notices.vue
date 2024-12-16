@@ -68,7 +68,13 @@
 
                 <el-table-column label="操作1" width="100">
                     <template #default="scope">
-
+                        <el-button v-if="scope.row.status == 1 || scope.row.status == 4"
+                        @click="status(scope.row.id,scope.row.status)">
+                            {{scope.row.status == 1 ? '设为私密' : '设为正常'}}
+                        </el-button>
+                        <el-button v-else>
+                            无法操作状态
+                        </el-button>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作2" width="100">
@@ -97,7 +103,8 @@ import Page from '@/common/Page.vue';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import type { LostItem, Params } from '@/api/user/LostItemApi';
-import { lostItemPage } from '@/api/user/LostItemApi'
+import { lostItemPage,updateStatus } from '@/api/user/LostItemApi'
+import { ElAlert, ElMessage } from 'element-plus';
 
 // 获取用户身份参数
 const route = useRoute();
@@ -169,6 +176,17 @@ function canBanUser(userIdentity: number): boolean {
         return [0, 2].includes(userIdentity);
     } else {
         return false;
+    }
+}
+// updateStatus
+function status(id:string,status: number){
+    if(status == 1){
+         updateStatus({id,status:4},'admin')
+         fetchData();
+    }
+    if(status == 4){
+         updateStatus({id,status:1},'admin')
+         fetchData();
     }
 }
 </script>
