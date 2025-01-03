@@ -14,6 +14,7 @@ import IdentityLog from "@/pages/admin/user/IdentityLog.vue";
 import CardDetail from "@/pages/user/ConfessionWalls/CardDetail.vue";
 import Publish from "@/pages/user/Forms/Publish.vue";
 import Confession from '@/pages/admin/confessionWall/Confession.vue'
+import MyIndex from "@/pages/user/Index/MyIndex.vue";
 export default createRouter({
     history: createWebHistory(),
     routes: [
@@ -50,6 +51,10 @@ export default createRouter({
                 {
                     path:'post',
                     component: Publish
+                },
+                {
+                    path:'myIndex',
+                    component: MyIndex
                 }
             ]
         },
