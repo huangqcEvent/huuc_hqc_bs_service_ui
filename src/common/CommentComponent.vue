@@ -9,7 +9,7 @@
             <div class="comment-content">
               <p class="username">{{ comment.userName }}</p>
               <p class="content">{{ comment.content }}</p>
-              <Image v-if="comment.imageUrl" :src="comment.imageUrl" :width="200"/>
+              <Image v-if="comment.imageUrl" :src="comment.imageUrl" :width="200" />
               <p class="comment-time">{{ comment.createTime }}</p>
             </div>
           </div>
@@ -56,6 +56,10 @@ const props = defineProps({
   isShow: {
     type: Boolean,
     default: false
+  },
+  postType: {
+    type: Number,
+    required: true
   }
 });
 
@@ -74,7 +78,7 @@ watch(() => props.isShow, async (newValue) => {
 });
 
 async function fetchComments() {
-  await getComments(props.postId).then((response) => {
+  await getComments(props.postId, props.postType).then((response) => {
     comments.value = response.data.data.list;
     total.value = response.data.data.total;
   });
@@ -118,7 +122,7 @@ async function addComment() {
   // 构建新增评论参数
   const params: CommentParams = {
     postId: props.postId,
-    postType: 1,
+    postType: props.postType,
     content: newContent.value,
     imageUrl: imageUrl
   };

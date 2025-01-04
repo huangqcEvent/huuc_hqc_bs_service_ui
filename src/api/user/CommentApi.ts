@@ -6,6 +6,6 @@ export function saveComment(params:any){
 }
 
 //查询所有评论
-export function getComments(id:string){
-    return request.get(`/user/comments/getComments/${id}`)
+export function getComments(id:string,postType:number){
+    return request.get(`/user/comments/getComments/${id}/${postType}`)
 }

@@ -8,8 +8,8 @@ export interface LostItem {
     location: string;
     phone: string;
     createTime?: string;
-    status?:number;
-    isTop?:number;
+    status?: number;
+    isTop?: number;
     image1?: string;
     image2?: string;
     image3?: string;
@@ -21,10 +21,10 @@ export interface Params {
     itemName: string;
     createTimeStart: string;
     createTimeEnd: string;
-    status?:number;
+    status?: number;
     pageSize: number;
     pageNumber: number;
-    dateRange: [string, string] | ['','']; // 日期范围数组
+    dateRange: [string, string] | ['', '']; // 日期范围数组
 }
 
 // 新增寻物贴接口
@@ -33,11 +33,16 @@ export function saveLostItem(params: LostItem) {
 }
 
 // 分页查询寻物贴
-export function lostItemPage(params: Params,userType?:string) {
+export function lostItemPage(params: Params, userType?: string) {
     return request.post("user/lostItem/page", params, { userType });
 }
 
 // 修改状态
-export function updateStatus(params:any,userType?:string) {
-    return request.put("/admin/lostItem/updateStatus",params,{ userType })
+export function updateStatus(params: any, userType?: string) {
+    return request.put("/admin/lostItem/updateStatus", params, { userType })
+}
+
+// 获取寻物贴详情
+export function getDetailById(id: string, userType?: string) {
+    return request.get(`/user/lostItem/detail/${id}`, { userType })
 }

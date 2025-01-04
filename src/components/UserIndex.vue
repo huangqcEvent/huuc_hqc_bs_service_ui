@@ -43,7 +43,7 @@
                 <el-button type="danger" @click="logout1" class="logout-btn">退出登录</el-button>
               </div>
               <template #reference>
-                <el-avatar :size="40" src="https://www.huuc.edu.cn/hncj/images/logo.png" />
+                <el-avatar :size="40" :src="userInfo.head" />
               </template>
             </el-popover>
           </div>

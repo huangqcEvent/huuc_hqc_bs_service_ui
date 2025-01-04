@@ -121,7 +121,7 @@ const handlePageChange = (newPage: number) => {
 };
 
 const goToDetail = (id: number | undefined) => {
-  router.push(`/lostItemDetail/${id}`);
+  router.push(`/userIndex/lostItemDetail/${id}`);
 };
 </script>
 

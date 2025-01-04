@@ -30,7 +30,7 @@
         </div>
     </div>
     <ElButton @click="toggleComments" class="showButton">查看评论</ElButton>
-    <CommentComponent :postId="id" :isShow="isShow" @update:isShow="isShow = $event" />
+    <CommentComponent :postId="id" :isShow="isShow" :postType=1 @update:isShow="isShow = $event" />
 </template>
 
 <script setup lang="ts">
