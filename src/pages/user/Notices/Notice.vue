@@ -76,6 +76,7 @@ const filters = ref<Params>({
   createTimeEnd: '',
   pageSize: 6, // 每页显示6条记录
   pageNumber: 1,
+  status:1,
   dateRange: ['', '']
 });
 

@@ -42,7 +42,7 @@ import { ElButton } from 'element-plus';
 import CommentComponent from '@/common/CommentComponent.vue';
 
 // 详情接口类型
-export interface lostItemDetail {
+export interface LostItemDetail {
     id:string// 寻物贴id
     userId:string // 发布者id
     userName:string // 发布者用户名
@@ -65,7 +65,7 @@ const router = useRouter();
 const id = ref<string>('');
 
 // 接口返回的详情数据接收
-const lostItemDetail = ref<lostItemDetail | null>(null);
+const lostItemDetail = ref<LostItemDetail | null>(null);
 
 // 是否显示评论抽屉
 const isShow = ref(false);
@@ -99,11 +99,11 @@ onMounted(() => {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.card-detail {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.card-detail p {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #555;
+    max-width: 50%; /* 设置最大宽度为容器宽度的50% */
 }
 
 .card-detail h1 {

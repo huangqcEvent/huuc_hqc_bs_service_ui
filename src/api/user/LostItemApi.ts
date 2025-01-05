@@ -21,7 +21,7 @@ export interface Params {
     itemName: string;
     createTimeStart: string;
     createTimeEnd: string;
-    status?: number;
+    status?: number | null;
     pageSize: number;
     pageNumber: number;
     dateRange: [string, string] | ['', '']; // 日期范围数组
@@ -45,4 +45,9 @@ export function updateStatus(params: any, userType?: string) {
 // 获取寻物贴详情
 export function getDetailById(id: string, userType?: string) {
     return request.get(`/user/lostItem/detail/${id}`, { userType })
+}
+
+// 置顶状态修改接口
+export function updateTopService(params:any,type:string){
+    return request.put("/admin/lostItem/updateTop",params,{userType:type})
 }
