@@ -72,6 +72,7 @@ const router = createRouter({
         {
             path: '/adminIndex',
             component: AdminIndex,
+            redirect:'/adminIndex/users',
             children: [
                 {
                     path: 'users',
