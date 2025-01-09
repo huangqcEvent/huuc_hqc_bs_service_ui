@@ -8,8 +8,8 @@
                     <el-input v-model="filterForm.userName" placeholder="请输入用户名"></el-input>
                 </el-form-item>
 
-                <el-form-item label="转化前身份">
-                    <el-select v-model="filterForm.oldIdentity" placeholder="全部" style="width: 100px;">
+                <el-form-item label="原身份">
+                    <el-select v-model="filterForm.oldIdentity" placeholder="全部">
                         <el-option label="全部" value=""></el-option>
                         <el-option label="管理员" value="1"></el-option>
                         <el-option label="普通用户" value="0"></el-option>
@@ -17,8 +17,8 @@
                     </el-select>
                 </el-form-item>
 
-                <el-form-item label="转化后身份">
-                    <el-select v-model="filterForm.newIdentity" placeholder="全部" style="width: 100px;">
+                <el-form-item label="新身份">
+                    <el-select v-model="filterForm.newIdentity" placeholder="全部">
                         <el-option label="全部" value=""></el-option>
                         <el-option label="管理员" value="1"></el-option>
                         <el-option label="普通用户" value="0"></el-option>
@@ -28,32 +28,31 @@
 
                 <el-form-item label="转化时间">
                     <el-date-picker v-model="filterForm.downTimeRange" type="daterange" range-separator="至"
-                        start-placeholder="开始日期" end-placeholder="结束日期" value-format="YYYY-MM-DD"
-                        style="width: 300px;"></el-date-picker>
+                        start-placeholder="开始日期" end-placeholder="结束日期" value-format="YYYY-MM-DD"></el-date-picker>
                 </el-form-item>
 
                 <el-form-item>
                     <el-button type="primary" @click="fetchData">搜索</el-button>
-                    <el-button type="defult" @click="clearFilters">清空</el-button>
+                    <el-button type="default" @click="clearFilters">清空</el-button>
                 </el-form-item>
             </el-form>
         </div>
         <!-- 用户列表 -->
         <div class="content">
-            <el-table :data="identityLog" style="width: 100%;">
-                <el-table-column prop="userName" label="用户名" width="150"></el-table-column>
+            <el-table :data="identityLog">
+                <el-table-column prop="userName" label="用户名"></el-table-column>
 
-                <el-table-column prop="updateAdminName" label="转化操作人" width="180"></el-table-column>
+                <el-table-column prop="updateAdminName" label="转化操作人"></el-table-column>
 
-                <el-table-column prop="updateReason" label="转化原因" width="180">
+                <el-table-column prop="updateReason" label="转化原因">
                     <template #default="scope">
                         {{ scope.row.updateReason || '空' }}
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="updateTime" label="转化时间" width="180"></el-table-column>
+                <el-table-column prop="updateTime" label="转化时间"></el-table-column>
 
-                <el-table-column prop="oldIdentity" label="转化前身份" width="120">
+                <el-table-column prop="oldIdentity" label="转化前身份">
                     <template #default="scope">
                         <el-tag :type="getType(scope.row.oldIdentity)">
                             {{ getDisplayName(scope.row.oldIdentity) }}
@@ -61,7 +60,7 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="newIdentity" label="转化后身份" width="120">
+                <el-table-column prop="newIdentity" label="转化后身份">
                     <template #default="scope">
                         <el-tag :type="getType(scope.row.newIdentity)">
                             {{ getDisplayName(scope.row.newIdentity) }}
@@ -82,7 +81,6 @@
 <script setup lang="ts" name="IdentityLog">
 import Page from '@/common/Page.vue';
 import { onMounted, ref } from 'vue';
-import request from '@/utils/axiosUtils';
 import { fetchIdentityLog } from '@/api/admin/user/userApi';
 
 interface identityLog {
@@ -189,63 +187,4 @@ function getDisplayName(row: number) {
 }
 </script>
 
-<style scoped>
-.container {
-    height: 100vh;
-    /* 占据整个视口高度 */
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    /* 防止整个页面滚动 */
-}
-
-.filter-form {
-    padding: 0px;
-    background-color: #f8f9fa;
-    margin-bottom: 0px;
-    /* 减小过滤框和表格之间的间距 */
-}
-
-.el-form-item {
-    margin-right: 16px;
-}
-
-.el-table .cell {
-    text-align: center;
-}
-
-.el-button {
-    margin-left: 16px;
-}
-
-.content {
-    flex: 1;
-    /* 占据剩余空间 */
-    overflow-y: auto;
-    /* 启用垂直滚动条 */
-    padding: 0px;
-    max-height: calc(100vh - 224px);
-    /* 调整 max-height 以适应新的间距 */
-}
-
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: auto;
-    /* 使分页组件位于底部 */
-    margin-bottom: 100px;
-    /* 确保分页条与底部有一定距离 */
-}
-
-/* 使表格适应屏幕宽度 */
-.el-table {
-    width: 100%;
-}
-
-/* 调整表格列的宽度 */
-.el-table__header-wrapper th {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-</style>
+<style scoped lang="scss"></style>

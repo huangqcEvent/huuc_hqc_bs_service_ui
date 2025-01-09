@@ -8,7 +8,7 @@
                 </el-form-item>
 
                 <el-form-item label="类型">
-                    <el-select v-model="filterForm.type" placeholder="全部" style="width: 100px;">
+                    <el-select v-model="filterForm.type" placeholder="全部">
                         <el-option label="全部" value=""></el-option>
                         <el-option label="找对象" value="0"></el-option>
                         <el-option label="表白" value="1"></el-option>
@@ -16,7 +16,7 @@
                 </el-form-item>
 
                 <el-form-item label="状态">
-                    <el-select v-model="filterForm.status" placeholder="全部" style="width: 100px;">
+                    <el-select v-model="filterForm.status" placeholder="全部">
                         <el-option label="全部" value=""></el-option>
                         <el-option label="正常" value="1"></el-option>
                         <el-option label="私密" value="2"></el-option>
@@ -38,24 +38,24 @@
         </div>
         <!-- 表白墙列表 -->
         <div class="content">
-            <el-table :data="confessionList" style="width: 100%;">
-                <el-table-column prop="realName" label="用户名" width="150"></el-table-column>
+            <el-table :data="confessionList">
+                <el-table-column prop="realName" label="用户名"></el-table-column>
 
-                <el-table-column prop="type" label="类型" width="180">
+                <el-table-column prop="type" label="类型">
                     <template #default="scope">
                         <el-tag :type="scope.row.type ? 'success' : 'danger'">{{ scope.row.type === 1 ? '表白贴' : '找对象贴'
                             }}</el-tag>
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="isAnonymous" label="是否匿名" width="150">
+                <el-table-column prop="isAnonymous" label="是否匿名">
                     <template #default="scope">
                         <el-tag :type="scope.row.isAnonymous ? 'success' : 'danger'">{{ scope.row.isAnonymous === 1 ?
                             '是' : '否' }}</el-tag>
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="status" label="状态" width="100">
+                <el-table-column prop="status" label="状态">
                     <template #default="scope">
                         <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'">
                             {{ scope.row.status === 1 ? '正常' : scope.row.status === 2 ? '私密' : '删除' }}
@@ -63,7 +63,7 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="isTop" label="是否置顶" width="100">
+                <el-table-column prop="isTop" label="是否置顶">
                     <template #default="scope">
                         <el-tag :type="scope.row.isTop ? 'success' : 'danger'">{{ scope.row.isTop === 1 ? '是' : '否'
                             }}</el-tag>
@@ -72,16 +72,16 @@
 
                 <el-table-column prop="createTime" label="发布时间" width="180"></el-table-column>
 
-                <el-table-column label="操作1" width="100">
+                <el-table-column label="操作1">
                     <template #default="scope">
                         <el-button v-if="canBanUser(scope.row.identity)" type="primary" plain
-                            @click.stop="updateStatus(scope.row.id, scope.row.status, scope.row.status === 1 ? 2 : 1,scope.row.userId)">
+                            @click.stop="updateStatus(scope.row.id, scope.row.status, scope.row.status === 1 ? 2 : 1, scope.row.userId)">
                             {{ scope.row.status === 1 ? '设为私密' : scope.row.status === 2 ? '正常显示' : '已删除' }}
                         </el-button>
                         <el-tag v-else type="danger">无权限</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作2" width="100">
+                <el-table-column label="操作2">
                     <template #default="scope">
                         <el-button v-if="canBanUser(scope.row.identity)" type="primary" plain
                             @click.stop="updateTop(scope.row.id, scope.row.isTop === 1 ? 0 : 1)">
@@ -89,7 +89,7 @@
                         </el-button>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作3" width="100">
+                <el-table-column label="操作3">
                     <template #default="scope">
                         <el-button type="primary" plain @click.stop="showDetails(scope.row.id)">
                             查看详情
@@ -139,6 +139,7 @@ import { cardQuery, updateConfessionStatus, updateTopService } from '@/api/user/
 import { ElMessage, ElMessageBox } from 'element-plus';
 import type { ConfessionDetail } from '@/pages/user/ConfessionWalls/CardDetail.vue';
 import { getDetailById } from '@/api/user/ConfessionWallApi';
+import '@/styles/modal.scss'
 
 // 获取用户身份参数
 const route = useRoute();
@@ -147,7 +148,7 @@ let identity = ref(Number(route.query.identity)); // 确保 identity 是数字
 // 列表数据
 interface Confession {
     id: string;
-    userId:string;
+    userId: string;
     realName: string;
     type: number;
     isAnonymous: number;
@@ -237,7 +238,7 @@ function canBanUser(userIdentity: number): boolean {
 }
 
 // 修改表白墙状态
-function updateStatus(id: string, oldStatus: number, newStatus: number,userId:string) {
+function updateStatus(id: string, oldStatus: number, newStatus: number, userId: string) {
     ElMessageBox.prompt(
         `确定要将此表白贴的状态修改为${newStatus === 1 ? '正常' : newStatus === 2 ? '私密' : '删除'}吗？`,
         '请输入原因并确定',
@@ -250,7 +251,7 @@ function updateStatus(id: string, oldStatus: number, newStatus: number,userId:st
         const params = {
             confessionId: id,
             oldStatus: oldStatus,
-            userId:userId,
+            userId: userId,
             newStatus: newStatus,
             updateReason: value.value
         }
@@ -301,128 +302,4 @@ function showDetails(id: string) {
 }
 </script>
 
-<style scoped>
-.el-table__row:hover {
-    background-color: #f0f9eb;
-    cursor: pointer;
-}
-
-.container {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.filter-form {
-    padding: 16px;
-    background-color: #f8f9fa;
-    margin-bottom: 16px;
-}
-
-.el-form-item {
-    margin-right: 16px;
-}
-
-.el-table .cell {
-    text-align: center;
-}
-
-.el-button {
-    margin-left: 16px;
-    width: 60px;
-}
-
-.content {
-    margin-top: -40px;
-    flex: 1;
-    overflow-y: auto;
-    padding: 0 16px;
-    max-height: calc(100vh - 224px);
-}
-
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: auto;
-    margin-bottom: 100px;
-}
-
-.el-table {
-    width: 100%;
-}
-
-.el-table__header-wrapper th {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* 自定义模态框样式 */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    /* 确保模态框在最上层 */
-}
-
-.modal-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 600px;
-    z-index: 1001;
-    /* 确保模态框内容也在最上层 */
-}
-
-.modal-content h3 {
-    margin-top: 0;
-}
-
-.modal-content p {
-    margin: 10px 0;
-}
-
-.modal-content img {
-    max-width: 100%;
-    height: auto;
-    transition: transform 0.3s ease;
-    /* 平滑过渡效果 */
-}
-
-.modal-content img:hover {
-    transform: scale(5);
-    /* 放大5倍 */
-}
-
-.modal-content .image-container {
-    display: flex;
-    gap: 10px;
-    /* 图片之间的间距 */
-}
-
-.modal-content .image-container img {
-    max-width: 32%;
-    /* 每张图片占总宽度的32%，留出8%的间距 */
-    height: auto;
-}
-
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
-}
-
-.modal-footer .el-button {
-    margin-left: 10px;
-}
-</style>
+<style scoped lang="scss"></style>

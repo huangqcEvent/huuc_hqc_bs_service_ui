@@ -1,0 +1,78 @@
+/* 自定义模态框样式 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(241, 238, 238, 0.951);
+    /* 修改为不透明或者调整透明度 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    /* 确保模态框处于顶部 */
+}
+
+.modal-content {
+    background-color: rgb(242, 234, 234);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(235, 239, 235, 0.1);
+    width: 80%;
+    max-width: 800px;
+    z-index: 2001;
+    overflow-y: auto;
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.modal-content p {
+    margin: 10px 0;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.modal-content .image-container {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.modal-content .image-container img {
+    max-width: 150px;
+    height: auto;
+    border-radius: 5px;
+    transition: transform 0.3s ease;
+}
+
+.modal-content .image-container img:hover {
+    transform: scale(2);
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.modal-footer .el-button {
+    margin-left: 10px;
+}
+
+/* 遮罩层点击关闭 */
+.modal-overlay {
+    cursor: pointer;
+}
+
+/* 模态框点击内容区域不关闭 */
+.modal-content {
+    cursor: default;
+}

@@ -8,18 +8,18 @@
           <span>{{ adminInfo.username }}</span>
         </div>
         <h1>欢迎来到管理后台</h1>
-        <el-button @click="showDrawer = true">
+        <el-button @click="showDrawer = true" class="drawer-btn">
           <el-icon>
             <CircleCloseFilled />
           </el-icon>
           违禁词管理
         </el-button>
-        <el-button type="text" @click="logout1" class="logout-button">退出登录</el-button>
+        <el-button link @click="logout1" class="logout-button">退出登录</el-button>
       </div>
     </el-header>
 
     <!-- 左侧导航 -->
-    <el-container>
+    <el-container class="main-container">
       <el-aside width="200px" class="sidebar">
         <el-menu :default-openeds="['1']" class="custom-menu" active-text-color="#42b983" background-color="#ffffff"
           text-color="#333333">
@@ -28,10 +28,7 @@
               <i class="el-icon-user"></i>
               <span>用户管理</span>
             </template>
-            <el-menu-item type="defult" index="1-1" @click="router.push({
-              path: '/adminIndex/users',
-              query: { identity: adminInfo.identity }
-            })">
+            <el-menu-item type="default" index="1-1" @click="router.push({ path: '/adminIndex/users', query: { identity: adminInfo.identity } })">
               <i class="el-icon-user"></i>
               <span>用户列表</span>
             </el-menu-item>
@@ -53,10 +50,7 @@
               <i class="el-icon-user"></i>
               <span>表白墙管理</span>
             </template>
-            <el-menu-item type="defult" index="1-1" @click="router.push({
-              path: '/adminIndex/confession',
-              query: { identity: adminInfo.identity }
-            })">
+            <el-menu-item index="1-1" @click="router.push({ path: '/adminIndex/confession', query: { identity: adminInfo.identity } })">
               <i class="el-icon-user"></i>
               <span>表白贴列表</span>
             </el-menu-item>
@@ -70,16 +64,12 @@
               <i class="el-icon-user"></i>
               <span>寻物贴管理</span>
             </template>
-            <el-menu-item type="defult" index="3-1" @click="router.push({
-              path: '/adminIndex/notices',
-              query: { identity: adminInfo.identity }
-            })">
+            <el-menu-item index="3-1" @click="router.push({ path: '/adminIndex/notices', query: { identity: adminInfo.identity } })">
               <i class="el-icon-user"></i>
               <span>寻物贴列表</span>
             </el-menu-item>
           </el-sub-menu>
         </el-menu>
-
       </el-aside>
 
       <!-- 主要内容区域 -->
@@ -93,23 +83,18 @@
       <div class="drawer-content">
         <h2>黑名单</h2>
         <ul>
-          <li v-for="(word, index) in blackList" :key="word">
-            {{ word }}
-          </li>
+          <li v-for="(word, index) in blackList" :key="word">{{ word }}</li>
         </ul>
         <h2>白名单</h2>
         <ul>
-          <li v-for="(word) in whiteList" :key="word">
-            {{ word }}
-          </li>
+          <li v-for="(word) in whiteList" :key="word">{{ word }}</li>
         </ul>
       </div>
     </el-drawer>
   </div>
 </template>
 
-<script setup lang="ts" name="AdminIndex">
-import { RouterView } from 'vue-router';
+<script setup lang="ts">
 import { onBeforeMount, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Image from '@/common/Image.vue';
@@ -130,17 +115,14 @@ const showDrawer = ref(false);
 const blackList = ref([]);
 const whiteList = ref([]);
 
-
 const logout1 = () => {
   confirm("确认要退出登录吗?", () => {
-    logout('admin').then(
-      response => {
-        console.log(response.data.msg);
-        // 清除登录状态
-        localStorage.removeItem('adminInfo');
-        localStorage.removeItem('adminToken');
-      }
-    );
+    logout('admin').then(response => {
+      console.log(response.data.msg);
+      // 清除登录状态
+      localStorage.removeItem('adminInfo');
+      localStorage.removeItem('adminToken');
+    });
     // 跳转到登录页面
     router.push('/login');
   }, () => {
@@ -162,44 +144,53 @@ onBeforeMount(() => {
 </script>
 
 <style scoped>
-.admin-layout {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background-color: #f0f2f5;
-}
-
 .banner {
   background: #42b983;
   color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 15px 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-bottom: 2px solid #36a175; /* 为了增加层次感 */
 }
 
 .banner-content {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   width: 100%;
+  align-items: center; /* 确保内容垂直居中 */
 }
 
 .user-info {
   display: flex;
   align-items: center;
+  flex-wrap: nowrap; /* 防止换行 */
+  gap: 10px; /* 加一些间距，避免过于紧凑 */
 }
 
 .user-info img {
   border-radius: 50%;
-  margin-right: 0.5rem;
+  width: 60px; /* 确保头像大小固定 */
+  height: 60px;
+  object-fit: cover; /* 保证头像图片的裁剪不会变形 */
 }
 
 .user-info span {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: bold;
+  margin-left: 10px; /* 确保用户名与头像有间距 */
+  white-space: nowrap; /* 防止用户名换行 */
+  color: white; /* 提升用户名对比度 */
+}
+
+h1 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: white;
+  text-align: center; /* 在小屏幕上居中标题 */
+  flex-grow: 1; /* 确保标题在较大的屏幕上能占满剩余空间 */
+  margin: 0;
 }
 
 .logout-button {
@@ -216,126 +207,58 @@ onBeforeMount(() => {
   transform: scale(1.1);
 }
 
-.sidebar {
+.drawer-btn {
   background-color: #ffffff;
-  color: #333333;
-  padding: 1rem;
-  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
-}
-
-.custom-menu {
-  border-right: none;
-  background: transparent;
-  color: #333333;
-}
-
-.custom-menu .el-menu-item,
-.custom-menu .el-sub-menu__title {
-  height: 48px;
-  line-height: 48px;
-  font-size: 14px;
-  padding-left: 20px !important;
-  transition: background-color 0.3s, color 0.3s;
-  display: flex;
-  align-items: center;
-}
-
-.custom-menu .el-menu-item i,
-.custom-menu .el-sub-menu__title i {
-  margin-right: 10px;
-  font-size: 18px;
-  color: #333333;
-}
-
-.custom-menu .el-menu-item.is-active,
-.custom-menu .el-sub-menu__title.is-active {
-  background-color: #e1f5fe;
+  border: 1px solid #42b983;
   color: #42b983;
-  border-left: 4px solid #42b983;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
-.custom-menu .el-menu-item:hover,
-.custom-menu .el-sub-menu__title:hover {
-  background-color: #f0f8ff;
-  color: #42b983;
-}
-
-.custom-menu .el-menu-item-group__title {
-  display: none;
-}
-
-.custom-menu .el-menu-item span {
-  vertical-align: middle;
-}
-
-.content {
-  flex: 1;
-  padding: 20px;
-  background-color: #f0f2f5;
-  overflow-y: auto;
-}
-
-.drawer-content {
-  padding: 20px;
-}
-
-.drawer-content h2 {
-  margin-top: 0;
-  margin-bottom: 10px;
-}
-
-.drawer-content ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.drawer-content li {
-  margin: 5px 0;
-  display: flex;
-  align-items: center;
-}
-
-.input-word {
-  margin-bottom: 10px;
-  width: 100%;
-}
-
-.item {
-  margin-left: 10px;
+.drawer-btn:hover {
+  background-color: #e8f5e9;
+  border-color: #36a175; /* 改变按钮边框颜色 */
 }
 
 @media (max-width: 768px) {
-  .admin-layout {
-    flex-direction: column;
-  }
-
-  .el-aside {
-    width: 100%;
-    height: auto;
-  }
-
-  .el-main {
-    padding: 1rem;
-  }
-
   .banner {
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    padding: 10px 15px; /* 更小的 padding */
   }
 
   .banner-content {
     flex-direction: column;
     align-items: center;
+    text-align: center;
   }
 
   .user-info {
-    margin-bottom: 1rem;
+    margin-bottom: 10px; /* 确保用户信息与其他内容有间距 */
+  }
+
+  .user-info img {
+    width: 50px; /* 在小屏幕上调整头像大小 */
+    height: 50px;
+  }
+
+  .user-info span {
+    font-size: 1rem;
+  }
+
+  h1 {
+    font-size: 1.2rem;
+    margin-top: 10px;
   }
 
   .logout-button {
-    margin-top: 1rem;
+    margin-top: 10px;
+  }
+
+  .drawer-btn {
+    width: 100%; /* 让按钮宽度自适应 */
+    margin-top: 10px;
   }
 }
+
 </style>

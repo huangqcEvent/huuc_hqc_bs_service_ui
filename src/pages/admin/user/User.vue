@@ -9,7 +9,7 @@
         </el-form-item>
 
         <el-form-item label="状态">
-          <el-select v-model="filterForm.state" placeholder="全部" style="width: 100px;">
+          <el-select v-model="filterForm.state" placeholder="全部">
             <el-option label="全部" value=""></el-option>
             <el-option label="正常" value="1"></el-option>
             <el-option label="停用" value="0"></el-option>
@@ -17,7 +17,7 @@
         </el-form-item>
 
         <el-form-item label="身份">
-          <el-select v-model="filterForm.identity" placeholder="全部" style="width: 100px;">
+          <el-select v-model="filterForm.identity" placeholder="全部">
             <el-option label="全部" value=""></el-option>
             <el-option label="普通用户" value="0"></el-option>
             <el-option label="管理员" value="1"></el-option>
@@ -36,33 +36,33 @@
           <el-button type="primary" @click="fetchData">搜索</el-button>
           <el-button type="default" @click="clearFilters">清空</el-button>
         </el-form-item>
-        
+
       </el-form>
     </div>
 
     <!-- 用户列表 -->
     <div class="content">
-      <el-table :data="userList" style="width: 100%;">
-        <el-table-column prop="head1" label="头像" width="80">
+      <el-table :data="userList">
+        <el-table-column prop="head" label="头像">
           <template #default="scope">
-            <el-avatar src="https://www.huuc.edu.cn/hncj/images/logo.png" size="80px"></el-avatar>
+            <el-avatar :src=scope.row.head size="default"></el-avatar>
           </template>
         </el-table-column>
-        <el-table-column prop="userName" label="用户名" width="150"></el-table-column>
-        <el-table-column prop="state" label="状态" width="120">
+        <el-table-column prop="userName" label="用户名"></el-table-column>
+        <el-table-column prop="state" label="状态">
           <template #default="scope">
             <el-tag :type="scope.row.state ? 'success' : 'danger'">{{ scope.row.state ? '正常' : '停用' }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="identity" label="身份" width="120">
+        <el-table-column prop="identity" label="身份">
           <template #default="scope">
             <el-tag :type="getType(scope.row.identity)">
               {{ getDisplayName(scope.row.identity) }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="注册时间" width="180"></el-table-column>
-        <el-table-column label="操作1" width="150">
+        <el-table-column prop="createTime" label="注册时间"></el-table-column>
+        <el-table-column label="操作1">
           <template #default="scope">
             <el-button v-if="canBanUser(scope.row.identity)" type="primary" plain
               @click="handledownEndChange(scope.row.id, scope.row.userName, scope.row.state == 0 ? 1 : 0)">
@@ -71,7 +71,7 @@
             <el-tag v-else type="danger">无权限</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作2" width="150">
+        <el-table-column label="操作2">
           <template #default="scope">
             <el-button v-if="canBanUser(scope.row.identity)" type="primary" plain
               @click="updateIdentity(scope.row.id, scope.row.identity)">
@@ -356,63 +356,4 @@ function canBanUser(userIdentity: number): boolean {
 }
 </script>
 
-<style scoped>
-.container {
-  height: 100vh;
-  /* 占据整个视口高度 */
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  /* 防止整个页面滚动 */
-}
-
-.filter-form {
-  padding: 0px;
-  background-color: #f8f9fa;
-  margin-bottom: 0px;
-  /* 减小过滤框和表格之间的间距 */
-}
-
-.el-form-item {
-  margin-right: 16px;
-}
-
-.el-table .cell {
-  text-align: center;
-}
-
-.el-button {
-  margin-left: 16px;
-}
-
-.content {
-  flex: 1;
-  /* 占据剩余空间 */
-  overflow-y: auto;
-  /* 启用垂直滚动条 */
-  padding: 0px;
-  max-height: calc(100vh - 224px);
-  /* 调整 max-height 以适应新的间距 */
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: auto;
-  /* 使分页组件位于底部 */
-  margin-bottom: 100px;
-  /* 确保分页条与底部有一定距离 */
-}
-
-/* 使表格适应屏幕宽度 */
-.el-table {
-  width: 100%;
-}
-
-/* 调整表格列的宽度 */
-.el-table__header-wrapper th {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-</style>
+<style scoped lang="scss"></style>
