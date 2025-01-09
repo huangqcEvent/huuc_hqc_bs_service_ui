@@ -16,7 +16,9 @@ import Publish from "@/pages/user/Forms/Publish.vue";
 import Confession from '@/pages/admin/confessionWall/Confession.vue'
 import MyIndex from "@/pages/user/Index/MyIndex.vue";
 import LostItemDetail from "@/pages/user/Notices/LostItemDetail.vue";
-export default createRouter({
+import { ElMessage } from 'element-plus';
+
+const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
@@ -26,11 +28,11 @@ export default createRouter({
         {
             path: '/userIndex',
             component: UserIndex,
-            redirect:'/userIndex/home',
-            children:[
+            redirect: '/userIndex/home',
+            children: [
                 {
                     path: 'home',
-                    component:Home
+                    component: Home
                 },
                 {
                     path: 'notice',
@@ -50,15 +52,15 @@ export default createRouter({
                 },
                 {
                     path: 'cardDetail/:id',
-                    name:'CardDetail',
+                    name: 'CardDetail',
                     component: CardDetail
                 },
                 {
-                    path:'post',
+                    path: 'post',
                     component: Publish
                 },
                 {
-                    path:'myIndex',
+                    path: 'myIndex',
                     component: MyIndex
                 }
             ]
@@ -99,3 +101,42 @@ export default createRouter({
         }
     ]
 })
+router.beforeEach((to, from, next) => {
+    console.log(from.path);
+
+    // 排除登录和注册页面
+    if (to.path === '/login' || to.path === '/register') {
+        next();
+        return;
+    }
+
+    // 用户侧
+    if (to.path.startsWith('/userIndex')) {
+        if (localStorage.getItem('userToken') != null) {
+            next();
+        } else {
+            ElMessage.error("用户未登录，请先登录！");
+            next('/login');
+        }
+    }
+    // 管理侧
+    else if (to.path.startsWith('/adminIndex')) {
+        if (localStorage.getItem('adminToken') != null) {
+            next();
+        } else {
+            ElMessage.error("管理员未登录，请先登录！");
+            next('/login');
+        }
+    }
+    // 其他页面（如果需要额外处理）
+    else {
+        next();
+    }
+});
+
+// 全局后置守卫：在路由导航完成后执行（可选）
+router.afterEach((to, from) => {
+    // 在这里可以做一些数据统计、分析、页面标题设置等操作
+    console.log(`From ${from.fullPath} navigated to ${to.fullPath}`);
+});
+export default router;

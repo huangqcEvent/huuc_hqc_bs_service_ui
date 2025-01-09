@@ -1,22 +1,31 @@
 <template>
 	<div class="container">
-		<el-row class="h-60">
-		</el-row>
-		<el-row justify="center" style="height: 30px">
-			<el-col :span="8" class="bg-primary-subtle p-10">
-				<el-form :model="loginForm" class="login-container" label-position="left" label-width="80px">
-					<h4 class="text-center">管理后台登录</h4>
+		<el-row justify="center" class="login-row">
+			<el-col :span="8" class="bg-card p-20">
+				<el-form :model="loginForm" :rules="rules" class="login-form" label-position="left" label-width="80px">
+					<h4 class="text-center login-title">登录</h4>
+
+					<!-- 账号输入框 -->
 					<el-form-item label="账号" prop="email">
-						<el-input v-model="loginForm.email" placeholder="账号"></el-input>
+						<el-input v-model="loginForm.email" placeholder="请输入账号" class="input-field"></el-input>
 					</el-form-item>
-					<el-form-item label="密码" prop="password">
-						<el-input type="password" v-model="loginForm.pwd" placeholder="密码"></el-input>
+
+					<!-- 密码输入框 -->
+					<el-form-item label="密码" prop="pwd">
+						<el-input type="password" v-model="loginForm.pwd" placeholder="请输入密码"
+							class="input-field"></el-input>
 					</el-form-item>
+
+					<!-- 登录和注册按钮 -->
 					<el-form-item class="text-center">
-						<el-button type="primary" class="m-l-20"
-							@click.prevent="toLogin(loginForm.email, loginForm.pwd)">登录</el-button>
-						<el-button type="default" class="m-l-20"
-							@click.prevent="() => { router.push('/register') }">去注册</el-button>
+						<el-button type="primary" class="login-btn"
+							@click.prevent="toLogin(loginForm.email, loginForm.pwd)">
+							登录
+						</el-button>
+						<el-button type="default" class="register-btn"
+							@click.prevent="() => { router.push('/register') }">
+							去注册
+						</el-button>
 					</el-form-item>
 				</el-form>
 			</el-col>
@@ -24,90 +33,180 @@
 	</div>
 </template>
 
-<script setup lang="ts" name="Login">
-import {login} from '@/api/commonApi/commonApi'
+<script setup lang="ts">
+import { login } from '@/api/commonApi/commonApi';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus';
 import { useWebSocketStore } from '@/stores/webSocket';
+
 // Data
 const loginForm = ref({
 	email: "",
 	pwd: ""
 });
-//pinia管理 webSocket
+
+// 校验规则
+const rules = {
+	email: [
+		{ required: true, message: '请输入账号', trigger: 'blur' },
+		{ min: 3, message: '请输入有效的账号（至少3位）', trigger: 'blur' }
+	],
+	pwd: [
+		{ required: true, message: '请输入密码', trigger: 'blur' },
+		{ min: 6, message: '密码至少 6 个字符', trigger: 'blur' }
+	]
+};
+
+// pinia 管理 webSocket
 const webSocketStore = useWebSocketStore();
-//拿到路由器
-const router = useRouter()
-// Methods
+
+// 路由
+const router = useRouter();
+
+// 登录方法
 function toLogin(email: string, pwd: string) {
 	let data = {
 		username: email,
 		password: pwd
 	};
-	
-	login(data) // 修正 URL 并传递 data 参数
-		.then(response => {
-			if (response.data.code == 200) {
-				if (response.data.data.identity == 1 || response.data.data.identity == 99) {
-					localStorage.setItem("adminToken",response.data.data.jwt)
-					localStorage.setItem("adminInfo", JSON.stringify(response.data.data))
-					router.push('/adminIndex')
-				} else if (response.data.data.identity == 0 || response.data.data.identity == 2) {
-					localStorage.setItem("userToken",response.data.data.jwt)
-					localStorage.setItem("userInfo", JSON.stringify(response.data.data))
-					router.push('/userIndex')
-					//登陆后建立webSocket连接
-					webSocketStore.connectWebSocket(response.data.data.id);
-				}
-			}
-			else {
-				ElMessage({
-					message: response.data.msg,
-					type: 'error',
-					dangerouslyUseHTMLString: true, // 允许使用 HTML 字符串
-				})
 
-			}
-		})
-		.catch(() => {
-			ElMessage({
-				message: '服务器接口错误',
-				type: 'error',
-			})
+	// 调用登录接口
+	login(data)
+		.then(response => {
+			if (response.data.code === 200) {
+				if (response.data.data.identity === 1 || response.data.data.identity === 99) {
+					localStorage.setItem("adminToken", response.data.data.jwt);
+					localStorage.setItem("adminInfo", JSON.stringify(response.data.data));
+					router.push('/adminIndex');
+				} else if (response.data.data.identity === 0 || response.data.data.identity === 2) {
+					localStorage.setItem("userToken", response.data.data.jwt);
+					localStorage.setItem("userInfo", JSON.stringify(response.data.data));
+					router.push('/userIndex');
+			// 登录后建立 webSocket 连接
+			webSocketStore.connectWebSocket(response.data.data.id);
+		  }
+		} else {
+		  ElMessage({
+			message: response.data.msg,
+			type: 'error',
+			dangerouslyUseHTMLString: true
+		  });
+		}
+	  })
+	  .catch(() => {
+		ElMessage({
+		  message: '服务器接口错误',
+		  type: 'error'
 		});
-}
-</script>
+	  });
+  }
+  </script>
 
 <style scoped>
-.h-60 {
-	height: 250px;
-}
-
+/* 背景 */
 .container {
 	width: 100%;
 	height: 100vh;
-	/* 设置容器高度为视口高度 */
-	background-image: url("/src/assets/back.png");
-	background-size: auto;
-	/* 背景图片铺满屏幕 */
-	background-position: center;
-	/* 背景图片居中 */
-	background-repeat: no-repeat;
-	/* 背景图片不重复 */
-	background-attachment: fixed;
-	/* 背景图片固定 */
+	background: linear-gradient(to right, #4facfe, #00f2fe);
 	display: flex;
-	/* 使用 Flexbox 布局 */
-	flex-direction: column;
-	/* 垂直排列 */
+	justify-content: center;
+	align-items: center;
 }
 
-.p-10 {
-	padding: 10px;
+.login-row {
+	width: 100%;
+	display: flex;
+	justify-content: center;
 }
 
-.text-center {
+.bg-card {
+	background-color: #ffffff;
+	border-radius: 10px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.login-form {
+	width: 100%;
+	max-width: 400px;
+	padding: 20px;
+  }
+  
+  .login-title {
+	font-size: 24px;
+	font-weight: 500;
+	color: #333;
+	margin-bottom: 30px;
+  }
+  
+  .input-field {
+	border-radius: 8px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .el-input__inner {
+	border-radius: 8px;
+  }
+  
+  .el-button {
+	border-radius: 20px;
+	width: 100%;
+	padding: 12px 0;
+  }
+  
+  .login-btn {
+	background-color: #4caf50;
+	border-color: #4caf50;
+	width: 200px;
+	margin-top: 20px;
+  }
+  
+  .el-input {
+	width: 250px;
+	margin-bottom: 0px;
+	margin-top: 20px;
+  }
+  
+  .register-btn {
+	background-color: #f5f5f5;
+	border-color: #dcdfe6;
+	color: #409EFF;
+	margin-top: 10px;
+	width: 200px;
+  }
+  
+  .text-center {
 	text-align: center;
-}
+  }
+  
+  /* Align labels with input fields */
+  .el-form-item {
+	display: flex;
+	align-items: center; /* Ensures label is vertically centered with input */
+  }
+  
+  .el-form-item__label {
+	display: flex;
+	align-items: center;
+  }
+  
+  /* Adjusting the error message alignment */
+  .el-form-item__error {
+	font-size: 12px;
+	color: #f56c6c;
+	margin-top: 5px; /* Reduce space between error message and input field */
+  }
+  
+  @media (max-width: 768px) {
+	.container {
+	  padding: 20px;
+	}
+  
+	.login-form {
+	  padding: 15px;
+	  max-width: 100%;
+	}
+  }
+  
 </style>
+  

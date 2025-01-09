@@ -1,23 +1,37 @@
 <template>
 	<div class="container">
-		<el-row class="h-60">
-		</el-row>
-		<el-row justify="center" style="height: 30px">
-			<el-col :span="8" class="bg-primary-subtle p-10">
-				<el-form :model="loginForm" class="login-container" label-position="left" label-width="80px">
-					<h4 class="text-center">管理后台注册</h4>
+		<el-row justify="center" class="register-row">
+			<el-col :span="8" class="form-card">
+				<el-form :model="loginForm" class="register-form" label-position="left" label-width="80px">
+					<h4 class="text-center register-title">注册</h4>
+
+					<!-- 账号输入框 -->
 					<el-form-item label="账号" prop="email">
-						<el-input v-model="loginForm.email" placeholder="账号"></el-input>
+						<el-input v-model="loginForm.email" placeholder="请输入账号" class="input-field" />
 					</el-form-item>
+
+					<!-- 密码输入框 -->
 					<el-form-item label="密码" prop="password">
-						<el-input type="password" v-model="loginForm.pwd" placeholder="密码"></el-input>
+						<el-input type="password" v-model="loginForm.pwd" placeholder="请输入密码" class="input-field" />
 					</el-form-item>
-					头像：<Upload @upload-success="handleUploadSuccess"></Upload>
+
+					<!-- 头像上传 -->
+					<el-form-item label="头像" prop="head">
+						<Upload @upload-success="handleUploadSuccess" />
+						<div v-if="loginForm.head" class="avatar-preview">
+							<img :src="loginForm.head" alt="头像预览" class="avatar-img" />
+						</div>
+					</el-form-item>
+
+					<!-- 注册和去登录按钮 -->
 					<el-form-item class="text-center">
-						<el-button type="primary" class="m-l-20"
-							@click.prevent="toRegister(loginForm.email, loginForm.pwd, loginForm.head)">注册</el-button>
-						<el-button type="default" class="m-l-20"
-							@click.prevent="() => { router.push('/login') }">去登陆</el-button>
+						<el-button type="primary" class="register-btn"
+							@click.prevent="toRegister(loginForm.email, loginForm.pwd, loginForm.head)">
+							注册
+						</el-button>
+						<el-button type="default" class="login-btn" @click.prevent="() => { router.push('/login') }">
+							去登录
+						</el-button>
 					</el-form-item>
 				</el-form>
 			</el-col>
@@ -25,11 +39,12 @@
 	</div>
 </template>
 
-<script setup lang="ts" name="Register">
+<script setup lang="ts">
 import { register } from '@/api/commonApi/commonApi';
 import { ref, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Upload from '@/common/Upload.vue';
+
 // Data
 const loginForm = ref({
 	email: "",
@@ -37,11 +52,10 @@ const loginForm = ref({
 	head: ""
 });
 
-
-//拿到路由器
+// Get router instance
 const router = useRouter();
 
-// Methods
+// Register method
 function toRegister(email: string, pwd: string, head: string) {
 	let data = {
 		username: email,
@@ -56,53 +70,122 @@ function toRegister(email: string, pwd: string, head: string) {
 		} else {
 			alert(response.data.msg);
 		}
-	})
-		.catch(error => {
-			console.error('Error during registration:', error);
-		});
+	}).catch(error => {
+		console.error('Error during registration:', error);
+	});
 }
+
+// Handle avatar upload success
 const handleUploadSuccess = (result: string) => {
 	console.log('上传成功结果:', result);
 	loginForm.value.head = result;
 };
-//卸载时取消监听
-//卸载完毕
+
+// Cleanup on unmount
 onUnmounted(() => {
-	console.log('卸载完毕,取消监听')
-
-})
-
+	console.log('卸载完毕,取消监听');
+});
 </script>
 
 <style scoped>
-.h-60 {
-	height: 250px;
-}
-
+/* 背景 */
 .container {
 	width: 100%;
 	height: 100vh;
-	/* 设置容器高度为视口高度 */
-	background-image: url("/src/assets/back.png");
-	background-size: auto;
-	/* 背景图片铺满屏幕 */
-	background-position: center;
-	/* 背景图片居中 */
-	background-repeat: no-repeat;
-	/* 背景图片不重复 */
-	background-attachment: fixed;
-	/* 背景图片固定 */
+	background: linear-gradient(to right, #6a11cb, #2575fc);
 	display: flex;
-	/* 使用 Flexbox 布局 */
-	flex-direction: column;
-	/* 垂直排列 */
+	justify-content: center;
+	align-items: center;
 }
 
-.p-10 {
-	padding: 10px;
+/* 表单容器 */
+.register-row {
+	width: 100%;
+	display: flex;
+	justify-content: center;
 }
 
+.form-card {
+	background-color: #ffffff;
+	border-radius: 10px;
+	box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+	padding: 40px 30px;
+	width: 100%;
+	max-width: 400px;
+}
+
+/* 标题 */
+.register-title {
+	font-size: 24px;
+	font-weight: 500;
+	color: #333;
+	margin-bottom: 20px;
+}
+
+/* 输入框 */
+.input-field {
+	border-radius: 10px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.el-input__inner {
+	border-radius: 10px;
+}
+
+/* 按钮样式 */
+.el-button {
+	border-radius: 25px;
+	width: 100%;
+	padding: 14px 0;
+}
+
+.el-input {
+	width: 200px;
+}
+
+.register-btn {
+	background-color: #4CAF50;
+	border-color: #4CAF50;
+	color: #fff;
+	margin-bottom: 10px;
+	width: 200px;
+}
+
+.login-btn {
+	background-color: #f4f6f9;
+	border-color: #e4e7ed;
+	color: #409EFF;
+	margin-bottom: 10px;
+	width: 200px;
+}
+
+/* 头像预览 */
+.avatar-preview {
+	margin-top: 10px;
+	text-align: center;
+}
+
+.avatar-img {
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 2px solid #ddd;
+}
+
+/* 居中对齐 */
 .text-center {
 	text-align: center;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+	.form-card {
+		padding: 20px 15px;
+	}
+
+	.register-title {
+		font-size: 20px;
+	}
 }
 </style>
