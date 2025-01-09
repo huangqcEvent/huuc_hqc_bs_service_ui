@@ -28,7 +28,8 @@
               <i class="el-icon-user"></i>
               <span>用户管理</span>
             </template>
-            <el-menu-item type="default" index="1-1" @click="router.push({ path: '/adminIndex/users', query: { identity: adminInfo.identity } })">
+            <el-menu-item type="default" index="1-1"
+              @click="router.push({ path: '/adminIndex/users', query: { identity: adminInfo.identity } })">
               <i class="el-icon-user"></i>
               <span>用户列表</span>
             </el-menu-item>
@@ -50,7 +51,8 @@
               <i class="el-icon-user"></i>
               <span>表白墙管理</span>
             </template>
-            <el-menu-item index="1-1" @click="router.push({ path: '/adminIndex/confession', query: { identity: adminInfo.identity } })">
+            <el-menu-item index="1-1"
+              @click="router.push({ path: '/adminIndex/confession', query: { identity: adminInfo.identity } })">
               <i class="el-icon-user"></i>
               <span>表白贴列表</span>
             </el-menu-item>
@@ -64,7 +66,8 @@
               <i class="el-icon-user"></i>
               <span>寻物贴管理</span>
             </template>
-            <el-menu-item index="3-1" @click="router.push({ path: '/adminIndex/notices', query: { identity: adminInfo.identity } })">
+            <el-menu-item index="3-1"
+              @click="router.push({ path: '/adminIndex/notices', query: { identity: adminInfo.identity } })">
               <i class="el-icon-user"></i>
               <span>寻物贴列表</span>
             </el-menu-item>
@@ -80,16 +83,28 @@
 
     <!-- 抽屉 -->
     <el-drawer v-model="showDrawer" title="违禁词管理" direction="rtl" size="50%">
-      <div class="drawer-content">
-        <h2>黑名单</h2>
-        <ul>
-          <li v-for="(word, index) in blackList" :key="word">{{ word }}</li>
-        </ul>
-        <h2>白名单</h2>
-        <ul>
-          <li v-for="(word) in whiteList" :key="word">{{ word }}</li>
-        </ul>
-      </div>
+      <el-tabs class="demo-tabs">
+        <el-tab-pane label="黑名单" name="first">
+          <!-- 黑名单表格 -->
+          <div class="word-table">
+            <div v-for="(row, index) in chunkList(blackList, 4)" :key="index" class="word-row">
+              <div v-for="(item, subIndex) in row" :key="subIndex" class="word-cell">
+                {{ item.sensitiveWord }}
+              </div>
+            </div>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="白名单" name="second">
+          <!-- 白名单表格 -->
+          <div class="word-table">
+            <div v-for="(row, index) in chunkList(whiteList, 4)" :key="index" class="word-row">
+              <div v-for="(item, subIndex) in row" :key="subIndex" class="word-cell">
+                {{ item.sensitiveWord }}
+              </div>
+            </div>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
     </el-drawer>
   </div>
 </template>
@@ -112,8 +127,18 @@ const adminInfo = reactive({
 
 const showDrawer = ref(false);
 
-const blackList = ref([]);
-const whiteList = ref([]);
+interface BlackList {
+  id: string;
+  sensitiveWord: string;
+}
+
+interface WhiteList {
+  id: string;
+  sensitiveWord: string;
+}
+
+const blackList = ref<BlackList[]>([]);
+const whiteList = ref<WhiteList[]>([]);
 
 const logout1 = () => {
   confirm("确认要退出登录吗?", () => {
@@ -130,7 +155,6 @@ const logout1 = () => {
   });
 };
 
-// 挂载前 调用onBeforeMount()指定的函数
 onBeforeMount(() => {
   const storedUserInfo = localStorage.getItem('adminInfo');
   if (storedUserInfo) {
@@ -141,6 +165,15 @@ onBeforeMount(() => {
     whiteList.value = response.data.data.whiteList;
   });
 });
+
+// 将列表拆分为每行4个元素
+const chunkList = (list: BlackList[] | WhiteList[], chunkSize: number) => {
+  const result: (BlackList[] | WhiteList[])[] = [];
+  for (let i = 0; i < list.length; i += chunkSize) {
+    result.push(list.slice(i, i + chunkSize));
+  }
+  return result;
+};
 </script>
 
 <style scoped>
@@ -152,44 +185,42 @@ onBeforeMount(() => {
   align-items: center;
   padding: 15px 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  border-bottom: 2px solid #36a175; /* 为了增加层次感 */
+  border-bottom: 2px solid #36a175;
 }
 
 .banner-content {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  align-items: center; /* 确保内容垂直居中 */
+  align-items: center;
 }
 
 .user-info {
   display: flex;
   align-items: center;
-  flex-wrap: nowrap; /* 防止换行 */
-  gap: 10px; /* 加一些间距，避免过于紧凑 */
+  flex-wrap: nowrap;
+  gap: 10px;
 }
 
 .user-info img {
   border-radius: 50%;
-  width: 60px; /* 确保头像大小固定 */
+  width: 60px;
   height: 60px;
-  object-fit: cover; /* 保证头像图片的裁剪不会变形 */
+  object-fit: cover;
 }
 
 .user-info span {
   font-size: 1.2rem;
   font-weight: bold;
-  margin-left: 10px; /* 确保用户名与头像有间距 */
-  white-space: nowrap; /* 防止用户名换行 */
-  color: white; /* 提升用户名对比度 */
+  color: white;
 }
 
 h1 {
   font-size: 1.5rem;
   font-weight: 500;
   color: white;
-  text-align: center; /* 在小屏幕上居中标题 */
-  flex-grow: 1; /* 确保标题在较大的屏幕上能占满剩余空间 */
+  text-align: center;
+  flex-grow: 1;
   margin: 0;
 }
 
@@ -213,18 +244,26 @@ h1 {
   color: #42b983;
   border-radius: 4px;
   padding: 0.5rem 1rem;
-  transition: background-color 0.3s, border-color 0.3s;
 }
 
-.drawer-btn:hover {
-  background-color: #e8f5e9;
-  border-color: #36a175; /* 改变按钮边框颜色 */
+.word-table {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4列布局 */
+  gap: 10px;
+  padding: 10px;
+}
+
+.word-cell {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+  font-size: 14px;
 }
 
 @media (max-width: 768px) {
   .banner {
     flex-direction: column;
-    padding: 10px 15px; /* 更小的 padding */
+    padding: 10px 15px;
   }
 
   .banner-content {
@@ -233,32 +272,8 @@ h1 {
     text-align: center;
   }
 
-  .user-info {
-    margin-bottom: 10px; /* 确保用户信息与其他内容有间距 */
-  }
-
-  .user-info img {
-    width: 50px; /* 在小屏幕上调整头像大小 */
-    height: 50px;
-  }
-
-  .user-info span {
-    font-size: 1rem;
-  }
-
-  h1 {
-    font-size: 1.2rem;
-    margin-top: 10px;
-  }
-
-  .logout-button {
-    margin-top: 10px;
-  }
-
-  .drawer-btn {
-    width: 100%; /* 让按钮宽度自适应 */
-    margin-top: 10px;
+  .word-table {
+    grid-template-columns: repeat(2, 1fr); /* 小屏幕下 2列布局 */
   }
 }
-
 </style>
