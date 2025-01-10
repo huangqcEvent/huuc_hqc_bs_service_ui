@@ -1,3 +1,4 @@
+<!-- 父组件 -->
 <template>
   <div class="admin-layout">
     <!-- Banner -->
@@ -8,7 +9,7 @@
           <span>{{ adminInfo.username }}</span>
         </div>
         <h1>欢迎来到管理后台</h1>
-        <el-button @click="showDrawer = true" class="drawer-btn">
+        <el-button @click="openDrawer" class="drawer-btn">
           <el-icon>
             <CircleCloseFilled />
           </el-icon>
@@ -81,31 +82,15 @@
       </el-main>
     </el-container>
 
-    <!-- 抽屉 -->
-    <el-drawer v-model="showDrawer" title="违禁词管理" direction="rtl" size="50%">
-      <el-tabs class="demo-tabs">
-        <el-tab-pane label="黑名单" name="first">
-          <!-- 黑名单表格 -->
-          <div class="word-table">
-            <div v-for="(row, index) in chunkList(blackList, 4)" :key="index" class="word-row">
-              <div v-for="(item, subIndex) in row" :key="subIndex" class="word-cell">
-                {{ item.sensitiveWord }}
-              </div>
-            </div>
-          </div>
-        </el-tab-pane>
-        <el-tab-pane label="白名单" name="second">
-          <!-- 白名单表格 -->
-          <div class="word-table">
-            <div v-for="(row, index) in chunkList(whiteList, 4)" :key="index" class="word-row">
-              <div v-for="(item, subIndex) in row" :key="subIndex" class="word-cell">
-                {{ item.sensitiveWord }}
-              </div>
-            </div>
-          </div>
-        </el-tab-pane>
-      </el-tabs>
-    </el-drawer>
+    <!-- 敏感词抽屉 -->
+    <SensitiveWordDrawer 
+      v-model:showDrawer="showDrawer" 
+      :activeTab="activeTab" 
+      :blackList="blackList" 
+      :whiteList="whiteList" 
+      @update:activeTab="activeTab = $event" 
+      :getWord="getWord" 
+    />
   </div>
 </template>
 
@@ -116,6 +101,7 @@ import Image from '@/common/Image.vue';
 import { logout } from '@/api/commonApi/commonApi';
 import { confirm } from '@/utils/confirmUtils';
 import { getProhibitedWords } from '@/api/admin/user/userApi';
+import SensitiveWordDrawer from '@/pages/admin/word/SensitiveWordDrawer.vue';
 
 const router = useRouter();
 const adminInfo = reactive({
@@ -126,6 +112,7 @@ const adminInfo = reactive({
 });
 
 const showDrawer = ref(false);
+const activeTab = ref('first'); // 默认选中黑名单 Tab
 
 interface BlackList {
   id: string;
@@ -160,20 +147,22 @@ onBeforeMount(() => {
   if (storedUserInfo) {
     Object.assign(adminInfo, JSON.parse(storedUserInfo));
   }
+});
+
+// 获取列表
+function getWord() {
   getProhibitedWords().then((response) => {
     blackList.value = response.data.data.blackList;
     whiteList.value = response.data.data.whiteList;
   });
-});
+}
 
-// 将列表拆分为每行4个元素
-const chunkList = (list: BlackList[] | WhiteList[], chunkSize: number) => {
-  const result: (BlackList[] | WhiteList[])[] = [];
-  for (let i = 0; i < list.length; i += chunkSize) {
-    result.push(list.slice(i, i + chunkSize));
-  }
-  return result;
-};
+// 打开抽屉并调用 getWord
+function openDrawer() {
+  showDrawer.value = true;
+  activeTab.value = 'first'; // 默认选中黑名单 Tab
+  getWord(); // 获取违禁词
+}
 </script>
 
 <style scoped>
@@ -244,36 +233,5 @@ h1 {
   color: #42b983;
   border-radius: 4px;
   padding: 0.5rem 1rem;
-}
-
-.word-table {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4列布局 */
-  gap: 10px;
-  padding: 10px;
-}
-
-.word-cell {
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: center;
-  font-size: 14px;
-}
-
-@media (max-width: 768px) {
-  .banner {
-    flex-direction: column;
-    padding: 10px 15px;
-  }
-
-  .banner-content {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .word-table {
-    grid-template-columns: repeat(2, 1fr); /* 小屏幕下 2列布局 */
-  }
 }
 </style>

@@ -16,7 +16,8 @@ import Publish from "@/pages/user/Forms/Publish.vue";
 import Confession from '@/pages/admin/confessionWall/Confession.vue'
 import MyIndex from "@/pages/user/Index/MyIndex.vue";
 import LostItemDetail from "@/pages/user/Notices/LostItemDetail.vue";
-import { ElMessage } from 'element-plus';
+import { ElMessageBox } from 'element-plus'
+import type { Action } from 'element-plus'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -72,7 +73,7 @@ const router = createRouter({
         {
             path: '/adminIndex',
             component: AdminIndex,
-            redirect:'/adminIndex/users',
+            redirect: '/adminIndex/users',
             children: [
                 {
                     path: 'users',
@@ -116,8 +117,13 @@ router.beforeEach((to, from, next) => {
         if (localStorage.getItem('userToken') != null) {
             next();
         } else {
-            ElMessage.error("用户未登录，请先登录！");
-            next('/login');
+            ElMessageBox.alert('为了您更好的浏览体验，请先登录！', '提示', {
+                confirmButtonText: 'OK',
+                type: 'warning',
+                callback: (action: Action) => {
+                    next('/login');
+                },
+            })
         }
     }
     // 管理侧
@@ -125,8 +131,13 @@ router.beforeEach((to, from, next) => {
         if (localStorage.getItem('adminToken') != null) {
             next();
         } else {
-            ElMessage.error("管理员未登录，请先登录！");
-            next('/login');
+            ElMessageBox.alert('为了您更好的浏览体验，请先登录！', '提示', {
+                confirmButtonText: 'OK',
+                type: 'warning',
+                callback: (action: Action) => {
+                    next('/login');
+                },
+            })
         }
     }
     // 其他页面（如果需要额外处理）

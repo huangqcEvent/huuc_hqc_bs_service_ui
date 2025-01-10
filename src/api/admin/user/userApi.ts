@@ -49,3 +49,24 @@ export function getProhibitedWords() {
     userType: 'admin'
   })
 }
+
+//删除白名单
+export function deleteWhite(id: string) {
+  return request.delete(`/admin/deleteWhiteById/${id}`, {
+    userType: 'admin'
+  })
+}
+
+//删除黑名单
+export function deleteBlack(id: string) {
+  return request.delete(`/admin/deleteBlackById/${id}`, {
+    userType: 'admin'
+  })
+}
+
+//新增敏感词
+export function saveWord(params: any) {
+  return request.post('/admin/addProhibitedWords', params, {
+    userType: 'admin'
+  })
+}
