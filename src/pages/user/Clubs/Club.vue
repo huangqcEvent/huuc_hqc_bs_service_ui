@@ -15,7 +15,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* 占据整个视口高度 */
+    max-height: calc(100vh - 80px); /* 调整最大高度 */
     background-color: #f0f2f5; /* 背景颜色 */
     color: #333;
     text-align: center;

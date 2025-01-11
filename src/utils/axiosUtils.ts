@@ -4,7 +4,7 @@ import { ElMessage } from 'element-plus';
 // 创建一个新的 axios 实例
 const instance = axios.create({
   baseURL: '/api',
-  timeout: 5000,
+  timeout: 20000,
 });
 
 // 添加请求拦截器
@@ -53,7 +53,7 @@ instance.interceptors.response.use(
     // 响应错误
     // 可以在这里处理全局的错误
     ElMessage({
-      message: '服务器错误,'+error.code,
+      message: '服务器错误',
       type: 'error',
     });
     return Promise.reject(error);

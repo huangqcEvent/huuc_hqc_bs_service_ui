@@ -120,11 +120,11 @@ const goToDetail = (id: number | undefined) => {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .home {
   padding: 20px;
   background-color: #f0f2f5;
-  min-height: 100vh;
+  max-height: calc(100vh - 80px); /* 调整最大高度 */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -229,5 +229,6 @@ const goToDetail = (id: number | undefined) => {
 
 .pagination {
   margin-top: -30px;
+  left: 700px;
 }
 </style>

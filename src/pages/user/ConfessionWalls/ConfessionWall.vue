@@ -155,24 +155,20 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
   background-image: url('./../../../assets/表白墙背景.jpg');
-  background-size: 1400px;
+  background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
+  max-height: calc(100vh - 60px);
   color: #333;
   text-align: center;
-  padding: 0px;
-  height: 100vh;
-  margin: 0;
 }
 
 .confession-wall {
   position: relative;
   width: 100%;
-  height: 800px;
   max-width: 1200px;
   margin: 0 auto;
-  margin-top: 0;
-  margin-bottom: 30px;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .large-card {
@@ -253,7 +249,7 @@ onMounted(() => {
 
 .page {
   position: absolute;
-  bottom: 50px;
+  bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
   text-align: center;

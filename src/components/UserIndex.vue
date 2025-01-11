@@ -52,7 +52,7 @@
     </el-header>
     <el-main>
       <el-scrollbar class="scrollbar" style="height: 100%;">
-        <div class="content">
+        <div>
           <router-view></router-view>
         </div>
       </el-scrollbar>
@@ -61,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted,computed } from 'vue';
+import { ref, reactive, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { logout } from '@/api/commonApi/commonApi';
 import { confirm } from '@/utils/confirmUtils';
@@ -107,7 +107,7 @@ const logout1 = () => {
     console.log('取消退出');
   });
 };
-function getmsg(){
+function getmsg() {
   messages.value = webSocketStore.getMessages
 }
 const goToPost = () => {

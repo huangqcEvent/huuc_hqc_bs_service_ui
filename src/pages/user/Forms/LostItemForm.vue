@@ -3,8 +3,8 @@
     <el-form :model="form" :rules="rules" ref="ruleFormRef" label-width="100px" class="confession-form">
       <el-form-item label="类型" prop="type">
         <el-radio-group v-model="form.type">
-          <el-radio :label="1">寻物</el-radio>
-          <el-radio :label="2">寻主</el-radio>
+          <el-radio value="1">寻物</el-radio>
+          <el-radio value="2">寻主</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="物品名称" prop="itemName">

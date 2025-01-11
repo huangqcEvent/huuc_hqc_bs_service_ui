@@ -39,8 +39,8 @@
             <el-form label-width="100px" :rules="rules">
                 <el-form-item label="类型">
                     <el-radio-group v-model="form.type">
-                        <el-radio :label="1">黑名单</el-radio>
-                        <el-radio :label="2">白名单</el-radio>
+                        <el-radio label="1">黑名单</el-radio>
+                        <el-radio label="2">白名单</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="敏感词" prop="word" maxlength="10" show-word-limit>

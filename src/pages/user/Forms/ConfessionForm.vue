@@ -2,8 +2,8 @@
   <el-form :model="form" :rules="rules" ref="formRef" label-width="100px" class="confession-form">
     <el-form-item label="类型" prop="type">
       <el-radio-group v-model="form.type">
-        <el-radio :label="1">表白</el-radio>
-        <el-radio :label="0">找对象</el-radio>
+        <el-radio value="1">表白</el-radio>
+        <el-radio value="0">找对象</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item label="标题" prop="title">
@@ -12,7 +12,7 @@
     <el-form-item label="概要" prop="summary">
       <el-input v-model="form.summary" placeholder="请输入概要" maxlength="20" show-word-limit></el-input>
     </el-form-item>
-    <el-form-item :label="form.type === 1 ? '描述' : '期望'" prop="toUserInfo">
+    <el-form-item value="form.type === 1 ? '描述' : '期望'" prop="toUserInfo">
       <el-input v-model="form.toUserInfo" :placeholder="'请输入对他(她)的' + (form.type === 1 ? '描述' : '期望')" maxlength="25"
         show-word-limit></el-input>
     </el-form-item>
@@ -22,14 +22,14 @@
     </el-form-item>
     <el-form-item label="是否匿名" prop="isAnonymous">
       <el-radio-group v-model="form.isAnonymous">
-        <el-radio :label="1">是</el-radio>
-        <el-radio :label="0">否</el-radio>
+        <el-radio value="1">是</el-radio>
+        <el-radio value="0">否</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item label="是否公开" prop="status">
       <el-radio-group v-model="form.status">
-        <el-radio :label="1">公开</el-radio>
-        <el-radio :label="2">私密</el-radio>
+        <el-radio value="1">公开</el-radio>
+        <el-radio value="2">私密</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item label="图片">
