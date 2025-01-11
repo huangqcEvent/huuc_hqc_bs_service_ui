@@ -28,8 +28,7 @@
 
         <el-form-item label="注册时间">
           <el-date-picker v-model="filterForm.createTimeRange" type="daterange" range-separator="至"
-            start-placeholder="开始日期" end-placeholder="结束日期" value-format="YYYY-MM-DD"
-            style="width: 300px;"></el-date-picker>
+            start-placeholder="开始日期" end-placeholder="结束日期" value-format="YYYY-MM-DD"></el-date-picker>
         </el-form-item>
 
         <el-form-item>

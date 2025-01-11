@@ -1,10 +1,10 @@
 <template>
   <div class="form-container">
-    <el-form :model="form" :rules="rules" ref="ruleFormRef" label-width="100px">
+    <el-form :model="form" :rules="rules" ref="ruleFormRef" label-width="100px" class="confession-form">
       <el-form-item label="类型" prop="type">
         <el-radio-group v-model="form.type">
-          <el-radio label='1'>寻物</el-radio>
-          <el-radio label="2">寻主</el-radio>
+          <el-radio :label="1">寻物</el-radio>
+          <el-radio :label="2">寻主</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="物品名称" prop="itemName">
@@ -106,52 +106,33 @@ const submitForm = () => {
 </script>
 
 <style scoped>
-.form-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: -50px;
-  height: 100vh;
-  /* 使容器高度占满整个视口 */
-}
-
-.el-form {
-  padding: 20px;
+.confession-form {
+  width: 100%;
+  max-width: 1500px;
+  height: 500px; /* 设置表单高度 */
+  margin: 0 auto;
   background-color: #fff;
+  padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 600px;
+  overflow-y: auto; /* 当内容超出时显示垂直滚动条 */
 }
 
-.el-form-item {
+.confession-form .el-form-item {
   margin-bottom: 20px;
 }
 
-.el-radio-group {
-  display: flex;
-  justify-content: space-around;
+.confession-form .el-form-item__label {
+  white-space: nowrap;
+  /* 防止文字换行 */
 }
 
-.el-radio {
-  font-size: 16px;
-  color: #333;
-}
-
-.el-radio__input.is-checked+.el-radio__label {
-  color: #409eff;
-}
-
-.el-radio__input.is-checked .el-radio__inner {
-  border-color: #409eff;
-  background: #409eff;
-}
-
-.el-textarea {
+.confession-form .el-input,
+.confession-form .el-textarea {
   width: 100%;
 }
 
-.el-button--primary {
+.confession-form .el-button {
   width: 100%;
 }
 

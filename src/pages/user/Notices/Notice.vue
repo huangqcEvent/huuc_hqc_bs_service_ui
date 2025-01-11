@@ -1,32 +1,27 @@
 <template>
   <div class="home">
-    <el-row :gutter="20" class="filter-row">
-      类型：<el-col :span="4">
-       <el-select v-model="filters.type" placeholder="请选择类型" clearable @change="applyFilters">
-          <el-option label="寻物" value="1"></el-option>
-          <el-option label="寻主" value="2"></el-option>
-        </el-select>
-      </el-col>
-      名称： <el-col :span="4">
-        <el-input v-model="filters.itemName" placeholder="请输入物品名称" clearable @input="applyFilters"></el-input>
-      </el-col>
-      发布时间：<el-col :span="8">
-        <el-date-picker
-          v-model="filters.dateRange"
-          type="daterange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          value-format="YYYY-MM-DD 00:00:00"
-          clearable
-          @change="applyFilters"
-        ></el-date-picker>
-      </el-col>
-      <el-col :span="4" style="text-align: right;">
-        <el-button type="primary" @click="applyFilters">搜索</el-button>
-        <el-button @click="clearFilters">清空</el-button>
-      </el-col>
-    </el-row>
+    <div class="filter-form">
+            <el-form :model="filters" inline>
+              <el-form-item label="名称">
+                <el-input v-model="filters.itemName" placeholder="物品名称"></el-input>
+              </el-form-item>
+              <el-form-item label="状态">
+                <el-select v-model="filters.type" placeholder="全部">
+                  <el-option label="全部" value=""></el-option>
+                  <el-option label="寻物" value="1"></el-option>
+                  <el-option label="寻主" value="2"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="发布时间">
+                <el-date-picker v-model="dateRange" type="daterange" range-separator="至"
+                  start-placeholder="开始日期" end-placeholder="结束日期" value-format="YYYY-MM-DD 00:00:00"></el-date-picker>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="fetchLostItems">搜索</el-button>
+                <el-button type="default" @click="clearFilters">清空</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
     <el-row :gutter="20" class="card-list">
       <el-col :span="8" v-for="item in lostItems" :key="item.id">
         <el-card class="box-card" @click="goToDetail(item.id)">
@@ -59,7 +54,7 @@
 </template>
 
 <script setup lang="ts" name="Notice">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import type { LostItem, Params } from '@/api/user/LostItemApi';
 import { lostItemPage } from '@/api/user/LostItemApi';
@@ -67,17 +62,28 @@ import { lostItemPage } from '@/api/user/LostItemApi';
 const router = useRouter();
 const lostItems = ref<LostItem[]>([]);
 const total = ref(0);
+const dateRange = ref(['', '']); // 确保初始化为数组
 
 // 过滤条件对象
 const filters = ref<Params>({
   type: null,
   itemName: '',
-  createTimeStart: '',
-  createTimeEnd: '',
+  createTimeStart: '', // 初始化为空字符串
+  createTimeEnd: '', // 初始化为空字符串
   pageSize: 6, // 每页显示6条记录
   pageNumber: 1,
-  status:1,
-  dateRange: ['', '']
+  status: 1
+});
+
+// 监听 dateRange 的变化，更新 filters 对象
+watch(dateRange, (newVal) => {
+  if (Array.isArray(newVal) && newVal.length === 2) {
+    filters.value.createTimeStart = newVal[0];
+    filters.value.createTimeEnd = newVal[1];
+  } else {
+    filters.value.createTimeStart = '';
+    filters.value.createTimeEnd = '';
+  }
 });
 
 onMounted(() => {
@@ -91,18 +97,6 @@ const fetchLostItems = async () => {
   total.value = response.data.data.total;
 };
 
-const applyFilters = () => {
-  if (filters.value.dateRange) {
-    filters.value.createTimeStart = filters.value.dateRange[0];
-    filters.value.createTimeEnd = filters.value.dateRange[1];
-  } else {
-    filters.value.createTimeStart = '';
-    filters.value.createTimeEnd = '';
-  }
-  filters.value.pageNumber = 1; // 重置页码
-  fetchLostItems();
-};
-
 const clearFilters = () => {
   filters.value = {
     type: null,
@@ -110,9 +104,9 @@ const clearFilters = () => {
     createTimeStart: '',
     createTimeEnd: '',
     pageSize: 6, // 每页显示6条记录
-    pageNumber: 1,
-    dateRange: ['', '']
+    pageNumber: 1
   };
+  dateRange.value = ['', ''];
   fetchLostItems();
 };
 

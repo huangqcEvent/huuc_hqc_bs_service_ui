@@ -46,16 +46,14 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
-import { ElForm, ElMessage } from 'element-plus'
+import { reactive } from 'vue'
+import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router';
 import Upload from '@/common/Upload.vue';
 import { saveConfession } from '@/api/user/ConfessionWallApi';
 
-const formRef = ref<InstanceType<typeof ElForm>>()
+const router = useRouter();
 
-const router = useRouter(); 
-  
 const form = reactive({
   title: '',
   content: '',
@@ -70,6 +68,9 @@ const form = reactive({
 })
 
 const rules = reactive({
+  type: [
+    { required: true, message: '请选择类型', trigger: 'change' }
+  ],
   title: [
     { required: true, message: '标题不能为空', trigger: 'blur' },
     { max: 10, message: '标题不能超过10个字', trigger: 'blur' }
@@ -101,29 +102,30 @@ const getImage3 = (result: string) => {
 };
 
 const submitForm = () => {
-  formRef.value?.validate((valid) => {
-    if (valid) {
       saveConfession(form).then((response) => {
         ElMessage.success(response.data.msg)
         router.push("/userIndex/confessionWall")
-      })
-    } else {
-      ElMessage.error('请检查表单信息');
-    }
-    // 确保返回 void
-    return;
-  });
-}
+      }).catch(
+        (response)=>{
+          ElMessage.success(response.data.msg)
+        }
+      )
+    } 
+  // 确保返回 void
 </script>
 <style scoped>
 .confession-form {
   width: 100%;
-  max-width: 600px;
+  max-width: 1500px;
+  height: 500px;
+  /* 设置表单高度 */
   margin: 0 auto;
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  /* 当内容超出时显示垂直滚动条 */
 }
 
 .confession-form .el-form-item {

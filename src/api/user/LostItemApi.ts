@@ -24,7 +24,6 @@ export interface Params {
     status?: number | null;
     pageSize: number;
     pageNumber: number;
-    dateRange: [string, string] | ['', '']; // 日期范围数组
 }
 
 // 新增寻物贴接口

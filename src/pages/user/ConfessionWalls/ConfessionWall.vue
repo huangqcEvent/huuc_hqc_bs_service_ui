@@ -12,7 +12,7 @@
                 <el-input v-model="filterForm.title" placeholder="请输入标题"></el-input>
               </el-form-item>
               <el-form-item label="状态">
-                <el-select v-model="filterForm.type" placeholder="全部" style="width: 100px;">
+                <el-select v-model="filterForm.type" placeholder="全部">
                   <el-option label="全部" value=""></el-option>
                   <el-option label="表白" value="1"></el-option>
                   <el-option label="找对象" value="0"></el-option>
@@ -20,8 +20,7 @@
               </el-form-item>
               <el-form-item label="发布时间">
                 <el-date-picker v-model="filterForm.createTimeRange" type="daterange" range-separator="至"
-                  start-placeholder="开始日期" end-placeholder="结束日期" value-format="YYYY-MM-DD"
-                  style="width: 300px;"></el-date-picker>
+                  start-placeholder="开始日期" end-placeholder="结束日期" value-format="YYYY-MM-DD"></el-date-picker>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="fetchData">搜索</el-button>
@@ -95,7 +94,7 @@ function fetchData() {
     createTimeEnd: formatDateTime(filterForm.value.createTimeRange[1]),
     title: filterForm.value.title,
     type: filterForm.value.type,
-    status:1
+    status: 1
   };
   cardQuery(params)
     .then((response) => {
