@@ -36,14 +36,14 @@
 
         <!-- 新增敏感词表单 -->
         <el-dialog title="新增敏感词" v-model="showAddWordForm" width="30%">
-            <el-form label-width="100px">
+            <el-form label-width="100px" :rules="rules">
                 <el-form-item label="类型">
                     <el-radio-group v-model="form.type">
                         <el-radio :label="1">黑名单</el-radio>
                         <el-radio :label="2">白名单</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="敏感词">
+                <el-form-item label="敏感词" prop="word" maxlength="10" show-word-limit>
                     <el-input v-model="form.word" placeholder="请输入敏感词"></el-input>
                 </el-form-item>
             </el-form>
@@ -58,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue';
+import { ref, watch, reactive } from 'vue';
 import { ElMessage } from 'element-plus';
 import { confirm } from '@/utils/confirmUtils';
 import { deleteWhite, deleteBlack, saveWord } from '@/api/admin/user/userApi';
@@ -90,6 +90,12 @@ const emit = defineEmits<{
 
 const localActiveTab = ref(props.activeTab);
 
+const rules = reactive({
+    word: [
+        { required: true, message: '词语不能为空', trigger: 'blur' },
+        { max: 10, message: '词语不能超过10个字', trigger: 'blur' }
+    ]
+})
 watch(
     () => props.activeTab,
     (newVal) => {

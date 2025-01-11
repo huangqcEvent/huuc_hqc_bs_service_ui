@@ -16,7 +16,6 @@
 </template>
 
 <script setup lang="ts" name="ConfessionCard">
-import { defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 
 const props = defineProps({
