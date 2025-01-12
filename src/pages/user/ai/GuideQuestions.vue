@@ -2,7 +2,7 @@
     <div class="guide-questions">
         <el-button @click="openDrawer">提问</el-button>
         <el-drawer title="问答" v-model="state.drawerVisible" direction="rtl" size="50%">
-            <div class="conversation-container">
+            <div class="conversation-container" ref="conversationContainer">
                 <div class="conversation">
                     <div v-for="(record, index) in state.conversation" :key="index" class="message">
                         <div v-if="record.user" class="user-message">
@@ -12,17 +12,17 @@
                             </div>
                         </div>
                         <div v-if="record.loading" class="assistant-message">
-                            <img :src="defaultAvatar" alt="Assistant Avatar" class="avatar" />
                             <div class="assistant loading">正在全力思考中...</div>
+                            <img :src="defaultAvatar" alt="Assistant Avatar" class="avatar" />
                         </div>
                         <div v-else-if="record.answer" class="assistant-message">
+                            <div class="assistant" v-html="parseNewLines(record.answer)"></div>
                             <img :src="defaultAvatar" alt="Assistant Avatar" class="avatar" />
-                            <div class="assistant" v-html="record.answer"></div>
                         </div>
                     </div>
                 </div>
                 <div class="input-container">
-                    <input v-model="state.question" type="text" placeholder="请输入问题" />
+                    <input v-model="state.question" type="text" placeholder="请输入问题" @keyup.enter="askQuestion" />
                     <el-button @click="askQuestion">提问</el-button>
                 </div>
             </div>
@@ -31,7 +31,7 @@
 </template>
 
 <script setup name="GuideQuestions">
-import { reactive, onMounted } from 'vue';
+import { reactive, onMounted, ref, nextTick } from 'vue';
 import { chat } from '@/api/user/ConfessionWallApi';
 
 const userInfo = reactive({
@@ -71,16 +71,26 @@ const askQuestion = async () => {
         loading: true
     };
     state.conversation.push(newRecord);
-    state.question = ''; // 清空输入框
     try {
         const response = await chat(state.question);
         newRecord.answer = response.data.msg;
+        state.question = ''; // 清空输入框
     } catch (error) {
         newRecord.answer = '提问失败，请重试';
     } finally {
         newRecord.loading = false;
+        nextTick(() => {
+            conversationContainer.value.scrollTop = conversationContainer.value.scrollHeight;
+        });
     }
 };
+
+// 解析换行符
+function parseNewLines(text){
+    return text.replace(/\n/g, '<br>').replace(/\*\*/g, '');
+};
+
+const conversationContainer = ref(null);
 
 onMounted(() => {
     const storedUserInfo = localStorage.getItem('userInfo');
@@ -90,7 +100,7 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .guide-questions {
     max-width: 600px;
     margin: 0 auto;
@@ -109,6 +119,32 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     height: 100%;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    /* Firefox */
+    scrollbar-color: #888 #f1f1f1;
+    /* Firefox */
+}
+
+.conversation-container::-webkit-scrollbar {
+    width: 8px;
+    /* Chrome, Safari, Edge */
+}
+
+.conversation-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    /* Chrome, Safari, Edge */
+}
+
+.conversation-container::-webkit-scrollbar-thumb {
+    background: #888;
+    /* Chrome, Safari, Edge */
+    border-radius: 4px;
+}
+
+.conversation-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    /* Chrome, Safari, Edge */
 }
 
 .conversation {
@@ -123,12 +159,16 @@ onMounted(() => {
     display: flex;
     border-top: 1px solid #ccc;
     padding-top: 10px;
+    background-color: #fff;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .input-container input {
     flex: 1;
     padding: 10px;
     font-size: 16px;
+    border: none;
+    outline: none;
 }
 
 .input-container button {
@@ -136,6 +176,15 @@ onMounted(() => {
     font-size: 16px;
     margin-left: 10px;
     cursor: pointer;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.input-container button:hover {
+    background-color: #0056b3;
 }
 
 .loading {
