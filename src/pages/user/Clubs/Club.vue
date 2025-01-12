@@ -9,7 +9,7 @@
   // 这里可以添加一些逻辑，例如获取数据等
   </script>
   
-  <style scoped>
+  <style scoped lang="scss">
   .home {
     display: flex;
     flex-direction: column;

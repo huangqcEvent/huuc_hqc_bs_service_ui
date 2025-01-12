@@ -1,9 +1,9 @@
 <template>
   <el-container>
     <el-header class="banner">
-      <el-row type="flex" justify="space-between" style="width: 100%;">
+      <el-row type="flex" justify="space-between" align="middle" style="width: 100%;">
         <el-col :span="8" class="logo">
-          <img src="https://www.huuc.edu.cn/images/logo.png" alt="Logo" />
+          <img src="D:\vsCodeProject\vueProject\hqc_bysj_vue3\src\assets\9d62581ef8d2daf9ef72d81dcd756ed.png" alt="Logo" />
         </el-col>
         <el-col :span="8" class="nav">
           <el-menu mode="horizontal" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b"
@@ -19,33 +19,39 @@
             <el-button type="primary" @click="login" class="login-btn">登录</el-button>
           </div>
           <div v-else class="user-info">
-            <el-popover placement="bottom" width="300" trigger="click" popper-class="message-popover">
-              <ul class="message-list">
-                <li v-if="messages.length === 0">
-                  无消息
-                </li>
-                <li v-else v-for="(message, index) in messages" :key="index">
-                  <span :class="{ read: message }">{{ message }}</span>
-                </li>
-              </ul>
-              <template #reference>
-                <el-badge :value="msgTotal" class="item" @click="getmsg">
-                  <el-icon style="font-size: 25px;">
-                    <Message />
-                  </el-icon>
-                </el-badge>
-              </template>
-            </el-popover>
-            <el-button type="success" @click="goToPost" class="post-button">我要发贴</el-button>
-            <el-popover placement="bottom" width="200" trigger="hover" popper-class="user-popover">
-              <div class="popover-content">
-                <h1>{{ userInfo.username }}</h1>
-                <el-button type="danger" @click="logout1" class="logout-btn">退出登录</el-button>
-              </div>
-              <template #reference>
-                <el-avatar :size="40" :src="userInfo.head" />
-              </template>
-            </el-popover>
+            <div class="message-icon">
+              <el-popover placement="bottom" width="300" trigger="click" popper-class="message-popover">
+                <ul class="message-list">
+                  <li v-if="messages.length === 0">
+                    无消息
+                  </li>
+                  <li v-else v-for="(message, index) in messages" :key="index">
+                    <span :class="{ read: message }">{{ message }}</span>
+                  </li>
+                </ul>
+                <template #reference>
+                  <el-badge :value="msgTotal" class="item" @click="getmsg">
+                    <el-icon style="font-size: 25px;">
+                      <Message />
+                    </el-icon>
+                  </el-badge>
+                </template>
+              </el-popover>
+            </div>
+            <div class="post-button-container">
+              <el-button type="success" @click="goToPost" class="post-button">我要发贴</el-button>
+            </div>
+            <div class="user-avatar">
+              <el-popover placement="bottom" width="200" trigger="hover" popper-class="user-popover">
+                <div class="popover-content">
+                  <h1>{{ userInfo.username }}</h1>
+                  <el-button type="danger" @click="logout1" class="logout-btn">退出登录</el-button>
+                </div>
+                <template #reference>
+                  <el-avatar size="default" :src="userInfo.head" />
+                </template>
+              </el-popover>
+            </div>
           </div>
         </el-col>
       </el-row>
@@ -60,6 +66,7 @@
   </el-container>
 </template>
 
+
 <script setup lang="ts">
 import { ref, reactive, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
@@ -67,6 +74,7 @@ import { logout } from '@/api/commonApi/commonApi';
 import { confirm } from '@/utils/confirmUtils';
 import { useWebSocketStore } from '@/stores/webSocket';
 
+const errorHandler = () => true
 const router = useRouter();
 const webSocketStore = useWebSocketStore();
 const messages = ref<string[]>([
@@ -124,7 +132,7 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .item {
   margin-top: -20px;
   margin-right: 30px;
@@ -143,6 +151,8 @@ onMounted(() => {
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 0;
+  height: 60px;
+  /* 固定高度 */
 }
 
 /* Logo 样式 */
@@ -153,7 +163,8 @@ onMounted(() => {
 }
 
 .logo img {
-  height: 45px;
+  height: 40px;
+  /* 调整 logo 高度 */
 }
 
 /* 导航菜单样式 */
@@ -166,7 +177,8 @@ onMounted(() => {
 
 .nav .el-menu-item {
   height: 60px;
-  line-height: 50px;
+  line-height: 60px;
+  /* 与 banner 高度一致 */
   padding: 0 20px;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -185,7 +197,7 @@ onMounted(() => {
 .login-button {
   display: flex;
   align-items: center;
-  margin-top: -5px;
+  justify-content: flex-end;
   height: 100%;
 }
 
@@ -210,7 +222,20 @@ onMounted(() => {
 .user {
   display: flex;
   justify-content: flex-end;
-  margin-top: 10px;
+  align-items: center;
+  height: 100%;
+}
+
+/* 消息图标样式 */
+.message-icon {
+  margin-top: 50px;
+  margin-right: 20px;
+}
+
+/* 发贴按钮容器样式 */
+.post-button-container {
+  margin-top: 20px;
+  margin-right: 20px;
 }
 
 /* 发贴按钮样式 */
@@ -222,8 +247,6 @@ onMounted(() => {
   padding: 10px 20px;
   color: #fff;
   font-size: 16px;
-  margin-right: 20px;
-  margin-top: -30px;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
   display: inline-flex;
   align-items: center;
@@ -237,10 +260,9 @@ onMounted(() => {
 }
 
 /* 用户头像样式 */
-.el-avatar {
+.user-avatar {
+  margin-top: 25px;
   margin-left: 20px;
-  cursor: pointer;
-  align-self: center;
 }
 
 /* 弹出框样式 */

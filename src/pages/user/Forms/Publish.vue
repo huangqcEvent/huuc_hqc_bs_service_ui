@@ -27,11 +27,11 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .publish-page {
   padding: 20px;
   background-color: #f0f2f5;
-  min-height: 100vh;
+  min-height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -5,7 +5,7 @@
     <el-header class="banner">
       <div class="banner-content">
         <div class="user-info">
-          <Image :src="adminInfo.head" :width="60"></Image>
+          <el-avatar size="default" :src="adminInfo.head" />
           <span>{{ adminInfo.username }}</span>
         </div>
         <h1>欢迎来到管理后台</h1>
@@ -165,7 +165,7 @@ function openDrawer() {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .banner {
   background: #42b983;
   color: white;
@@ -189,19 +189,7 @@ function openDrawer() {
   align-items: center;
   flex-wrap: nowrap;
   gap: 10px;
-}
-
-.user-info img {
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-}
-
-.user-info span {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: white;
+  margin-top: 20px;
 }
 
 h1 {

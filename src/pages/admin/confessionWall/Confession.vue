@@ -301,5 +301,3 @@ function showDetails(id: string) {
     });
 }
 </script>
-
-<style scoped lang="scss"></style>

@@ -139,5 +139,3 @@ function clearFilters() {
   fetchData();
 }
 </script>
-
-<style scoped lang="scss"></style>

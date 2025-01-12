@@ -44,7 +44,7 @@
   });
   </script>
   
-  <style scoped>
+  <style scoped lang="scss">
   /* 样式可以根据需要添加 */
   </style>
   

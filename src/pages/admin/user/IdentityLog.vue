@@ -186,5 +186,3 @@ function getDisplayName(row: number) {
     }
 }
 </script>
-
-<style scoped lang="scss"></style>

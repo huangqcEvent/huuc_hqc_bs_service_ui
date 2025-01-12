@@ -74,7 +74,7 @@ const showImg = () => {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .fullImg {
   width: 100vw;
   height: 100vh;

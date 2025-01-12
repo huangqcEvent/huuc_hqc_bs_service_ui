@@ -24,6 +24,7 @@ export interface Params {
     status?: number | null;
     pageSize: number;
     pageNumber: number;
+    dateRange?:[string,string]
 }
 
 // 新增寻物贴接口

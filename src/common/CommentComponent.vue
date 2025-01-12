@@ -144,7 +144,7 @@ const handleUpdateIsShow = (value: boolean) => {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .comments-container {
   display: flex;
   flex-direction: column;

@@ -162,14 +162,12 @@ button {
   overflow: hidden; /* 禁止滚动条 */
 }
 
-// 过滤条件表单样式
 .filter-form {
   margin-bottom: 8px; /* 减少表单底部的间距 */
   position: sticky;
   top: 0px;
 }
 
-// 用户列表样式
 .content {
   flex: 1;
   margin-top: 8px; /* 减少表格与过滤表单之间的间距 */
@@ -178,7 +176,6 @@ button {
   overflow: hidden; /* 禁止垂直滚动条 */
 }
 
-// 分页条样式
 .pagination {
   margin-top: 8px; /* 减少分页条与内容之间的间距 */
   position: fixed;
@@ -187,7 +184,6 @@ button {
   right: 0;
 }
 
-// 调整行间距
 .el-table__row {
   height: 48px; /* 调整行高 */
 }
@@ -197,7 +193,6 @@ button {
   padding: 6px 10px; /* 调整单元格的内边距 */
 }
 
-// 自定义滚动条样式（细滚动条）
 .el-table__body-wrapper::-webkit-scrollbar {
   width: 6px; /* 设置垂直滚动条的宽度 */
 }

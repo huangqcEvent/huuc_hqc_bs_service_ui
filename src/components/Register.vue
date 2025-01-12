@@ -87,7 +87,7 @@ onUnmounted(() => {
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* 背景 */
 .container {
 	width: 100%;

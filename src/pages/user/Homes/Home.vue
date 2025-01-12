@@ -17,14 +17,14 @@ import GuideQuestions from '@/pages/user/ai/GuideQuestions.vue';
 
 // 图片数据
 const images = ref([
-  { id: 1, src: 'https://www.huuc.edu.cn/images/logo.png' },
-  { id: 2, src: 'https://www.huuc.edu.cn/images/logo.png' },
-  { id: 3, src: 'https://www.huuc.edu.cn/images/logo.png' },
-  { id: 4, src: 'https://www.huuc.edu.cn/images/logo.png' }
+  { id: 1, src: 'https://cdn.pixabay.com/photo/2017/03/26/10/44/longboard-2175193_960_720.jpg' },
+  { id: 2, src: 'https://cdn.pixabay.com/photo/2017/03/26/10/44/longboard-2175193_960_720.jpg' },
+  { id: 3, src: 'https://cdn.pixabay.com/photo/2017/03/26/10/44/longboard-2175193_960_720.jpg' },
+  { id: 4, src: 'https://cdn.pixabay.com/photo/2017/03/26/10/44/longboard-2175193_960_720.jpg' }
 ]);
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .carousel-image {
   width: 100% !important;
   height: 100% !important;

@@ -197,7 +197,7 @@ function hideDeleteButton(id: string) {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .word-table {
     display: grid;
     grid-template-columns: repeat(4, 1fr);

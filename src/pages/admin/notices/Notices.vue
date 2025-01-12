@@ -263,5 +263,3 @@ function status(id: string, status: number) {
     })
 }
 </script>
-
-<style scoped lang="scss"></style>

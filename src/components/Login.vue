@@ -6,20 +6,20 @@
 					<h4 class="text-center login-title">登录</h4>
 
 					<!-- 账号输入框 -->
-					<el-form-item label="账号" prop="email">
-						<el-input v-model="loginForm.email" placeholder="请输入账号" class="input-field"></el-input>
+					<el-form-item label="用户名" prop="username">
+						<el-input v-model="loginForm.username" placeholder="请输入用户名" class="input-field"></el-input>
 					</el-form-item>
 
 					<!-- 密码输入框 -->
-					<el-form-item label="密码" prop="pwd">
-						<el-input type="password" v-model="loginForm.pwd" placeholder="请输入密码"
+					<el-form-item label="密码" prop="password">
+						<el-input type="password" v-model="loginForm.password" placeholder="请输入密码"
 							class="input-field"></el-input>
 					</el-form-item>
 
 					<!-- 登录和注册按钮 -->
 					<el-form-item class="text-center">
 						<el-button type="primary" class="login-btn"
-							@click.prevent="toLogin(loginForm.email, loginForm.pwd)">
+							@click.prevent="toLogin(loginForm.username, loginForm.password)">
 							登录
 						</el-button>
 						<el-button type="default" class="register-btn"
@@ -42,8 +42,8 @@ import { useWebSocketStore } from '@/stores/webSocket';
 
 // Data
 const loginForm = ref({
-	email: "",
-	pwd: ""
+	username: "",
+	password: ""
 });
 
 // 校验规则
@@ -65,10 +65,10 @@ const webSocketStore = useWebSocketStore();
 const router = useRouter();
 
 // 登录方法
-function toLogin(email: string, pwd: string) {
+function toLogin(username: string, password: string) {
 	let data = {
-		username: email,
-		password: pwd
+		username,
+		password
 	};
 
 	// 调用登录接口
@@ -103,7 +103,7 @@ function toLogin(email: string, pwd: string) {
   }
   </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* 背景 */
 .container {
 	width: 100%;

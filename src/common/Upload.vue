@@ -44,7 +44,7 @@ const beforeAvatarUpload = (rawFile: any) => {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .upload {
     display: flex;
     align-items: center; /* 文本和上传区域垂直居中 */

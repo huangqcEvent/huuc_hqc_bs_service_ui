@@ -1,0 +1,36 @@
+.confession-form {
+    width: 100%;
+    max-width: 1500px;
+    height: 500px;
+    /* 设置表单高度 */
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    /* 当内容超出时显示垂直滚动条 */
+  }
+  
+  .confession-form .el-form-item {
+    margin-bottom: 20px;
+  }
+  
+  .confession-form .el-form-item__label {
+    white-space: nowrap;
+    /* 防止文字换行 */
+  }
+  
+  .confession-form .el-input,
+  .confession-form .el-textarea {
+    width: 100%;
+  }
+  
+  .confession-form .el-button {
+    width: 100%;
+  }
+  
+  .image-uploads {
+    display: flex;
+    gap: 10px;
+  }

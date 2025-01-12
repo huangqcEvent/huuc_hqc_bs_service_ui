@@ -148,7 +148,7 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .wall {
   display: flex;
   flex-direction: column;

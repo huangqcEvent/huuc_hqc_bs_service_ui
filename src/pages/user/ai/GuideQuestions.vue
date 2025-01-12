@@ -4,20 +4,24 @@
         <el-drawer title="问答" v-model="state.drawerVisible" direction="rtl" size="50%">
             <div class="conversation-container" ref="conversationContainer">
                 <div class="conversation">
+                    <div class="assistant-message">
+                        <img :src="defaultAvatar" alt="Assistant Avatar" class="avatar" />
+                        <div class="assistant"> 你好，我是AI小助手，请问有什么可以帮你的吗？</div>
+                    </div>
                     <div v-for="(record, index) in state.conversation" :key="index" class="message">
                         <div v-if="record.user" class="user-message">
-                            <img :src="userInfo.head || defaultAvatar" alt="User Avatar" class="avatar" />
                             <div class="user">
-                                {{ userInfo.username }}: {{ record.question }}
+                                {{ record.question }}
                             </div>
+                            <img :src="userInfo.head || defaultAvatar" alt="User Avatar" class="avatar" />
                         </div>
                         <div v-if="record.loading" class="assistant-message">
-                            <div class="assistant loading">正在全力思考中...</div>
                             <img :src="defaultAvatar" alt="Assistant Avatar" class="avatar" />
+                            <div class="assistant">正在全力思考中...</div>
                         </div>
                         <div v-else-if="record.answer" class="assistant-message">
-                            <div class="assistant" v-html="parseNewLines(record.answer)"></div>
                             <img :src="defaultAvatar" alt="Assistant Avatar" class="avatar" />
+                            <div class="assistant" v-html="parseNewLines(record.answer)"></div>
                         </div>
                     </div>
                 </div>
@@ -86,7 +90,7 @@ const askQuestion = async () => {
 };
 
 // 解析换行符
-function parseNewLines(text){
+function parseNewLines(text) {
     return text.replace(/\n/g, '<br>').replace(/\*\*/g, '');
 };
 
@@ -187,10 +191,6 @@ onMounted(() => {
     background-color: #0056b3;
 }
 
-.loading {
-    color: #007bff;
-}
-
 .error {
     color: red;
 }
@@ -199,15 +199,25 @@ onMounted(() => {
     margin-bottom: 10px;
 }
 
-.user-message {
-    display: flex;
-    align-items: flex-start;
-}
-
 .assistant-message {
     display: flex;
     align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.user-message {
+    display: flex;
+    align-items: flex-start;
     justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.user-message .avatar {
+    margin-left: 10px; /* 调整用户头像与对话框的距离 */
+}
+
+.assistant-message .avatar {
+    margin-right: 10px; /* 调整助手头像与对话框的距离 */
 }
 
 .avatar {
@@ -217,28 +227,20 @@ onMounted(() => {
     margin-right: 10px;
 }
 
-.user-message .avatar {
-    margin-right: 10px;
-}
-
-.assistant-message .avatar {
-    margin-left: 10px;
-    margin-right: 0;
-}
-
 .user {
-    font-weight: bold;
-    color: #333;
-    background-color: #f0f0f0;
+    margin-top: 5px;
+    color: #555;
+    background-color: #d1ee99;
     padding: 10px;
     border-radius: 5px;
     max-width: 70%;
+    text-align: left;
 }
 
 .assistant {
     margin-top: 5px;
     color: #555;
-    background-color: #e0f7fa;
+    background-color: #caf0f5;
     padding: 10px;
     border-radius: 5px;
     max-width: 70%;

@@ -34,7 +34,7 @@ const goToDetail = () => {
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .confession-card {
   margin-bottom: 20px;
   width: 350px;

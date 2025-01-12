@@ -120,7 +120,7 @@ const goToDetail = (id: number | undefined) => {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .home {
   padding: 20px;
   background-color: #f0f2f5;
