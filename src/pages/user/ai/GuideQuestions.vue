@@ -1,7 +1,12 @@
 <template>
     <div class="guide-questions">
-        <el-button @click="openDrawer">提问</el-button>
-        <el-drawer title="问答" v-model="state.drawerVisible" direction="rtl" size="50%">
+        <div class="icon-container" @click="openDrawer">
+            <el-icon class="item" style="font-size: 25px;">
+                <ChatDotRound />
+            </el-icon>
+            <span class="icon-text">小助手</span>
+        </div>
+        <el-drawer title="智慧问答小助手" v-model="state.drawerVisible" direction="rtl" size="50%">
             <div class="conversation-container" ref="conversationContainer">
                 <div class="conversation">
                     <div class="assistant-message">
@@ -84,7 +89,12 @@ const askQuestion = async () => {
     } finally {
         newRecord.loading = false;
         nextTick(() => {
-            conversationContainer.value.scrollTop = conversationContainer.value.scrollHeight;
+            if (conversationContainer.value) {
+                console.log('Scrolling to bottom');
+                conversationContainer.value.scrollTop = conversationContainer.value.scrollHeight;
+            } else {
+                console.log('conversationContainer is not defined');
+            }
         });
     }
 };
@@ -105,6 +115,23 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+.item {
+    margin-top: 10px;
+    margin-right: 0px;
+    cursor: pointer;
+}
+
+.icon-text {
+    visibility: hidden;
+    margin-top: 10px;
+    transition: opacity 0.3s;
+}
+
+.icon-container:hover .icon-text {
+    visibility: visible;
+    opacity: 1;
+}
+
 .guide-questions {
     max-width: 600px;
     margin: 0 auto;
@@ -213,11 +240,13 @@ onMounted(() => {
 }
 
 .user-message .avatar {
-    margin-left: 10px; /* 调整用户头像与对话框的距离 */
+    margin-left: 10px;
+    /* 调整用户头像与对话框的距离 */
 }
 
 .assistant-message .avatar {
-    margin-right: 10px; /* 调整助手头像与对话框的距离 */
+    margin-right: 10px;
+    /* 调整助手头像与对话框的距离 */
 }
 
 .avatar {

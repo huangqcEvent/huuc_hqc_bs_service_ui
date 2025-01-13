@@ -17,7 +17,7 @@
         <el-input v-model="form.phone" placeholder="请输入联系方式（电话）" maxlength="11" show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="详细描述" prop="itemDesc">
-        <el-input type="textarea" placeholder="请输入详细描述" v-model="form.itemDesc" :rows="4" maxlength="100"
+        <el-input type="textarea" placeholder="请输入详细描述" v-model="form.itemDesc" :rows=4 maxlength="100"
           show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="图片">

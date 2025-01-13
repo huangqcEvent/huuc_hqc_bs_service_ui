@@ -245,7 +245,7 @@ function updateStatus(id: string, oldStatus: number, newStatus: number, userId: 
         {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
-            type: 'warning'
+            type: 'warning',
         }
     ).then((value) => {
         const params = {

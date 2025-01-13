@@ -19,6 +19,9 @@
             <el-button type="primary" @click="login" class="login-btn">登录</el-button>
           </div>
           <div v-else class="user-info">
+            <div class="post-button-container">
+              <GuideQuestions></GuideQuestions>
+            </div>
             <div class="message-icon">
               <el-popover placement="bottom" width="300" trigger="click" popper-class="message-popover">
                 <ul class="message-list">
@@ -73,6 +76,7 @@ import { useRouter } from 'vue-router';
 import { logout } from '@/api/commonApi/commonApi';
 import { confirm } from '@/utils/confirmUtils';
 import { useWebSocketStore } from '@/stores/webSocket';
+import GuideQuestions from '@/pages/user/ai/GuideQuestions.vue';
 
 const errorHandler = () => true
 const router = useRouter();

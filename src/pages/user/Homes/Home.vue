@@ -5,15 +5,11 @@
         <img :src="item.src" alt="carousel image" class="carousel-image" />
       </el-carousel-item>
     </el-carousel>
-    <div id="app">
-      <GuideQuestions />
-    </div>
   </div>
 </template>
 
 <script setup lang="ts" name="Home">
 import { ref } from 'vue';
-import GuideQuestions from '@/pages/user/ai/GuideQuestions.vue';
 
 // 图片数据
 const images = ref([
