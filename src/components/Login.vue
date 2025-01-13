@@ -2,7 +2,8 @@
 	<div class="container">
 		<el-row justify="center" class="login-row">
 			<el-col :span="8" class="bg-card p-20">
-				<el-form :model="loginForm" :rules="rules" class="login-form" label-position="left" label-width="80px">
+				<el-form :model="loginForm" :rules="rules" ref="ruleFormRef" class="login-form" label-position="left"
+					label-width="80px">
 					<h4 class="text-center login-title">登录</h4>
 
 					<!-- 账号输入框 -->
@@ -46,13 +47,15 @@ const loginForm = ref({
 	password: ""
 });
 
+const ruleFormRef = ref();
+
 // 校验规则
 const rules = {
-	email: [
+	username: [
 		{ required: true, message: '请输入账号', trigger: 'blur' },
 		{ min: 3, message: '请输入有效的账号（至少3位）', trigger: 'blur' }
 	],
-	pwd: [
+	password: [
 		{ required: true, message: '请输入密码', trigger: 'blur' },
 		{ min: 6, message: '密码至少 6 个字符', trigger: 'blur' }
 	]
@@ -66,42 +69,49 @@ const router = useRouter();
 
 // 登录方法
 function toLogin(username: string, password: string) {
-	let data = {
-		username,
-		password
-	};
+	ruleFormRef.value.validate((valid: boolean) => {
+		if (valid) {
+			let data = {
+				username,
+				password
+			};
 
-	// 调用登录接口
-	login(data)
-		.then(response => {
-			if (response.data.code === 200) {
-				if (response.data.data.identity === 1 || response.data.data.identity === 99) {
-					localStorage.setItem("adminToken", response.data.data.jwt);
-					localStorage.setItem("adminInfo", JSON.stringify(response.data.data));
-					router.push('/adminIndex');
-				} else if (response.data.data.identity === 0 || response.data.data.identity === 2) {
-					localStorage.setItem("userToken", response.data.data.jwt);
-					localStorage.setItem("userInfo", JSON.stringify(response.data.data));
-					router.push('/userIndex');
-			// 登录后建立 webSocket 连接
-			webSocketStore.connectWebSocket(response.data.data.id);
-		  }
+			// 调用登录接口
+			login(data)
+				.then(response => {
+					if (response.data.code === 200) {
+						if (response.data.data.identity === 1 || response.data.data.identity === 99) {
+							localStorage.setItem("adminToken", response.data.data.jwt);
+							localStorage.setItem("adminInfo", JSON.stringify(response.data.data));
+							router.push('/adminIndex');
+						} else if (response.data.data.identity === 0 || response.data.data.identity === 2) {
+							localStorage.setItem("userToken", response.data.data.jwt);
+							localStorage.setItem("userInfo", JSON.stringify(response.data.data));
+							router.push('/userIndex');
+							// 登录后建立 webSocket 连接
+							webSocketStore.connectWebSocket(response.data.data.id);
+						}
+					} else {
+						ElMessage({
+							message: response.data.msg,
+							type: 'error',
+							dangerouslyUseHTMLString: true
+						});
+					}
+				})
+				.catch(() => {
+					ElMessage({
+						message: '服务器接口错误',
+						type: 'error'
+					});
+				});
 		} else {
-		  ElMessage({
-			message: response.data.msg,
-			type: 'error',
-			dangerouslyUseHTMLString: true
-		  });
+			ElMessage.error('请填写必填项');
+			return false;
 		}
-	  })
-	  .catch(() => {
-		ElMessage({
-		  message: '服务器接口错误',
-		  type: 'error'
-		});
-	  });
-  }
-  </script>
+	});
+};
+</script>
 
 <style scoped lang="scss">
 /* 背景 */
@@ -130,83 +140,83 @@ function toLogin(username: string, password: string) {
 	width: 100%;
 	max-width: 400px;
 	padding: 20px;
-  }
-  
-  .login-title {
+}
+
+.login-title {
 	font-size: 24px;
 	font-weight: 500;
 	color: #333;
 	margin-bottom: 30px;
-  }
-  
-  .input-field {
-	border-radius: 8px;
+}
+
+.input-field {
+	border-radius: 10px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .el-input__inner {
+}
+
+.el-input__inner {
 	border-radius: 8px;
-  }
-  
-  .el-button {
+}
+
+.el-button {
 	border-radius: 20px;
 	width: 100%;
 	padding: 12px 0;
-  }
-  
-  .login-btn {
+}
+
+.login-btn {
 	background-color: #4caf50;
 	border-color: #4caf50;
 	width: 200px;
 	margin-top: 20px;
-  }
-  
-  .el-input {
+}
+
+.el-input {
 	width: 250px;
 	margin-bottom: 0px;
 	margin-top: 20px;
-  }
-  
-  .register-btn {
+}
+
+.register-btn {
 	background-color: #f5f5f5;
 	border-color: #dcdfe6;
 	color: #409EFF;
 	margin-top: 10px;
 	width: 200px;
-  }
-  
-  .text-center {
+}
+
+.text-center {
 	text-align: center;
-  }
-  
-  /* Align labels with input fields */
-  .el-form-item {
-	display: flex;
-	align-items: center; /* Ensures label is vertically centered with input */
-  }
-  
-  .el-form-item__label {
+}
+
+/* Align labels with input fields */
+.el-form-item {
 	display: flex;
 	align-items: center;
-  }
-  
-  /* Adjusting the error message alignment */
-  .el-form-item__error {
+	/* Ensures label is vertically centered with input */
+}
+
+.el-form-item__label {
+	display: flex;
+	align-items: center;
+}
+
+/* Adjusting the error message alignment */
+.el-form-item__error {
 	font-size: 12px;
 	color: #f56c6c;
-	margin-top: 5px; /* Reduce space between error message and input field */
-  }
-  
-  @media (max-width: 768px) {
+	margin-top: 5px;
+	/* Reduce space between error message and input field */
+}
+
+@media (max-width: 768px) {
 	.container {
-	  padding: 20px;
+		padding: 20px;
 	}
-  
+
 	.login-form {
-	  padding: 15px;
-	  max-width: 100%;
+		padding: 15px;
+		max-width: 100%;
 	}
-  }
-  
+}
 </style>
-  

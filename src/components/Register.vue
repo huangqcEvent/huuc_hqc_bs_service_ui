@@ -2,12 +2,13 @@
 	<div class="container">
 		<el-row justify="center" class="register-row">
 			<el-col :span="8" class="form-card">
-				<el-form :model="loginForm" class="register-form" label-position="left" label-width="80px">
+				<el-form :model="loginForm" class="register-form" :rules="rules" ref="ruleFormRef" label-position="left"
+					label-width="80px">
 					<h4 class="text-center register-title">注册</h4>
 
 					<!-- 账号输入框 -->
-					<el-form-item label="账号" prop="email">
-						<el-input v-model="loginForm.email" placeholder="请输入账号" class="input-field" />
+					<el-form-item label="账号" prop="username">
+						<el-input v-model="loginForm.username" placeholder="请输入账号" class="input-field" />
 					</el-form-item>
 
 					<!-- 密码输入框 -->
@@ -16,7 +17,7 @@
 					</el-form-item>
 
 					<!-- 头像上传 -->
-					<el-form-item label="头像" prop="head">
+					<el-form-item label="头像" prop="head" style="margin-top: 20px;">
 						<Upload @upload-success="handleUploadSuccess" />
 						<div v-if="loginForm.head" class="avatar-preview">
 							<img :src="loginForm.head" alt="头像预览" class="avatar-img" />
@@ -26,7 +27,7 @@
 					<!-- 注册和去登录按钮 -->
 					<el-form-item class="text-center">
 						<el-button type="primary" class="register-btn"
-							@click.prevent="toRegister(loginForm.email, loginForm.pwd, loginForm.head)">
+							@click.prevent="toRegister(loginForm.username, loginForm.pwd, loginForm.head)">
 							注册
 						</el-button>
 						<el-button type="default" class="login-btn" @click.prevent="() => { router.push('/login') }">
@@ -43,37 +44,59 @@
 import { register } from '@/api/commonApi/commonApi';
 import { ref, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
 import Upload from '@/common/Upload.vue';
 
 // Data
 const loginForm = ref({
-	email: "",
+	username: "",
 	pwd: "",
 	head: ""
 });
+
+const ruleFormRef = ref();
+
+// 校验规则
+const rules = {
+	username: [
+		{ required: true, message: '请输入账号', trigger: 'blur' },
+		{ min: 3, message: '请输入有效的账号（至少3位）', trigger: 'blur' }
+	],
+	password: [
+		{ required: true, message: '请输入密码', trigger: 'blur' },
+		{ min: 6, message: '密码至少 6 个字符', trigger: 'blur' }
+	]
+};
 
 // Get router instance
 const router = useRouter();
 
 // Register method
 function toRegister(email: string, pwd: string, head: string) {
-	let data = {
-		username: email,
-		password: pwd,
-		head: head
-	};
+	ruleFormRef.value.validate((valid: boolean) => {
+		if (valid) {
+			let data = {
+				username: email,
+				password: pwd,
+				head: head
+			};
 
-	register(data).then(response => {
-		if (response.data.code === 200) {
-			alert(response.data.msg);
-			router.push('/login');
+			register(data).then(response => {
+				if (response.data.code === 200) {
+					alert(response.data.msg);
+					router.push('/login');
+				} else {
+					alert(response.data.msg);
+				}
+			}).catch(error => {
+				console.error('Error during registration:', error);
+			});
 		} else {
-			alert(response.data.msg);
+			ElMessage.error('请填写必填项');
+			return false;
 		}
-	}).catch(error => {
-		console.error('Error during registration:', error);
 	});
-}
+};
 
 // Handle avatar upload success
 const handleUploadSuccess = (result: string) => {
@@ -140,7 +163,9 @@ onUnmounted(() => {
 }
 
 .el-input {
-	width: 200px;
+	width: 250px;
+	margin-bottom: 0px;
+	margin-top: 20px;
 }
 
 .register-btn {

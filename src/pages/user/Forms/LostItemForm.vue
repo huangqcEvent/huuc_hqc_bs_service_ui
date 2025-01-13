@@ -3,15 +3,16 @@
     <el-form :model="form" :rules="rules" ref="ruleFormRef" label-width="100px" class="confession-form">
       <el-form-item label="类型" prop="type">
         <el-radio-group v-model="form.type">
-          <el-radio value="1">寻物</el-radio>
-          <el-radio value="2">寻主</el-radio>
+          <el-radio value=1>寻物</el-radio>
+          <el-radio value=2>寻主</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="物品名称" prop="itemName">
         <el-input v-model="form.itemName" placeholder="请输入物品名称" maxlength="10" show-word-limit></el-input>
       </el-form-item>
       <el-form-item :label="form.type == 1 ? '丢失地点' : '捡到地点'" prop="location">
-        <el-input v-model="form.location" :placeholder="form.type == 1 ? '请输入丢失地点' : '请输入捡到地点'" maxlength="10" show-word-limit></el-input>
+        <el-input v-model="form.location" :placeholder="form.type == 1 ? '请输入丢失地点' : '请输入捡到地点'" maxlength="10"
+          show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="联系方式" prop="phone">
         <el-input v-model="form.phone" placeholder="请输入联系方式（电话）" maxlength="11" show-word-limit></el-input>
@@ -59,7 +60,7 @@ const form = reactive<LostItem>({
 
 const rules = reactive({
   type: [
-    { required: true, message: '请选择类型', trigger: 'change' }
+    { required: true, message: '请选择类型', trigger: 'blur' }
   ],
   itemName: [
     { required: true, message: '请输入物品名称', trigger: 'blur' },
