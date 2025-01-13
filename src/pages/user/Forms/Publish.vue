@@ -7,7 +7,7 @@
       <el-tab-pane label="拾金寻物贴" name="third">
         <LostItemForm />
       </el-tab-pane>
-      <el-tab-pane label="社团公告贴" name="fourth">
+      <el-tab-pane v-if="userInfo.identity == 2" label="社团公告贴" name="fourth">
         <ClubAnnouncementForm />
       </el-tab-pane>
     </el-tabs>
@@ -15,16 +15,31 @@
 </template>
 
 <script lang="ts" setup name="Publish">
-import { ref } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import type { TabsPaneContext } from 'element-plus'
 import ConfessionForm from './ConfessionForm.vue';
 import LostItemForm from './LostItemForm.vue';
 import ClubAnnouncementForm from './ClubAnnouncementForm.vue';
+
 const activeName = ref('first')
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event)
 }
+const userInfo = reactive({
+  id: '',
+  username: '',
+  head: '',
+  identity: 0
+});
+
+//检测身份，用于判断是否具备发帖权限
+onMounted(() => {
+  const storedUserInfo = localStorage.getItem('userInfo');
+  if (storedUserInfo) {
+    Object.assign(userInfo, JSON.parse(storedUserInfo));
+  }
+});
 </script>
 
 <style scoped lang="scss">

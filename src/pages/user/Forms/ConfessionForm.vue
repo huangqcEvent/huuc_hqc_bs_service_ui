@@ -17,8 +17,7 @@
         show-word-limit></el-input>
     </el-form-item>
     <el-form-item label="内容" prop="content">
-      <el-input type="textarea" v-model="form.content" placeholder="请输入内容" rows=5 maxlength="1000"
-        show-word-limit></el-input>
+      <el-input type="textarea" v-model="form.content" placeholder="请输入内容" maxlength="1000" show-word-limit></el-input>
     </el-form-item>
     <el-form-item label="是否匿名" prop="isAnonymous">
       <el-radio-group v-model="form.isAnonymous">

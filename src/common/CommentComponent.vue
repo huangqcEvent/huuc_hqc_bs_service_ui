@@ -206,6 +206,9 @@ const handleUpdateIsShow = (value: boolean) => {
   margin: 5px 0;
   color: #555;
   font-weight: bold;
+  word-wrap: break-word; /* 确保文字自动换行 */
+  white-space: pre-wrap; /* 保留空白符并自动换行 */
+  max-width: 500px;
 }
 
 .comment-content .comment-time {
