@@ -122,7 +122,6 @@ const chunkList = (list: BlackList[] | WhiteList[], chunkSize: number) => {
 function deleteBlackById(id: string, word: string) {
     confirm("确定删除黑名单词汇" + "‘" + word + "’" + "吗？", () => {
         deleteBlack(id).then(() => {
-            ElMessage.success('删除成功')
             props.getWord()
         })
     }, () => {
@@ -134,7 +133,6 @@ function deleteBlackById(id: string, word: string) {
 function deleteWhiteById(id: string, word: string) {
     confirm("确定删除白名单词汇" + "‘" + word + "’" + "吗？", () => {
         deleteWhite(id).then(() => {
-            ElMessage.success('删除成功')
             props.getWord()
         })
     }, () => {
@@ -156,15 +154,12 @@ const form = ref({
 // 新增敏感词
 function addWord(param: any) {
     saveWord(param).then(() => {
-        ElMessage.success('新增成功');
         showAddWordForm.value = false;
         props.getWord(); // 刷新列表
         form.value = {
             type: '',
             word: ''
         }
-    }).catch(() => {
-        ElMessage.error('新增失败');
     });
 }
 

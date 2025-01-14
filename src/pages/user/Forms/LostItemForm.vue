@@ -96,7 +96,6 @@ const submitForm = () => {
   ruleFormRef.value.validate((valid: boolean) => {
     if (valid) {
       saveLostItem(form).then((response) => {
-        ElMessage.success(response.data.msg);
         router.push("/userIndex/notice");
       });
     } else {

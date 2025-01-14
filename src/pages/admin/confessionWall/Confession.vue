@@ -256,7 +256,6 @@ function updateStatus(id: string, oldStatus: number, newStatus: number, userId: 
             updateReason: value.value
         }
         updateConfessionStatus(params, 'admin').then(() => {
-            ElMessage.success('状态修改成功');
             fetchData();
         })
     }).catch(() => {
@@ -281,7 +280,6 @@ function updateTop(id: string, newTop: number) {
     )
         .then(() => {
             updateTopService(params, 'admin').then(() => {
-                ElMessage.success("设置成功");
                 fetchData();
             })
         })
@@ -295,9 +293,6 @@ function showDetails(id: string) {
     getDetailById(id, 'admin').then((response) => {
         confessionDetail.value = response.data.data;
         dialogVisible.value = true;
-    }).catch((error) => {
-        console.error('Error fetching detail:', error);
-        ElMessage.error('加载详情失败，请稍后再试。');
     });
 }
 </script>

@@ -198,9 +198,6 @@ function showDetails(id: string) {
     getDetailById(id, 'admin').then((response) => {
         lostItemDetail.value = response.data.data;
         dialogVisible.value = true;
-    }).catch((error) => {
-        console.error('Error fetching detail:', error);
-        ElMessage.error('加载详情失败，请稍后再试。');
     });
 }
 const applyFilters = () => {
@@ -231,7 +228,6 @@ function updateTop(id: string, newTop: number) {
     )
         .then(() => {
             updateTopService(params, 'admin').then(() => {
-                ElMessage.success("设置成功");
                 fetchData();
             })
         })
@@ -252,12 +248,10 @@ function status(id: string, status: number) {
     ).then(() => {
         if (status == 1) {
             updateStatus({ id, status: 4 }, 'admin')
-            ElMessage.success('状态修改成功');
             fetchData();
         }
         if (status == 4) {
             updateStatus({ id, status: 1 }, 'admin')
-            ElMessage.success('状态修改成功');
             fetchData();
         }
     })

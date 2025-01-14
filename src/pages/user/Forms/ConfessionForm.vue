@@ -114,13 +114,8 @@ const submitForm = () => {
   ruleFormRef.value.validate((valid: boolean) => {
     if (valid) {
       saveConfession(form).then((response) => {
-        ElMessage.success(response.data.msg)
         router.push("/userIndex/confessionWall")
-      }).catch(
-        (response) => {
-          ElMessage.success(response.data.msg)
-        }
-      )
+      })
     } else {
       ElMessage.error('请填写必填项');
       return false;

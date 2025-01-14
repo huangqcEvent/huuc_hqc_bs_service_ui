@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { ElScrollbar, ElMessage } from 'element-plus';
+import { ElScrollbar } from 'element-plus';
 import { upload } from '@/api/commonApi/commonApi';
 import { saveComment, getComments } from '@/api/user/CommentApi';
 import Image from './Image.vue';
@@ -129,7 +129,6 @@ async function addComment() {
 
   // 发送请求保存评论
   saveComment(params).then((response) => {
-    ElMessage.success(response.data.msg);
     // 刷新评论列表
     fetchComments();
   });

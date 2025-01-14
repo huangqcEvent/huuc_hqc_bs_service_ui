@@ -91,20 +91,8 @@ function toLogin(username: string, password: string) {
 							// 登录后建立 webSocket 连接
 							webSocketStore.connectWebSocket(response.data.data.id);
 						}
-					} else {
-						ElMessage({
-							message: response.data.msg,
-							type: 'error',
-							dangerouslyUseHTMLString: true
-						});
-					}
+					} 
 				})
-				.catch(() => {
-					ElMessage({
-						message: '服务器接口错误',
-						type: 'error'
-					});
-				});
 		} else {
 			ElMessage.error('请填写必填项');
 			return false;

@@ -134,8 +134,7 @@ const getImage3 = (result: string) => {
 const submitForm = () => {
   ruleFormRef.value.validate((valid: boolean) => {
     if (valid) {
-      save(form).then((response) => {
-        ElMessage.success(response.data.msg)
+      save(form).then(() => {
         router.push("/userIndex/club");
       })
     } else {

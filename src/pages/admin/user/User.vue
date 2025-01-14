@@ -227,12 +227,6 @@ function handledownEndChange(id: number, userName: string, downEnd: number) {
               });
               window.location.reload();
             })
-            .catch((error) => {
-              ElMessage({
-                type: 'error',
-                message: '封禁失败: ' + error.message,
-              });
-            });
         }
       })
       .catch(() => {
@@ -262,12 +256,6 @@ function handledownEndChange(id: number, userName: string, downEnd: number) {
             });
             window.location.reload();
           })
-          .catch((error) => {
-            ElMessage({
-              type: 'error',
-              message: '解封失败: ' + error.message,
-            });
-          });
       }).catch(() => {
         ElMessage({
           type: 'info',
@@ -317,12 +305,6 @@ function updateIdentity(userId: string, oldIndentity: number) {
                 });
                 window.location.reload();
               })
-              .catch((error) => {
-                ElMessage({
-                  type: 'error',
-                  message: '转化失败: ' + error.message,
-                });
-              });
             done();
           } else {
             ElMessage({
