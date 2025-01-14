@@ -84,10 +84,6 @@ onMounted(() => {
     id.value = route.params.id as string;
     getDetailById(id.value).then((response) => {
         lostItemDetail.value = response.data.data;
-    }).catch((error) => {
-        console.error('Error fetching detail:', error);
-        // 可以在这里添加更多的错误处理逻辑，比如显示错误消息
-        alert('加载详情失败，请稍后再试。');
-    });
+    })
 });
 </script>

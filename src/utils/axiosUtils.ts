@@ -37,15 +37,15 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   function (response) {
     // 如果响应数据中的 code 为 500 或 401，则返回错误信息
-    if (response.data.code === 500 || response.data.code === 401 || response.data.code === 401) {
+    if (response.data.code === 500 || response.data.code === 400 || response.data.code === 401) {
       ElMessage({
-        message: response.data.msg || '服务器错误',
+        message: response.data.msg || '操作失败',
         type: 'error',
         dangerouslyUseHTMLString: true, // 允许使用 HTML 字符串
       });
 
       // 抛出错误以中断后续处理
-      return Promise.reject(new Error(response.data.msg || '服务器错误'));
+      return Promise.reject(new Error(response.data.msg || '操作失败'));
     } else if (response.data.code === 200) {
       if (response.data.data == null) {
         ElMessage({
@@ -59,10 +59,9 @@ instance.interceptors.response.use(
     return response;
   },
   function (error) {
-    // 响应错误
     // 可以在这里处理全局的错误
     ElMessage({
-      message: '服务器错误',
+      message: '后端服务器错误',
       type: 'error',
     });
     return Promise.reject(error);
