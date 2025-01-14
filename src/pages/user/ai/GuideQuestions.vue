@@ -82,7 +82,7 @@ const askQuestion = async () => {
     state.conversation.push(newRecord);
     try {
         const response = await chat(state.question);
-        newRecord.answer = response.data.msg;
+        newRecord.answer = response.data.data;
         state.question = ''; // 清空输入框
     } catch (error) {
         newRecord.answer = '提问失败，请重试';

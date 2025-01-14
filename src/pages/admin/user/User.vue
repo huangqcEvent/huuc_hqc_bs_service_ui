@@ -220,12 +220,7 @@ function handledownEndChange(id: number, userName: string, downEnd: number) {
           };
           banOrUnbanUser(params)
             .then(() => {
-              ElMessage({
-                type: 'success',
-                message: '封禁用户:' + userName + '<br>' + '封禁原因:' + value,
-                dangerouslyUseHTMLString: true, // 允许使用 HTML 字符串
-              });
-              window.location.reload();
+              fetchData();
             })
         }
       })
@@ -249,12 +244,7 @@ function handledownEndChange(id: number, userName: string, downEnd: number) {
         }
         banOrUnbanUser(params)
           .then(() => {
-            ElMessage({
-              type: 'success',
-              message: '成功解封用户:' + userName,
-              dangerouslyUseHTMLString: true, // 允许使用 HTML 字符串
-            });
-            window.location.reload();
+            fetchData();
           })
       }).catch(() => {
         ElMessage({
@@ -299,11 +289,7 @@ function updateIdentity(userId: string, oldIndentity: number) {
             };
             updateUserIdentity(params)
               .then(() => {
-                ElMessage({
-                  type: 'success',
-                  message: '成功转化',
-                });
-                window.location.reload();
+                fetchData();
               })
             done();
           } else {
