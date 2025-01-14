@@ -90,10 +90,7 @@ const askQuestion = async () => {
         newRecord.loading = false;
         nextTick(() => {
             if (conversationContainer.value) {
-                console.log('Scrolling to bottom');
                 conversationContainer.value.scrollTop = conversationContainer.value.scrollHeight;
-            } else {
-                console.log('conversationContainer is not defined');
             }
         });
     }

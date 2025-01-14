@@ -112,7 +112,6 @@ function fetchData() {
   fetchDownLog(params).then(response => {
     total.value = response.data.data.total;
     downLogList.value = response.data.data.list;
-    console.log(response.data.data);
   });
 }
 

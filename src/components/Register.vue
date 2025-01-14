@@ -83,14 +83,12 @@ function toRegister(email: string, pwd: string, head: string) {
 
 			register(data).then(response => {
 				if (response.data.code === 200) {
-					alert(response.data.msg);
+					ElMessage.success(response.data.msg);
 					router.push('/login');
 				} else {
-					alert(response.data.msg);
+					ElMessage.error(response.data.msg);
 				}
-			}).catch(error => {
-				console.error('Error during registration:', error);
-			});
+			})
 		} else {
 			ElMessage.error('请填写必填项');
 			return false;
@@ -100,14 +98,9 @@ function toRegister(email: string, pwd: string, head: string) {
 
 // Handle avatar upload success
 const handleUploadSuccess = (result: string) => {
-	console.log('上传成功结果:', result);
 	loginForm.value.head = result;
 };
 
-// Cleanup on unmount
-onUnmounted(() => {
-	console.log('卸载完毕,取消监听');
-});
 </script>
 
 <style scoped lang="scss">

@@ -104,8 +104,6 @@ const router = createRouter({
     ]
 })
 router.beforeEach((to, from, next) => {
-    console.log(from.path);
-
     // 排除登录和注册页面
     if (to.path === '/login' || to.path === '/register') {
         next();
@@ -149,6 +147,5 @@ router.beforeEach((to, from, next) => {
 // 全局后置守卫：在路由导航完成后执行（可选）
 router.afterEach((to, from) => {
     // 在这里可以做一些数据统计、分析、页面标题设置等操作
-    console.log(`From ${from.fullPath} navigated to ${to.fullPath}`);
 });
 export default router;

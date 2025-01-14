@@ -83,14 +83,8 @@
     </el-container>
 
     <!-- 敏感词抽屉 -->
-    <SensitiveWordDrawer 
-      v-model:showDrawer="showDrawer" 
-      :activeTab="activeTab" 
-      :blackList="blackList" 
-      :whiteList="whiteList" 
-      @update:activeTab="activeTab = $event" 
-      :getWord="getWord" 
-    />
+    <SensitiveWordDrawer v-model:showDrawer="showDrawer" :activeTab="activeTab" :blackList="blackList"
+      :whiteList="whiteList" @update:activeTab="activeTab = $event" :getWord="getWord" />
   </div>
 </template>
 
@@ -130,7 +124,6 @@ const whiteList = ref<WhiteList[]>([]);
 const logout1 = () => {
   confirm("确认要退出登录吗?", () => {
     logout('admin').then(response => {
-      console.log(response.data.msg);
       // 清除登录状态
       localStorage.removeItem('adminInfo');
       localStorage.removeItem('adminToken');
@@ -138,7 +131,6 @@ const logout1 = () => {
     // 跳转到登录页面
     router.push('/login');
   }, () => {
-    console.log('取消退出');
   });
 };
 

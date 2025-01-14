@@ -125,7 +125,6 @@ function deleteBlackById(id: string, word: string) {
             props.getWord()
         })
     }, () => {
-        console.log('取消退出');
     })
 }
 
@@ -136,7 +135,6 @@ function deleteWhiteById(id: string, word: string) {
             props.getWord()
         })
     }, () => {
-        console.log('取消退出');
     })
 }
 

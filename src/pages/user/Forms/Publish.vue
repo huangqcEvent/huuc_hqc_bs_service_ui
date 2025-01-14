@@ -1,6 +1,6 @@
 <template>
   <div class="publish-page">
-    <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+    <el-tabs v-model="activeName" class="demo-tabs">
       <el-tab-pane label="表白墙贴" name="first">
         <ConfessionForm />
       </el-tab-pane>
@@ -16,16 +16,12 @@
 
 <script lang="ts" setup name="Publish">
 import { ref, reactive, onMounted } from 'vue'
-import type { TabsPaneContext } from 'element-plus'
 import ConfessionForm from './ConfessionForm.vue';
 import LostItemForm from './LostItemForm.vue';
 import ClubAnnouncementForm from './ClubAnnouncementForm.vue';
 
 const activeName = ref('first')
 
-const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event)
-}
 const userInfo = reactive({
   id: '',
   username: '',

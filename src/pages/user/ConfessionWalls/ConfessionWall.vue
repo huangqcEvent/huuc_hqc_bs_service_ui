@@ -102,7 +102,6 @@ function fetchData() {
       total.value = response.data.data.total;
     })
     .catch((error) => {
-      console.error('请求失败:', error);
       confessions.value = null;
     });
 }

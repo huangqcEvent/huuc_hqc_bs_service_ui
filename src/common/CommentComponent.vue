@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { ElScrollbar } from 'element-plus';
+import { ElScrollbar, ElMessage } from 'element-plus';
 import { upload } from '@/api/commonApi/commonApi';
 import { saveComment, getComments } from '@/api/user/CommentApi';
 import Image from './Image.vue';
@@ -113,8 +113,7 @@ async function addComment() {
       const response = await upload(newImageFile.value);
       imageUrl = response.data.msg;
     } catch (error) {
-      console.error('Error uploading image:', error);
-      alert('上传图片失败，请稍后再试。');
+      ElMessage.error('上传图片失败，请稍后再试。');
       return;
     }
   }
@@ -205,8 +204,10 @@ const handleUpdateIsShow = (value: boolean) => {
   margin: 5px 0;
   color: #555;
   font-weight: bold;
-  word-wrap: break-word; /* 确保文字自动换行 */
-  white-space: pre-wrap; /* 保留空白符并自动换行 */
+  word-wrap: break-word;
+  /* 确保文字自动换行 */
+  white-space: pre-wrap;
+  /* 保留空白符并自动换行 */
   max-width: 500px;
 }
 

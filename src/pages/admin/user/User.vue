@@ -145,7 +145,6 @@ function fetchData() {
   fetchUsers(params).then(response => {
     total.value = response.data.data.total;
     userList.value = response.data.data.list;
-    console.log(response.data.data);
   });
 }
 

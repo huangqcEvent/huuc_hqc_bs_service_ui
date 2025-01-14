@@ -197,9 +197,7 @@ function fetchData() {
     cardQuery(params, 'admin').then((response) => {
         confessionList.value = response.data.data.list;
         total.value = response.data.data.total;
-    }).catch((error) => {
-        console.error('请求失败:', error);
-    });
+    })
 }
 
 // 分页变化

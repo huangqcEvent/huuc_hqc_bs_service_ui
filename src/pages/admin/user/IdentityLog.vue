@@ -132,7 +132,6 @@ function fetchData() {
         .then(response => {
             total.value = response.data.data.total;
             identityLog.value = response.data.data.list;
-            console.log(response.data.data);
         });
 }
 

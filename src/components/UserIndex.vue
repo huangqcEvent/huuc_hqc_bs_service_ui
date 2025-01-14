@@ -3,7 +3,8 @@
     <el-header class="banner">
       <el-row type="flex" justify="space-between" align="middle" style="width: 100%;">
         <el-col :span="8" class="logo">
-          <img src="D:\vsCodeProject\vueProject\hqc_bysj_vue3\src\assets\9d62581ef8d2daf9ef72d81dcd756ed.png" alt="Logo" />
+          <img src="D:\vsCodeProject\vueProject\hqc_bysj_vue3\src\assets\9d62581ef8d2daf9ef72d81dcd756ed.png"
+            alt="Logo" />
         </el-col>
         <el-col :span="8" class="nav">
           <el-menu mode="horizontal" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b"
@@ -108,7 +109,6 @@ const logout1 = () => {
   confirm("确认要退出登录吗?", () => {
     logout('user').then(
       response => {
-        console.log(response.data.msg);
         localStorage.removeItem('userInfo');
         localStorage.removeItem('userToken');
       }
@@ -116,7 +116,6 @@ const logout1 = () => {
       router.push('/login');
     });
   }, () => {
-    console.log('取消退出');
   });
 };
 function getmsg() {
