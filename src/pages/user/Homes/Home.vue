@@ -22,51 +22,51 @@ const images = ref([
 
 <style scoped lang="scss">
 .carousel-image {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
+  width: 100%  ;
+  height: 100%  ;
+  object-fit: cover  ;
   /* 使图片覆盖整个轮播图区域 */
 }
 
 #app {
-  margin-top: 20px !important; /* 添加一些间距，确保问答组件不被轮播图遮挡 */
+  margin-top: 20px  ; /* 添加一些间距，确保问答组件不被轮播图遮挡 */
 }
 
 .custom-prev-button,
 .custom-next-button {
-  position: absolute !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  background-color: rgba(0, 0, 0, 0.5) !important;
-  color: white !important;
-  border: none !important;
-  padding: 10px 20px !important;
-  cursor: pointer !important;
-  z-index: 10 !important;
-  font-size: 16px !important;
+  position: absolute  ;
+  top: 50%  ;
+  transform: translateY(-50%)  ;
+  background-color: rgba(0, 0, 0, 0.5)  ;
+  color: white  ;
+  border: none  ;
+  padding: 10px 20px  ;
+  cursor: pointer  ;
+  z-index: 10  ;
+  font-size: 16px  ;
 }
 
 .custom-prev-button {
-  left: 10px !important;
+  left: 10px  ;
 }
 
 .custom-next-button {
-  right: 10px !important;
+  right: 10px  ;
 }
 
 .el-carousel__item h3 {
-  color: #475669 !important;
-  opacity: 0.75 !important;
-  line-height: 200px !important;
-  margin: 0 !important;
-  text-align: center !important;
+  color: #475669  ;
+  opacity: 0.75  ;
+  line-height: 200px  ;
+  margin: 0  ;
+  text-align: center  ;
 }
 
 .el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf !important;
+  background-color: #99a9bf  ;
 }
 
 .el-carousel__item:nth-child(2n + 1) {
-  background-color: #d3dce6 !important;
+  background-color: #d3dce6  ;
 }
 </style>

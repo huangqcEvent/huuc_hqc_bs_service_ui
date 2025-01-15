@@ -44,7 +44,7 @@
       <el-table :data="userList">
         <el-table-column prop="head" label="头像">
           <template #default="scope">
-            <el-avatar :src=scope.row.head size="default"></el-avatar>
+            <Image :src="scope.row.head" :width="30" :height="30"></Image>
           </template>
         </el-table-column>
         <el-table-column prop="userName" label="用户名"></el-table-column>
@@ -94,7 +94,7 @@ import { onMounted, ref, h } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useRoute } from 'vue-router';
 import { fetchUsers, banOrUnbanUser, updateUserIdentity } from '@/api/admin/user/userApi';
-
+import Image from '@/common/Image.vue'
 // 获取用户身份参数
 const route = useRoute();
 let identity = ref(Number(route.query.identity)); // 确保 identity 是数字
@@ -321,3 +321,15 @@ function canBanUser(userIdentity: number): boolean {
   }
 }
 </script>
+<style scoped lang="scss">
+.content {
+  flex: 1;
+  margin-top: 0px;
+  /* 减少表格与过滤表单之间的间距 */
+  margin-bottom: 20px;
+  /* 减少表格与分页条之间的间距 */
+  overflow-y: auto;
+  height: calc(100vh - 150px);
+  /* 高度占满页面剩余空间，减去顶部和底部的空间 */
+}
+</style>

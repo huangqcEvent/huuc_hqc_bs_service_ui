@@ -6,159 +6,17 @@
 
 body {
   margin: 0;
-  font-family: pingfang-sc-regular, serif !important;
+  font-family: pingfang-sc-regular, serif  ;
   line-height: 1.4;
-  height: 100vh;
   display: flex;
   flex-direction: column;
   overflow: hidden; /* 禁止 body 滚动 */
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-button {
-  font-family: pingfang-sc-regular, serif !important;
-}
-
-.el-table {
-  thead {
-    color: #515a6e !important;
-  }
-
-  th.el-table__cell {
-    border-right: none !important;
-    background-color: var(--el-fill-color-light) !important;
-    &:hover::before {
-      position: absolute;
-      top: 50%;
-      left: 0;
-      display: inline-block;
-      height: 20px;
-      content: ' ';
-      border-left: 1px solid rgb(191 191 191);
-      transform: translateY(-50%);
-    }
-  }
-
-  &__header-wrapper,
-  &__header,
-  &__body-wrapper,
-  &__body {
-    width: 100% !important;
-    overflow: hidden; /* 防止表格内部出现滚动条 */
-  }
-
-  &__body-wrapper {
-    .el-scrollbar__view {
-      height: 100%;
-      overflow-y: auto; /* 允许垂直滚动 */
-      max-height: 500px; /* 增加最大高度 */
-    }
-  }
-
-  &--border .el-table__cell {
-    border-right: none !important;
-  }
-}
-
-.el-card {
-  &__custom,
-  &__four-row,
-  &__custom-detail {
-    height: 100%;
-    & .el-card__body {
-      display: grid;
-      height: 100%;
-      gap: 20px;
-      grid-template-rows: auto 1fr auto;
-    }
-  }
-
-  &__four-row .el-card__body {
-    grid-template-rows: auto auto 1fr auto;
-  }
-
-  &__custom-detail .el-card__body {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-}
-
-.el-select {
-  width: 100px !important;
-}
-
-.custom-status-wrapper {
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  flex-direction: row;
-}
-
-.el-button.custom-status-button {
-  padding: 2.5px !important;
-  margin-right: 8px;
-  width: 2.5px !important;
-  height: 2.5px !important;
-}
-
-.custom-el-link {
-  padding: 6px 12px !important;
-  border-radius: 5px;
-
-  &:hover {
-    background-color: var(--el-fill-color-light);
-  }
-}
-
-.is-bordered-label {
-  width: 150px !important;
-  color: #909399 !important;
-}
-
-.custom-detail__part-title {
-  padding: 36px 0 16px;
-  font-size: 24px;
-  font-family: pingfang-sc-medium, serif !important;
-  color: #000c19;
-  line-height: 1.4;
-  font-weight: 500;
-}
-
-.el-form-item__label {
-  font-family: pingfang-sc-medium, serif !important;
-  line-height: 1.4;
-}
-
-.el-form-item {
-  margin-bottom: 8px; /* 减少表单项之间的间距 */
-}
-
-.el-form-item label {
-  font-weight: bold;
-}
-
-.el-input {
-  width: 150px;
-}
-
-.el-date-picker {
-  width: 200px;
-}
-
-.el-button {
-  margin-right: 8px;
 }
 
 .container {
   padding: 0px;
   display: flex;
   flex-direction: column;
-  height: 100vh;
   overflow: hidden; /* 禁止滚动条 */
 }
 
@@ -172,7 +30,7 @@ button {
   flex: 1;
   margin-top: 8px; /* 减少表格与过滤表单之间的间距 */
   margin-bottom: 20px; /* 减少表格与分页条之间的间距 */
-  max-height: calc(100vh - 80px); /* 调整最大高度 */
+  max-height: calc(100vh - 140px);
   overflow: hidden; /* 禁止垂直滚动条 */
 }
 
@@ -184,24 +42,6 @@ button {
   right: 0;
 }
 
-.el-table__row {
-  height: 48px; /* 调整行高 */
-}
-
-.el-table th,
-.el-table td {
-  padding: 6px 10px; /* 调整单元格的内边距 */
-}
-
-.el-table__body-wrapper::-webkit-scrollbar {
-  width: 6px; /* 设置垂直滚动条的宽度 */
-}
-
-.el-table__body-wrapper::-webkit-scrollbar-thumb {
-  background-color: #dcdcdc; /* 设置滚动条的颜色 */
-  border-radius: 3px;
-}
-
-.el-table__body-wrapper::-webkit-scrollbar-track {
-  background-color: #f1f1f1; /* 设置滚动条轨道的颜色 */
+.el-select{
+  width: 120px;
 }

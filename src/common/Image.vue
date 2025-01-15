@@ -82,7 +82,7 @@ const showImg = () => {
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  z-index: 999; /* 降低 z-index 确保其他元素不被完全遮挡 */
   display: flex;
   justify-content: center;
   align-items: center;
