@@ -18,10 +18,11 @@
                 <el-form-item label="状态">
                     <el-select v-model="filterForm.status" placeholder="全部">
                         <el-option label="全部" value=""></el-option>
-                        <el-option label="正常" value="1"></el-option>
-                        <el-option label="已解决" value="2"></el-option>
+                        <el-option label="发布" value="1"></el-option>
+                        <el-option label="私密" value="2"></el-option>
                         <el-option label="删除" value="3"></el-option>
-                        <el-option label="私密" value="4"> </el-option>
+                        <el-option label="待审核" value="4"></el-option>
+                        <el-option label="已完结" value="5"></el-option>
                     </el-select>
                 </el-form-item>
 
@@ -52,9 +53,8 @@
 
                 <el-table-column prop="status" label="状态">
                     <template #default="scope">
-                        <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'">
-                            {{ scope.row.status === 1 ? '正常' : scope.row.status === 2 ? '已解决' : scope.row.status === 3 ?
-                                '删除' : '私密' }}
+                        <el-tag :type="getStatusType(scope.row.status)">
+                            {{ getStatusLabel(scope.row.status) }}
                         </el-tag>
                     </template>
                 </el-table-column>
@@ -70,11 +70,11 @@
 
                 <el-table-column label="操作1">
                     <template #default="scope">
-                        <el-button v-if="scope.row.status == 1 || scope.row.status == 4"
-                            @click="status(scope.row.id, scope.row.status)">
-                            {{ scope.row.status == 1 ? '设为私密' : '设为正常' }}
+                        <el-button v-if="scope.row.status === 1 || scope.row.status === 2"
+                            @click="toggleStatus(scope.row.id, scope.row.status)">
+                            {{ scope.row.status === 1 ? '设为私密' : '设为正常' }}
                         </el-button>
-                        <el-button v-else>
+                        <el-button v-else disabled>
                             无法操作状态
                         </el-button>
                     </template>
@@ -107,7 +107,6 @@
                         <p><strong>失物名称:</strong> {{ lostItemDetail.itemName }}</p>
                         <p><strong>丢失地点:</strong> {{ lostItemDetail.location }}</p>
                         <p><strong>描述:</strong> {{ lostItemDetail.itemDesc }}</p>
-                        <p><strong>失物名称:</strong> {{ lostItemDetail.itemName }}</p>
                         <p><strong>发布时间:</strong> {{ lostItemDetail.createTime }}</p>
                         <p><strong>类型:</strong> {{ lostItemDetail.type == 1 ? '寻物' : '寻主' }}</p>
                         <p><strong>联系方式:</strong> {{ lostItemDetail.phone }}</p>
@@ -142,7 +141,6 @@ import '@/styles/modal.scss'
 
 // 获取用户身份参数
 const route = useRoute();
-let identity = ref(Number(route.query.identity)); // 确保 identity 是数字
 
 // 接受数据
 let noticeList = ref<LostItem[]>([]);
@@ -173,6 +171,7 @@ const fetchData = async () => {
     noticeList.value = response.data.data.list;
     total.value = response.data.data.total;
 };
+
 // 分页变化
 function pageChange(number: number, size: number) {
     filterForm.value.pageNumber = number;
@@ -200,6 +199,7 @@ function showDetails(id: string) {
         dialogVisible.value = true;
     });
 }
+
 const applyFilters = () => {
     if (filterForm.value.dateRange) {
         filterForm.value.createTimeStart = filterForm.value.dateRange[0];
@@ -211,7 +211,8 @@ const applyFilters = () => {
     filterForm.value.pageNumber = 1; // 重置页码
     fetchData();
 };
-//置顶与取消置顶
+
+// 置顶与取消置顶
 function updateTop(id: string, newTop: number) {
     const params = {
         id: id,
@@ -235,10 +236,11 @@ function updateTop(id: string, newTop: number) {
             ElMessage.info('操作取消');
         })
 }
-// updateStatus
-function status(id: string, status: number) {
+
+// 切换状态
+function toggleStatus(id: string, status: number) {
     ElMessageBox.confirm(
-        '确定要' + (status == 1 ? '设为私密吗' : '公开'),
+        '确定要' + (status == 1 ? '设为私密吗' : '设为正常吗'),
         'Warning',
         {
             confirmButtonText: '确定',
@@ -246,14 +248,48 @@ function status(id: string, status: number) {
             type: 'warning',
         }
     ).then(() => {
-        if (status == 1) {
-            updateStatus({ id, status: 4 }, 'admin')
+        const newStatus = status === 1 ? 2 : 1;
+        updateStatus({ id, status: newStatus }, 'admin').then(() => {
             fetchData();
-        }
-        if (status == 4) {
-            updateStatus({ id, status: 1 }, 'admin')
-            fetchData();
-        }
-    })
+        });
+    }).catch(() => {
+        ElMessage.info('已取消操作');
+    });
+}
+
+// 获取状态标签类型
+function getStatusType(status: number): string {
+    switch (status) {
+        case 1:
+            return 'success';
+        case 2:
+            return 'info';
+        case 3:
+            return 'danger';
+        case 4:
+            return 'warning';
+        case 5:
+            return 'info';
+        default:
+            return 'default';
+    }
+}
+
+// 获取状态标签文本
+function getStatusLabel(status: number): string {
+    switch (status) {
+        case 1:
+            return '发布';
+        case 2:
+            return '私密';
+        case 3:
+            return '删除';
+        case 4:
+            return '待审核';
+        case 5:
+            return '已完结';
+        default:
+            return '未知';
+    }
 }
 </script>

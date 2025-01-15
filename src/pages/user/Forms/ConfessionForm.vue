@@ -3,8 +3,8 @@
     <el-form :model="form" :rules="rules" ref="ruleFormRef" label-width="100px" class="confession-form">
       <el-form-item label="类型" prop="type">
         <el-radio-group v-model="form.type">
-          <el-radio value=1>表白</el-radio>
-          <el-radio value=0>找对象</el-radio>
+          <el-radio value=1>找对象</el-radio>
+          <el-radio value=2>表白</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="标题" prop="title">

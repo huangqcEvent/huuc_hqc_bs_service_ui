@@ -18,6 +18,7 @@ import MyIndex from "@/pages/user/Index/MyIndex.vue";
 import LostItemDetail from "@/pages/user/Notices/LostItemDetail.vue";
 import { ElMessageBox } from 'element-plus'
 import type { Action } from 'element-plus'
+import PostAudit from "@/pages/admin/audit/PostAudit.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -73,7 +74,7 @@ const router = createRouter({
         {
             path: '/adminIndex',
             component: AdminIndex,
-            redirect: '/adminIndex/users',
+            redirect: '/adminIndex/audit',
             children: [
                 {
                     path: 'users',
@@ -94,6 +95,10 @@ const router = createRouter({
                 {
                     path: 'notices',
                     component: Notices
+                },
+                {
+                    path: 'audit',
+                    component: PostAudit
                 }
             ]
         },

@@ -24,50 +24,55 @@
       <el-aside width="200px" class="sidebar">
         <el-menu :default-openeds="['1']" class="custom-menu" active-text-color="#42b983" background-color="#ffffff"
           text-color="#333333">
-          <el-sub-menu index="1">
-            <template #title>
-              <i class="el-icon-user"></i>
-              <span>用户管理</span>
-            </template>
-            <el-menu-item type="default" index="1-1"
-              @click="router.push({ path: '/adminIndex/users', query: { identity: adminInfo.identity } })">
-              <i class="el-icon-user"></i>
-              <span>用户列表</span>
-            </el-menu-item>
-            <el-menu-item index="1-2" @click="router.push('/adminIndex/downLog')">
-              <i class="el-icon-lock"></i>
-              <span>账号封禁记录</span>
-            </el-menu-item>
-            <el-menu-item index="1-3" @click="router.push('/adminIndex/identityLog')">
-              <i class="el-icon-lock"></i>
-              <span>身份变更记录</span>
-            </el-menu-item>
-          </el-sub-menu>
+          <el-menu-item index="1-1" @click="router.push({ path: '/adminIndex/audit' })">
+            <i class="el-icon-user"></i>
+            <span>审核列表</span>
+          </el-menu-item>
         </el-menu>
-
         <el-menu :default-openeds="['2']" class="custom-menu" active-text-color="#42b983" background-color="#ffffff"
           text-color="#333333">
           <el-sub-menu index="2">
             <template #title>
               <i class="el-icon-user"></i>
+              <span>用户管理</span>
+            </template>
+            <el-menu-item type="default" index="2-1"
+              @click="router.push({ path: '/adminIndex/users', query: { identity: adminInfo.identity } })">
+              <i class="el-icon-user"></i>
+              <span>用户列表</span>
+            </el-menu-item>
+            <el-menu-item index="2-2" @click="router.push('/adminIndex/downLog')">
+              <i class="el-icon-lock"></i>
+              <span>账号封禁记录</span>
+            </el-menu-item>
+            <el-menu-item index="2-3" @click="router.push('/adminIndex/identityLog')">
+              <i class="el-icon-lock"></i>
+              <span>身份变更记录</span>
+            </el-menu-item>
+          </el-sub-menu>
+        </el-menu>
+        <el-menu :default-openeds="['3']" class="custom-menu" active-text-color="#42b983" background-color="#ffffff"
+          text-color="#333333">
+          <el-sub-menu index="3">
+            <template #title>
+              <i class="el-icon-user"></i>
               <span>表白墙管理</span>
             </template>
-            <el-menu-item index="1-1"
+            <el-menu-item index="3-1"
               @click="router.push({ path: '/adminIndex/confession', query: { identity: adminInfo.identity } })">
               <i class="el-icon-user"></i>
               <span>表白贴列表</span>
             </el-menu-item>
           </el-sub-menu>
         </el-menu>
-
-        <el-menu :default-openeds="['3']" class="custom-menu" active-text-color="#42b983" background-color="#ffffff"
+        <el-menu :default-openeds="['4']" class="custom-menu" active-text-color="#42b983" background-color="#ffffff"
           text-color="#333333">
-          <el-sub-menu index="3">
+          <el-sub-menu index="4">
             <template #title>
               <i class="el-icon-user"></i>
               <span>寻物贴管理</span>
             </template>
-            <el-menu-item index="3-1"
+            <el-menu-item index="4-1"
               @click="router.push({ path: '/adminIndex/notices', query: { identity: adminInfo.identity } })">
               <i class="el-icon-user"></i>
               <span>寻物贴列表</span>
@@ -91,7 +96,6 @@
 <script setup lang="ts">
 import { onBeforeMount, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import Image from '@/common/Image.vue';
 import { logout } from '@/api/commonApi/commonApi';
 import { confirm } from '@/utils/confirmUtils';
 import { getProhibitedWords } from '@/api/admin/user/userApi';

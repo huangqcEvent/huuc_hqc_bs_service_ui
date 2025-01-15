@@ -1,27 +1,27 @@
 <template>
   <div class="home">
     <div class="filter-form">
-            <el-form :model="filters" inline>
-              <el-form-item label="名称">
-                <el-input v-model="filters.itemName" placeholder="物品名称"></el-input>
-              </el-form-item>
-              <el-form-item label="状态">
-                <el-select v-model="filters.type" placeholder="全部">
-                  <el-option label="全部" value=""></el-option>
-                  <el-option label="寻物" value="1"></el-option>
-                  <el-option label="寻主" value="2"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="发布时间">
-                <el-date-picker v-model="dateRange" type="daterange" range-separator="至"
-                  start-placeholder="开始日期" end-placeholder="结束日期" value-format="YYYY-MM-DD 00:00:00"></el-date-picker>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="fetchLostItems">搜索</el-button>
-                <el-button type="default" @click="clearFilters">清空</el-button>
-              </el-form-item>
-            </el-form>
-          </div>
+      <el-form :model="filters" inline>
+        <el-form-item label="名称">
+          <el-input v-model="filters.itemName" placeholder="物品名称"></el-input>
+        </el-form-item>
+        <el-form-item label="类型">
+          <el-select v-model="filters.type" placeholder="全部">
+            <el-option label="全部" value=""></el-option>
+            <el-option label="寻物" value="1"></el-option>
+            <el-option label="寻主" value="2"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="发布时间">
+          <el-date-picker v-model="dateRange" type="daterange" range-separator="至" start-placeholder="开始日期"
+            end-placeholder="结束日期" value-format="YYYY-MM-DD 00:00:00"></el-date-picker>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="fetchLostItems">搜索</el-button>
+          <el-button type="default" @click="clearFilters">清空</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
     <el-row :gutter="20" class="card-list">
       <el-col :span="8" v-for="item in lostItems" :key="item.id">
         <el-card class="box-card" @click="goToDetail(item.id)">
@@ -41,15 +41,12 @@
           </div>
         </el-card>
       </el-col>
+      <div v-if="lostItems.length === 0" class="no-data">
+        <p>没有找到相关物品信息。</p>
+      </div>
     </el-row>
-    <el-pagination
-      layout="prev, pager, next"
-      :total="total"
-      :page-size="filters.pageSize"
-      :current-page="filters.pageNumber"
-      @current-change="handlePageChange"
-      class="pagination"
-    />
+    <el-pagination layout="prev, pager, next" :total="total" :page-size="filters.pageSize"
+      :current-page="filters.pageNumber" @current-change="handlePageChange" class="pagination" />
   </div>
 </template>
 
@@ -64,7 +61,7 @@ const lostItems = ref<LostItem[]>([]);
 const total = ref(0);
 const dateRange = ref(['', '']); // 确保初始化为数组
 
-// 过滤条件对象
+// 过滤条件对象 用户端status固定为1 只查公开的数据
 const filters = ref<Params>({
   type: null,
   itemName: '',
@@ -124,7 +121,8 @@ const goToDetail = (id: number | undefined) => {
 .home {
   padding: 20px;
   background-color: #f0f2f5;
-  max-height: calc(100vh - 80px); /* 调整最大高度 */
+  max-height: calc(100vh - 80px);
+  /* 调整最大高度 */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -146,7 +144,8 @@ const goToDetail = (id: number | undefined) => {
 }
 
 .box-card {
-  margin-bottom: 20px; /* 减少底部外边距 */
+  margin-bottom: 20px;
+  /* 减少底部外边距 */
   cursor: pointer;
   transition: transform 0.3s ease;
   background-color: #fff;
@@ -154,8 +153,10 @@ const goToDetail = (id: number | undefined) => {
   border-radius: 12px;
   box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  max-height: 250px; /* 设置最大高度 */
-  padding: 10px; /* 减少内边距 */
+  max-height: 250px;
+  /* 设置最大高度 */
+  padding: 10px;
+  /* 减少内边距 */
 }
 
 .box-card:hover {
@@ -164,7 +165,8 @@ const goToDetail = (id: number | undefined) => {
 }
 
 .card-header {
-  padding: 10px; /* 减少内边距 */
+  padding: 10px;
+  /* 减少内边距 */
   background-color: #f5f7fa;
   border-bottom: 1px solid #ebeef5;
   font-weight: bold;
@@ -174,13 +176,15 @@ const goToDetail = (id: number | undefined) => {
 }
 
 .card-body {
-  padding: 10px; /* 减少内边距 */
+  padding: 10px;
+  /* 减少内边距 */
   display: flex;
   align-items: center;
 }
 
 .card-footer {
-  padding: 10px; /* 减少内边距 */
+  padding: 10px;
+  /* 减少内边距 */
   border-top: 1px solid #ebeef5;
   text-align: left;
   color: #909399;
@@ -191,11 +195,14 @@ const goToDetail = (id: number | undefined) => {
 }
 
 .item-image {
-  width: 100px; /* 减小图片宽度 */
-  height: 100px; /* 减小图片高度 */
+  width: 100px;
+  /* 减小图片宽度 */
+  height: 100px;
+  /* 减小图片高度 */
   object-fit: cover;
   border-radius: 12px;
-  margin-right: 10px; /* 减少右边距 */
+  margin-right: 10px;
+  /* 减少右边距 */
 }
 
 .item-info {
@@ -204,7 +211,8 @@ const goToDetail = (id: number | undefined) => {
 }
 
 .item-name {
-  font-size: 1.2em; /* 减小字体大小 */
+  font-size: 1.2em;
+  /* 减小字体大小 */
   margin: 0;
   color: #303133;
   font-weight: 600;
@@ -213,7 +221,8 @@ const goToDetail = (id: number | undefined) => {
 .location {
   color: #909399;
   margin: 0;
-  font-size: 0.9em; /* 减小字体大小 */
+  font-size: 0.9em;
+  /* 减小字体大小 */
   margin-top: 5px;
 }
 
@@ -224,11 +233,20 @@ const goToDetail = (id: number | undefined) => {
 
 .card-footer .time {
   margin: 0;
-  font-size: 0.8em; /* 减小字体大小 */
+  font-size: 0.8em;
+  /* 减小字体大小 */
 }
 
 .pagination {
   margin-top: -30px;
   left: 700px;
+}
+
+.no-data {
+  width: 100%;
+  max-width: 1200px;
+  text-align: center;
+  margin-top: 50px;
+  color: #900
 }
 </style>

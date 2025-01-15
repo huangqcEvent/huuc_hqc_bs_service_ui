@@ -10,17 +10,19 @@
                 <el-form-item label="类型">
                     <el-select v-model="filterForm.type" placeholder="全部">
                         <el-option label="全部" value=""></el-option>
-                        <el-option label="找对象" value="0"></el-option>
-                        <el-option label="表白" value="1"></el-option>
+                        <el-option label="找对象" value="1"></el-option>
+                        <el-option label="表白" value="2"></el-option>
                     </el-select>
                 </el-form-item>
 
                 <el-form-item label="状态">
                     <el-select v-model="filterForm.status" placeholder="全部">
                         <el-option label="全部" value=""></el-option>
-                        <el-option label="正常" value="1"></el-option>
+                        <el-option label="发布" value="1"></el-option>
                         <el-option label="私密" value="2"></el-option>
-                        <el-option label="删除" value="0"></el-option>
+                        <el-option label="删除" value="3"></el-option>
+                        <el-option label="待审核" value="4"></el-option>
+                        <el-option label="已完结" value="5"></el-option>
                     </el-select>
                 </el-form-item>
 
@@ -43,7 +45,7 @@
 
                 <el-table-column prop="type" label="类型">
                     <template #default="scope">
-                        <el-tag :type="scope.row.type ? 'success' : 'danger'">{{ scope.row.type === 1 ? '表白贴' : '找对象贴'
+                        <el-tag :type="scope.row.type ? 'success' : 'danger'">{{ scope.row.type === 1 ? '找对象贴' : '表白帖'
                             }}</el-tag>
                     </template>
                 </el-table-column>
@@ -57,8 +59,8 @@
 
                 <el-table-column prop="status" label="状态">
                     <template #default="scope">
-                        <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'">
-                            {{ scope.row.status === 1 ? '正常' : scope.row.status === 2 ? '私密' : '删除' }}
+                        <el-tag :type="getStatusType(scope.row.status)">
+                            {{ getStatusLabel(scope.row.status) }}
                         </el-tag>
                     </template>
                 </el-table-column>
@@ -74,11 +76,13 @@
 
                 <el-table-column label="操作1">
                     <template #default="scope">
-                        <el-button v-if="canBanUser(scope.row.identity)" type="primary" plain
-                            @click.stop="updateStatus(scope.row.id, scope.row.status, scope.row.status === 1 ? 2 : 1, scope.row.userId)">
-                            {{ scope.row.status === 1 ? '设为私密' : scope.row.status === 2 ? '正常显示' : '已删除' }}
+                        <el-button v-if="canBanUser(scope.row.identity) && (scope.row.status === 1 || scope.row.status === 2)"
+                            type="primary" plain
+                            @click.stop="updateStatus(scope.row.id, scope.row.status, getNextStatus(scope.row.status), scope.row.userId)">
+                            {{ getNextStatusLabel(scope.row.status) }}
                         </el-button>
-                        <el-tag v-else type="danger">无权限</el-tag>
+                        <el-tag v-else-if="!canBanUser(scope.row.identity)" type="danger">无权限</el-tag>
+                        <el-tag v-else type="info">状态不可切换</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作2">
@@ -129,7 +133,6 @@
         </div>
     </div>
 </template>
-
 
 <script setup lang="ts" name="DownLog">
 import Page from '@/common/Page.vue';
@@ -238,7 +241,7 @@ function canBanUser(userIdentity: number): boolean {
 // 修改表白墙状态
 function updateStatus(id: string, oldStatus: number, newStatus: number, userId: string) {
     ElMessageBox.prompt(
-        `确定要将此表白贴的状态修改为${newStatus === 1 ? '正常' : newStatus === 2 ? '私密' : '删除'}吗？`,
+        `确定要将此表白贴的状态修改为${getNextStatusLabel(newStatus)}吗？`,
         '请输入原因并确定',
         {
             confirmButtonText: '确定',
@@ -292,5 +295,65 @@ function showDetails(id: string) {
         confessionDetail.value = response.data.data;
         dialogVisible.value = true;
     });
+}
+
+// 获取状态标签类型
+function getStatusType(status: number): string {
+    switch (status) {
+        case 1:
+            return 'success';
+        case 2:
+            return 'info';
+        case 3:
+            return 'danger';
+        case 4:
+            return 'warning';
+        case 5:
+            return 'info';
+        default:
+            return 'default';
+    }
+}
+
+// 获取状态标签文本
+function getStatusLabel(status: number): string {
+    switch (status) {
+        case 1:
+            return '发布';
+        case 2:
+            return '私密';
+        case 3:
+            return '删除';
+        case 4:
+            return '待审核';
+        case 5:
+            return '已完结';
+        default:
+            return '未知';
+    }
+}
+
+// 获取下一个状态
+function getNextStatus(currentStatus: number): number {
+    switch (currentStatus) {
+        case 1:
+            return 2; // 发布 -> 私密
+        case 2:
+            return 1; // 私密 -> 发布
+        default:
+            return currentStatus; // 其他状态不变
+    }
+}
+
+// 获取下一个状态的标签文本
+function getNextStatusLabel(currentStatus: number): string {
+    switch (currentStatus) {
+        case 1:
+            return '设为私密';
+        case 2:
+            return '正常显示';
+        default:
+            return '状态不可切换';
+    }
 }
 </script>

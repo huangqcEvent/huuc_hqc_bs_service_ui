@@ -12,8 +12,8 @@
 					</el-form-item>
 
 					<!-- 密码输入框 -->
-					<el-form-item label="密码" prop="password">
-						<el-input type="password" v-model="loginForm.pwd" placeholder="请输入密码" class="input-field" />
+					<el-form-item label="密码" prop="pwd">
+						<el-input type="pwd" v-model="loginForm.pwd" placeholder="请输入密码" class="input-field" />
 					</el-form-item>
 
 					<!-- 头像上传 -->

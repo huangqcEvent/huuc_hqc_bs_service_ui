@@ -11,11 +11,11 @@
               <el-form-item label="标题">
                 <el-input v-model="filterForm.title" placeholder="请输入标题"></el-input>
               </el-form-item>
-              <el-form-item label="状态">
+              <el-form-item label="类型">
                 <el-select v-model="filterForm.type" placeholder="全部">
                   <el-option label="全部" value=""></el-option>
-                  <el-option label="表白" value="1"></el-option>
-                  <el-option label="找对象" value="0"></el-option>
+                  <el-option label="找对象" value="1"></el-option>
+                  <el-option label="表白" value="2"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="发布时间">
@@ -33,6 +33,7 @@
               <ConfessionCard :title="confession.title" :content="confession.summary" :author="confession.userName"
                 :id="confession.id" :createTime="confession.createTime" />
             </el-col>
+            <p v-if="confessions.length === 0">暂时没有数据哦，快去发帖吧</p>
           </div>
           <div class="page">
             {{ currentPage }} / {{ totalPages }} 共{{ total }}条
@@ -85,7 +86,7 @@ const filterForm = ref({
   createTimeRange: ['', ''] as [string, string]
 });
 
-// 请求数据
+// 请求数据 用户端status固定为1 只查公开的数据
 function fetchData() {
   const params = {
     pageSize: itemsPerPage,
