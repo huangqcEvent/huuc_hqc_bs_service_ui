@@ -77,7 +77,8 @@
 
                 <el-table-column label="操作1">
                     <template #default="scope">
-                        <el-button v-if="canBanUser(scope.row.identity) && (scope.row.status === 1 || scope.row.status === 2)"
+                        <el-button
+                            v-if="canBanUser(scope.row.identity) && (scope.row.status === 1 || scope.row.status === 2)"
                             type="primary" plain
                             @click.stop="updateStatus(scope.row.id, scope.row.status, getNextStatus(scope.row.status), scope.row.userId)">
                             {{ getNextStatusLabel(scope.row.status) }}
@@ -89,7 +90,7 @@
                 <el-table-column label="操作2">
                     <template #default="scope">
                         <el-button v-if="canBanUser(scope.row.identity)" type="primary" plain
-                            @click.stop="updateTop(scope.row.id, scope.row.isTop === 1 ? 0 : 1)">
+                            @click.stop="updateTop(scope.row.id, scope.row.isTop === 1 ? 0 : 1, scope.row.userId)">
                             {{ scope.row.isTop === 1 ? "取消置顶" : "设为置顶" }}
                         </el-button>
                     </template>
@@ -266,10 +267,11 @@ function updateStatus(id: string, oldStatus: number, newStatus: number, userId: 
 }
 
 // 置顶/取消置顶
-function updateTop(id: string, newTop: number) {
+function updateTop(id: string, newTop: number, userId: string) {
     const params = {
         confessionId: id,
-        newTop: newTop
+        newTop: newTop,
+        userId
     }
     ElMessageBox.confirm(
         '确定要' + (newTop == 1 ? '设为置顶吗' : '取消置顶吗'),

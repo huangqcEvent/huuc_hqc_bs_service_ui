@@ -70,22 +70,22 @@
   </el-container>
 </template>
 
-
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed } from 'vue';
+import { ref, reactive, onMounted, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { logout } from '@/api/commonApi/commonApi';
 import { confirm } from '@/utils/confirmUtils';
 import { useWebSocketStore } from '@/stores/webSocket';
 import GuideQuestions from '@/pages/user/ai/GuideQuestions.vue';
 
-const errorHandler = () => true
 const router = useRouter();
 const webSocketStore = useWebSocketStore();
-const messages = ref<string[]>([
-]);
-// 计算消息总数
-const msgTotal = computed(() => messages.value.length);
+
+// 响应式数据
+const messages = computed(() => webSocketStore.getMessages);
+const msgTotal = ref(0);
+
+// 用户信息
 const userInfo = reactive({
   id: '',
   username: '',
@@ -93,6 +93,12 @@ const userInfo = reactive({
 });
 const isLoggedIn = ref(false);
 
+// 监听消息变化，更新消息总数
+watch(messages, (newMessages) => {
+  msgTotal.value = newMessages.length;
+});
+
+// 登录逻辑
 const login = () => {
   if (localStorage.getItem('userInfo') == null) {
     router.push("/login");
@@ -105,33 +111,44 @@ const login = () => {
   }
 };
 
+// 退出登录逻辑
 const logout1 = () => {
   confirm("确认要退出登录吗?", () => {
     logout('user').then(
-      response => {
+      () => {
         localStorage.removeItem('userInfo');
         localStorage.removeItem('userToken');
+        webSocketStore.closeSocket();
       }
     ).finally(() => {
+      localStorage.removeItem('userInfo');
+      localStorage.removeItem('userToken');
+      webSocketStore.closeSocket();
       router.push('/login');
     });
-  }, () => {
-  });
+  }, () => {});
 };
-function getmsg() {
-  messages.value = webSocketStore.getMessages
-}
+
+// 获取消息
+const getmsg = () => {
+};
+
+// 跳转到发帖页面
 const goToPost = () => {
   router.push('/userIndex/post');
 };
 
+// 页面加载时初始化
 onMounted(() => {
   const storedUserInfo = localStorage.getItem('userInfo');
   if (storedUserInfo) {
     Object.assign(userInfo, JSON.parse(storedUserInfo));
     isLoggedIn.value = true;
-    messages.value = webSocketStore.getMessages
   }
+
+  webSocketStore.loadMessages(userInfo.id)
+  // 初始化消息数量
+  msgTotal.value = messages.value.length;
 });
 </script>
 
@@ -346,25 +363,7 @@ onMounted(() => {
 
 /* 滚动条样式 */
 .scrollbar {
-  height: 100%;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #888 #f1f1f1;
-}
-
-/* 滚动条轨道样式 */
-.scrollbar::-webkit-scrollbar {
-  width: 10px;
-}
-
-/* 滚动条滑块样式 */
-.scrollbar::-webkit-scrollbar-thumb {
-  background-color: #888;
-  border-radius: 5px;
-}
-
-/* 滚动条滑块悬停样式 */
-.scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: #555;
+  padding: 0;
+  height: calc(100vh - 60px); 
 }
 </style>

@@ -40,6 +40,8 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { useWebSocketStore } from '@/stores/webSocket';
+import { onMounted } from 'vue';
+import { useData } from 'element-plus/es/components/table-v2/src/composables/use-data.mjs';
 
 // Data
 const loginForm = ref({
@@ -80,25 +82,26 @@ function toLogin(username: string, password: string) {
 			login(data)
 				.then(response => {
 					if (response.data.code === 200) {
-						if (response.data.data.identity === 1 || response.data.data.identity === 99) {
-							localStorage.setItem("adminToken", response.data.data.jwt);
-							localStorage.setItem("adminInfo", JSON.stringify(response.data.data));
+						const userData = response.data.data;
+						if (userData.identity === 1 || userData.identity === 99) {
+							localStorage.setItem("adminToken", userData.jwt);
+							localStorage.setItem("adminInfo", JSON.stringify(userData));
 							router.push('/adminIndex');
-						} else if (response.data.data.identity === 0 || response.data.data.identity === 2) {
-							localStorage.setItem("userToken", response.data.data.jwt);
-							localStorage.setItem("userInfo", JSON.stringify(response.data.data));
+						} else if (userData.identity === 0 || userData.identity === 2) {
+							localStorage.setItem("userToken", userData.jwt);
+							localStorage.setItem("userInfo", JSON.stringify(userData));
+							webSocketStore.connectWebSocket(userData.id);
+							webSocketStore.loadMessages(userData.id);
 							router.push('/userIndex');
-							// 登录后建立 webSocket 连接
-							webSocketStore.connectWebSocket(response.data.data.id);
 						}
-					} 
+					}
 				})
 		} else {
 			ElMessage.error('请填写必填项');
 			return false;
 		}
 	});
-};
+}
 </script>
 
 <style scoped lang="scss">
