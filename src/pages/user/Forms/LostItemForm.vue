@@ -21,6 +21,12 @@
         <el-input type="textarea" placeholder="请输入详细描述" v-model="form.itemDesc" :rows=4 maxlength="1000"
           show-word-limit></el-input>
       </el-form-item>
+      <el-form-item label="是否公开" prop="status">
+        <el-radio-group v-model="form.status">
+          <el-radio value=1>公开</el-radio>
+          <el-radio value=2>私密</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item label="图片">
         <div class="image-uploads">
           <Upload @upload-success="getImage1"></Upload>
@@ -56,6 +62,7 @@ const form = reactive<LostItem>({
   image1: '',
   image2: '',
   image3: '',
+  status: null
 });
 
 const rules = reactive({
@@ -77,6 +84,9 @@ const rules = reactive({
   itemDesc: [
     { required: true, message: '请输入详细描述', trigger: 'blur' },
     { max: 1000, message: '详细描述最多1000个字符', trigger: 'blur' }
+  ],
+  status: [
+    { required: true, message: '请选择是否公开', trigger: 'blur' },
   ]
 });
 

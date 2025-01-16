@@ -8,7 +8,7 @@ export interface LostItem {
     location: string;
     phone: string;
     createTime?: string;
-    status?: number;
+    status?: number | null;
     isTop?: number;
     image1?: string;
     image2?: string;

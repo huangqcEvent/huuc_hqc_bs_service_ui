@@ -24,6 +24,7 @@ export interface PageData {
     title: string; // 标题
     status: number; // 状态
     createTime: string; // 提交时间
+    autoAuditTime?: string;//机器审核时间
     auditTime?: string; // 审核时间
     auditUserId?: string; // 审核人
     auditUserName?: string; // 审核人名称

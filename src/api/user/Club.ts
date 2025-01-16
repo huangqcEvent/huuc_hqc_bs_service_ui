@@ -10,6 +10,7 @@ export interface Club {
     timeType?: number | null;//时间类型 1长期 2限时
     startTime?: string;//开始时间
     endTime?: string;//结束时间
+    status?:number | null;
     image1?: string;
     image2?: string;
     image3?: string;

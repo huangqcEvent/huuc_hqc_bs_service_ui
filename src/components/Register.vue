@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import { register } from '@/api/commonApi/commonApi';
-import { ref, onUnmounted } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import Upload from '@/common/Upload.vue';
@@ -62,7 +62,7 @@ const rules = {
 		{ required: true, message: '请输入账号', trigger: 'blur' },
 		{ min: 3, message: '请输入有效的账号（至少3位）', trigger: 'blur' }
 	],
-	password: [
+	pwd: [
 		{ required: true, message: '请输入密码', trigger: 'blur' },
 		{ min: 6, message: '密码至少 6 个字符', trigger: 'blur' }
 	]

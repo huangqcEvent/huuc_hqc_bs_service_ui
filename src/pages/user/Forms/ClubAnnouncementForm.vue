@@ -9,6 +9,12 @@
     <el-form-item label="标题" prop="title">
       <el-input v-model="form.title" placeholder="请输入标题" maxlength="10" show-word-limit></el-input>
     </el-form-item>
+    <el-form-item label="是否公开" prop="status">
+      <el-radio-group v-model="form.status">
+        <el-radio value=1>公开</el-radio>
+        <el-radio value=2>私密</el-radio>
+      </el-radio-group>
+    </el-form-item>
     <template v-if="form.type === 1">
       <el-form-item label="社团工作" prop="daily">
         <el-input type="textarea" v-model="form.daily" placeholder="请输入社团工作" maxlength="1000"
@@ -79,6 +85,7 @@ const form = reactive<Club>({
   timeType: undefined,
   startTime: undefined,
   endTime: undefined,
+  status: null
 })
 
 const router = useRouter();
@@ -116,6 +123,9 @@ const rules = reactive({
   ],
   endTime: [
     { required: true, message: '终止时间不能为空', trigger: 'blur' }
+  ],
+  status: [
+    { required: true, message: '请选择是否公开', trigger: 'blur' }
   ]
 })
 

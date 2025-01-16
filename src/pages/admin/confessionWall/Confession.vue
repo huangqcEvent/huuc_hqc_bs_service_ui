@@ -23,6 +23,7 @@
                         <el-option label="删除" value="3"></el-option>
                         <el-option label="待审核" value="4"></el-option>
                         <el-option label="已完结" value="5"></el-option>
+                        <el-option label="拒审待修改" value="6"></el-option>
                     </el-select>
                 </el-form-item>
 
@@ -310,6 +311,8 @@ function getStatusType(status: number): string {
             return 'warning';
         case 5:
             return 'info';
+        case 6:
+            return 'error';
         default:
             return 'default';
     }
@@ -328,6 +331,8 @@ function getStatusLabel(status: number): string {
             return '待审核';
         case 5:
             return '已完结';
+        case 6:
+            return '拒审待修改'
         default:
             return '未知';
     }

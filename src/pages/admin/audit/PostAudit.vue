@@ -7,11 +7,11 @@
           <el-button @click="showFilterDialog = true" class="filter-button">过滤</el-button>
           <AutoAuditList :status="filterForm.status" :pageData="pageData" :total="total"></AutoAuditList>
         </el-tab-pane>
-        <el-tab-pane label="人工审核" :name="STATUS_MANUAL_AUDIT">
+        <el-tab-pane label="待人工审核" :name="STATUS_MANUAL_AUDIT">
           <el-button @click="showFilterDialog = true" class="filter-button">过滤</el-button>
           <AutoAuditList :status="filterForm.status" :pageData="pageData" :total="total"></AutoAuditList>
         </el-tab-pane>
-        <el-tab-pane label="待修改" :name="STATUS_PENDING_MODIFICATION">
+        <el-tab-pane label="已打回" :name="STATUS_PENDING_MODIFICATION">
           <el-button @click="showFilterDialog = true" class="filter-button">过滤</el-button>
           <AutoAuditList :status="filterForm.status" :pageData="pageData" :total="total"></AutoAuditList>
         </el-tab-pane>
@@ -37,8 +37,8 @@
             <el-form-item label="状态">
               <el-select v-model="filterForm.status" placeholder="全部">
                 <el-option label="待机器审核" :value="STATUS_MACHINE_AUDIT"></el-option>
-                <el-option label="人工审核" :value="STATUS_MANUAL_AUDIT"></el-option>
-                <el-option label="待修改" :value="STATUS_PENDING_MODIFICATION"></el-option>
+                <el-option label="待人工审核" :value="STATUS_MANUAL_AUDIT"></el-option>
+                <el-option label="已打回" :value="STATUS_PENDING_MODIFICATION"></el-option>
                 <el-option label="审核通过" :value="STATUS_AUDIT_PASSED"></el-option>
               </el-select>
             </el-form-item>
@@ -100,10 +100,10 @@ import { ElLoading } from 'element-plus';
 import { debounce } from 'lodash';
 
 // 定义状态常量
-const STATUS_PENDING_MODIFICATION = '3';
+const STATUS_PENDING_MODIFICATION = '4';
 const STATUS_MACHINE_AUDIT = '1';
 const STATUS_MANUAL_AUDIT = '2';
-const STATUS_AUDIT_PASSED = '4';
+const STATUS_AUDIT_PASSED = '3';
 
 const createTimeRange = ref(['', '']);
 const showFilterDialog = ref(false);

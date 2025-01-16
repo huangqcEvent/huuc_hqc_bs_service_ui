@@ -19,10 +19,11 @@
                 </el-table-column>
                 <el-table-column prop="userName" label="用户名称" />
                 <el-table-column prop="title" label="标题" />
-                <el-table-column v-if="status != '3'" prop="createTime" label="提交时间" width="180" />
-                <el-table-column v-if="status === '4' || status === '3'" prop="auditTime" label="审核时间" width="180" />
+                <el-table-column v-if="status != '4'" prop="createTime" label="提交时间" width="180" />
+                <el-table-column prop="autoAuditTime" label="机器审核时间" width="180" />
+                <el-table-column v-if="status === '4' || status === '3'" prop="auditTime" label="人工审核时间" width="180" />
                 <el-table-column v-if="status === '4' || status === '3'" prop="auditUserName" label="审核人名称" />
-                <el-table-column v-if="status === '3'" prop="reason" label="拒绝原因" />
+                <el-table-column v-if="status === '4'" prop="reason" label="拒绝原因" />
             </el-table>
         </div>
     </div>
