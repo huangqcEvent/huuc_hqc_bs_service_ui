@@ -9,6 +9,7 @@ import Home from "@/pages/user/Homes/Home.vue";
 import Notices from "@/pages/admin/notices/Notices.vue";
 import Notice from "@/pages/user/Notices/Notice.vue";
 import Club from "@/pages/user/Clubs/Club.vue";
+import Club1 from "@/pages/admin/club/Club.vue";
 import ConfessionWall from "@/pages/user/ConfessionWalls/ConfessionWall.vue"
 import IdentityLog from "@/pages/admin/user/IdentityLog.vue";
 import CardDetail from "@/pages/user/ConfessionWalls/CardDetail.vue";
@@ -99,6 +100,10 @@ const router = createRouter({
                 {
                     path: 'audit',
                     component: PostAudit
+                },
+                {
+                    path: 'club',
+                    component: Club1
                 }
             ]
         },

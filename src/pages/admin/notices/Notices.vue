@@ -42,6 +42,8 @@
         <!-- 寻物列表 -->
         <div class="content">
             <el-table :data="noticeList">
+
+                <el-table-column prop="userName" label="用户名称"></el-table-column>
                 <el-table-column prop="itemName" label="物品名称"></el-table-column>
 
                 <el-table-column prop="type" label="类型">
@@ -69,25 +71,23 @@
 
                 <el-table-column prop="createTime" label="发布时间" width="180"></el-table-column>
 
-                <el-table-column label="操作1">
+                <el-table-column label="状态操作">
                     <template #default="scope">
                         <el-button v-if="scope.row.status === 1 || scope.row.status === 2"
                             @click="toggleStatus(scope.row.id, scope.row.status)">
                             {{ scope.row.status === 1 ? '设为私密' : '设为正常' }}
                         </el-button>
-                        <el-button v-else disabled>
-                            无法操作状态
-                        </el-button>
+                        <el-tag v-else type="info">状态不可切换</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作2">
+                <el-table-column label="详情">
                     <template #default="scope">
                         <el-button type="primary" plain @click.stop="showDetails(scope.row.id)">
                             查看详情
                         </el-button>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作3">
+                <el-table-column label="排序">
                     <template #default="scope">
                         <el-button type="primary" plain
                             @click.stop="updateTop(scope.row.id, scope.row.isTop === 1 ? 0 : 1)">
@@ -292,7 +292,7 @@ function getStatusLabel(status: number): string {
         case 5:
             return '已完结';
         case 6:
-            return '拒审待修改'    
+            return '拒审待修改'
         default:
             return '未知';
     }

@@ -83,7 +83,7 @@ const webSocketStore = useWebSocketStore();
 
 // 响应式数据
 const messages = computed(() => webSocketStore.getMessages);
-const msgTotal = ref(0);
+const msgTotal = computed(() => messages.value.length)
 
 // 用户信息
 const userInfo = reactive({

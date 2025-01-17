@@ -58,8 +58,7 @@
               <i class="el-icon-user"></i>
               <span>表白墙管理</span>
             </template>
-            <el-menu-item index="3-1"
-              @click="router.push({ path: '/adminIndex/confession', query: { identity: adminInfo.identity } })">
+            <el-menu-item index="3-1" @click="router.push({ path: '/adminIndex/confession' })">
               <i class="el-icon-user"></i>
               <span>表白贴列表</span>
             </el-menu-item>
@@ -72,10 +71,22 @@
               <i class="el-icon-user"></i>
               <span>寻物贴管理</span>
             </template>
-            <el-menu-item index="4-1"
-              @click="router.push({ path: '/adminIndex/notices', query: { identity: adminInfo.identity } })">
+            <el-menu-item index="4-1" @click="router.push({ path: '/adminIndex/notices' })">
               <i class="el-icon-user"></i>
               <span>寻物贴列表</span>
+            </el-menu-item>
+          </el-sub-menu>
+        </el-menu>
+        <el-menu :default-openeds="['5']" class="custom-menu" active-text-color="#42b983" background-color="#ffffff"
+          text-color="#333333">
+          <el-sub-menu index="5">
+            <template #title>
+              <i class="el-icon-user"></i>
+              <span>社团贴管理</span>
+            </template>
+            <el-menu-item index="5-1" @click="router.push({ path: '/adminIndex/club' })">
+              <i class="el-icon-user"></i>
+              <span>社团贴列表</span>
             </el-menu-item>
           </el-sub-menu>
         </el-menu>

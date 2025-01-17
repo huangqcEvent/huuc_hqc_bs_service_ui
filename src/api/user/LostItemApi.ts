@@ -2,6 +2,7 @@ import request from '@/utils/axiosUtils';
 export interface LostItem {
     id?: number;
     userId?: string;
+    userName?: string;
     itemName: string;
     type: number | null;
     itemDesc: string;
@@ -24,7 +25,7 @@ export interface Params {
     status?: number | null;
     pageSize: number;
     pageNumber: number;
-    dateRange?:[string,string]
+    dateRange?: [string, string]
 }
 
 // 新增寻物贴接口
@@ -48,6 +49,6 @@ export function getDetailById(id: string, userType?: string) {
 }
 
 // 置顶状态修改接口
-export function updateTopService(params:any,type:string){
-    return request.put("/admin/lostItem/updateTop",params,{userType:type})
+export function updateTopService(params: any, type: string) {
+    return request.put("/admin/lostItem/updateTop", params, { userType: type })
 }

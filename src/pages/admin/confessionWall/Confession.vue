@@ -75,27 +75,24 @@
 
                 <el-table-column prop="createTime" label="发布时间" width="180"></el-table-column>
 
-                <el-table-column label="操作1">
+                <el-table-column label="状态操作">
                     <template #default="scope">
-                        <el-button
-                            v-if="canBanUser(scope.row.identity) && (scope.row.status === 1 || scope.row.status === 2)"
-                            type="primary" plain
+                        <el-button v-if="(scope.row.status === 1 || scope.row.status === 2)" type="primary" plain
                             @click.stop="updateStatus(scope.row.id, scope.row.status, getNextStatus(scope.row.status), scope.row.userId)">
                             {{ getNextStatusLabel(scope.row.status) }}
                         </el-button>
-                        <el-tag v-else-if="!canBanUser(scope.row.identity)" type="danger">无权限</el-tag>
                         <el-tag v-else type="info">状态不可切换</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作2">
+                <el-table-column label="排序">
                     <template #default="scope">
-                        <el-button v-if="canBanUser(scope.row.identity)" type="primary" plain
+                        <el-button type="primary" plain
                             @click.stop="updateTop(scope.row.id, scope.row.isTop === 1 ? 0 : 1, scope.row.userId)">
                             {{ scope.row.isTop === 1 ? "取消置顶" : "设为置顶" }}
                         </el-button>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作3">
+                <el-table-column label="详情">
                     <template #default="scope">
                         <el-button type="primary" plain @click.stop="showDetails(scope.row.id)">
                             查看详情
@@ -148,7 +145,6 @@ import '@/styles/modal.scss'
 
 // 获取用户身份参数
 const route = useRoute();
-let identity = ref(Number(route.query.identity)); // 确保 identity 是数字
 
 // 列表数据
 interface Confession {
@@ -227,17 +223,6 @@ function clearFilters() {
         createTimeRange: ["", ""]
     };
     fetchData();
-}
-
-// 用户封禁权限检测
-function canBanUser(userIdentity: number): boolean {
-    if (identity.value === 99) {
-        return [0, 1, 2].includes(userIdentity);
-    } else if (identity.value === 1) {
-        return [0, 2].includes(userIdentity);
-    } else {
-        return false;
-    }
 }
 
 // 修改表白墙状态
