@@ -11,11 +11,11 @@
           <el-button @click="showFilterDialog = true" class="filter-button">过滤</el-button>
           <AutoAuditList :status="filterForm.status" :pageData="pageData" :total="total"></AutoAuditList>
         </el-tab-pane>
-        <el-tab-pane label="已打回" :name="STATUS_PENDING_MODIFICATION">
+        <el-tab-pane label="审核通过" :name="STATUS_AUDIT_PASSED">
           <el-button @click="showFilterDialog = true" class="filter-button">过滤</el-button>
           <AutoAuditList :status="filterForm.status" :pageData="pageData" :total="total"></AutoAuditList>
         </el-tab-pane>
-        <el-tab-pane label="审核通过" :name="STATUS_AUDIT_PASSED">
+        <el-tab-pane label="已打回" :name="STATUS_PENDING_MODIFICATION">
           <el-button @click="showFilterDialog = true" class="filter-button">过滤</el-button>
           <AutoAuditList :status="filterForm.status" :pageData="pageData" :total="total"></AutoAuditList>
         </el-tab-pane>
@@ -150,8 +150,6 @@ const fetchData = debounce(() => {
     fullscreen: true,
     text: '加载中...',
   });
-
-  console.log('Fetching data with filters:', filterForm.value); // 添加调试信息
 
   // 调用 API 获取数据
   auditPage(filterForm.value, 'admin').then((res) => {
