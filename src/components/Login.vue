@@ -94,7 +94,11 @@ function toLogin(username: string, password: string) {
 							webSocketStore.loadMessages(userData.id);
 							router.push('/userIndex');
 						}
+					} else {
+						ElMessage.warning(response.data.msg)
 					}
+				}).catch(() => {
+					ElMessage.error("服务器错误")
 				})
 		} else {
 			ElMessage.error('请填写必填项');
