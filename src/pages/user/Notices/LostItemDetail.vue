@@ -1,16 +1,15 @@
 <template>
     <el-page-header @back="goBack">
         <template #content>
-            <span class="text-large font-600 mr-3">来自 {{ lostItemDetail?.userName }} 的 {{ lostItemDetail?.type
-                === 1 ? '寻物' : '寻主' }}贴 </span>
+            <span class="text-large font-600 mr-3">来自 {{ lostItemDetail?.userName }} 的 {{ lostItemDetail?.typeName }}贴
+            </span>
         </template>
     </el-page-header>
     <div class="card-detail-container">
         <div v-if="lostItemDetail" class="card-detail">
             <h1>{{ lostItemDetail.itemName }}</h1>
             <div class="user-info">
-                <img v-if="lostItemDetail.head" :src="lostItemDetail.head" alt="User Head"
-                    class="user-head">
+                <img v-if="lostItemDetail.head" :src="lostItemDetail.head" alt="User Head" class="user-head">
                 <p><strong>用户名:</strong> {{ lostItemDetail.userName }}</p>
             </div>
             <p><strong>失物名称:</strong> {{ lostItemDetail.itemName }}</p>
@@ -44,19 +43,20 @@ import '@/styles/cardDetail.scss'
 
 // 详情接口类型
 export interface LostItemDetail {
-    id:string// 寻物贴id
-    userId:string // 发布者id
-    userName:string // 发布者用户名
-    head:string // 发布者头像
-    itemName:string // 失物名称
-    type:number // 类型 1寻物 2寻主
-    itemDesc:string // 失物描述
-    location:string // 丢失地点
-    phone:string // 联系方式（电话）
-    createTime:string // 发布时间
-    image1:string // 图片1
-    image2:string // 图片2
-    image3:string // 图片3
+    id: string// 寻物贴id
+    userId: string // 发布者id
+    userName: string // 发布者用户名
+    head: string // 发布者头像
+    itemName: string // 失物名称
+    type: number // 类型 1寻物 2寻主
+    typeName: string;
+    itemDesc: string // 失物描述
+    location: string // 丢失地点
+    phone: string // 联系方式（电话）
+    createTime: string // 发布时间
+    image1: string // 图片1
+    image2: string // 图片2
+    image3: string // 图片3
 }
 
 const route = useRoute();

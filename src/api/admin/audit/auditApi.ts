@@ -18,6 +18,7 @@ export interface PageData {
     id: string; // 流水号
     postId: string; // 贴id
     postType: number; // 贴大类型
+    postTypeName: string;//大类型枚举
     postSubType: number; // 贴小类型
     userId: string; // 用户id
     userName: string; // 用户名称

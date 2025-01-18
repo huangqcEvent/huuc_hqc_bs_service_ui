@@ -55,7 +55,7 @@
                 <el-table-column prop="oldIdentity" label="转化前身份">
                     <template #default="scope">
                         <el-tag :type="getType(scope.row.oldIdentity)">
-                            {{ getDisplayName(scope.row.oldIdentity) }}
+                            {{ scope.row.oldIdentityName }}
                         </el-tag>
                     </template>
                 </el-table-column>
@@ -63,7 +63,7 @@
                 <el-table-column prop="newIdentity" label="转化后身份">
                     <template #default="scope">
                         <el-tag :type="getType(scope.row.newIdentity)">
-                            {{ getDisplayName(scope.row.newIdentity) }}
+                            {{ scope.row.newIdentityName }}
                         </el-tag>
                     </template>
                 </el-table-column>
@@ -87,7 +87,9 @@ interface identityLog {
     id: string;
     userName: string;
     oldIdentity: number;
+    oldIdentityName: string;
     newIdentity: number;
+    newIdentityName: string;
     updateTime: string;
     updateReason: number;
     updateAdminName: string;
@@ -169,19 +171,6 @@ function getType(row: number) {
         return 'success';
     } else {
         return 'danger'
-    }
-}
-
-// 获取显示名称
-function getDisplayName(row: number) {
-    if (row === 2) {
-        return '社团账号';
-    } else if (row === 1) {
-        return '管理员';
-    } else if (row === 0) {
-        return '普通用户';
-    } else {
-        return '超级管理员'
     }
 }
 </script>

@@ -26,7 +26,7 @@
       <el-col :span="8" v-for="item in lostItems" :key="item.id">
         <el-card class="box-card" @click="goToDetail(item.id)">
           <div class="card-header">
-            <span class="type">{{ item.type === 1 ? '寻物' : '寻主' }}</span>
+            <span class="type">{{ item.typeName }}</span>
           </div>
           <div class="card-body">
             <el-image :src="item.image1" fit="cover" class="item-image" />

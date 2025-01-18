@@ -44,7 +44,7 @@
 
         <el-table-column prop="downEnd" label="是否已解封">
           <template #default="scope">
-            <el-tag :type="scope.row.downEnd ? 'success' : 'danger'">{{ scope.row.downEnd ? '已解封' : '封禁中' }}</el-tag>
+            <el-tag :type="scope.row.downEnd ? 'success' : 'danger'">{{ scope.row.downEndName }}</el-tag>
           </template>
         </el-table-column>
 
@@ -74,6 +74,7 @@ interface downLog {
   downTime: string;
   downAdminName: string;
   downEnd: number;
+  downEndName: string;
   downEndTime: string;
   downEndAdminName: string
 }

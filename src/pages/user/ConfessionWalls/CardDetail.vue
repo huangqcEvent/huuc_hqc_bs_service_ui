@@ -1,8 +1,8 @@
 <template>
     <el-page-header @back="goBack">
         <template #content>
-            <span class="text-large font-600 mr-3">来自 {{ confessionDetail?.userName }} 的 {{ confessionDetail?.typeStr
-                === '找对象' ? '找对象' : '表白' }}贴 </span>
+            <span class="text-large font-600 mr-3">来自 {{ confessionDetail?.userName }} 的 {{
+                confessionDetail?.typeName }}贴 </span>
         </template>
     </el-page-header>
     <div class="card-detail-container">
@@ -17,7 +17,7 @@
             <p><strong>创建时间:</strong> {{ confessionDetail.createTime }}</p>
             <p><strong>概要:</strong> {{ confessionDetail.summary }}</p>
             <p><strong>描述:</strong> {{ confessionDetail.toUserInfo }}</p>
-            <p><strong>类型:</strong> {{ confessionDetail.typeStr }}</p>
+            <p><strong>类型:</strong> {{ confessionDetail.typeName }}</p>
             <div class="image-container">
                 <Image v-if="confessionDetail.image1" :src="confessionDetail.image1" :width="200" class="image" />
                 <Image v-if="confessionDetail.image2" :src="confessionDetail.image2" :width="200" class="image" />
@@ -52,7 +52,8 @@ export interface ConfessionDetail {
     summary: string;
     title: string;
     toUserInfo: string;
-    typeStr: string;
+    type: number;
+    typeName: string;
     userHead: string;
     userId: string;
     userName: string;

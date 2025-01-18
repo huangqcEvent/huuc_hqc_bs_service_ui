@@ -54,14 +54,14 @@
                 <el-table-column v-if="filterForm.type != 1 && filterForm.type != 2" prop="type" label="类型">
                     <template #default="scope">
                         <el-tag :type="scope.row.type === 1 ? 'success' : 'danger'">
-                            {{ scope.row.type === 1 ? '纳新' : '公告' }}
+                            {{ scope.row.typeName }}
                         </el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="status" label="状态">
                     <template #default="scope">
                         <el-tag :type="getStatusType(scope.row.status)">
-                            {{ getStatusLabel(scope.row.status) }}
+                            {{ scope.row.statusName }}
                         </el-tag>
                     </template>
                 </el-table-column>
@@ -81,12 +81,12 @@
                 <el-table-column v-if="filterForm.type == 1" prop="timeType" label="期限">
                     <template #default="scope">
                         <el-tag type="success" v-if="scope.row.timeType == 1">
-                            长期
+                            {{ scope.row.timeTypeName }}
                         </el-tag>
                         <el-tooltip class="box-item" effect="dark"
                             :content="`${scope.row.startTime} 至 ${scope.row.endTime}`" placement="right-start">
                             <el-tag type="error" v-if="scope.row.timeType == 2">
-                                固定期限
+                                {{ scope.row.timeTypeName }}
                             </el-tag>
                         </el-tooltip>
                     </template>
@@ -203,26 +203,6 @@ function getStatusType(status: number): string {
             return 'error';
         default:
             return 'default';
-    }
-}
-
-// 获取状态标签文本
-function getStatusLabel(status: number): string {
-    switch (status) {
-        case 1:
-            return '发布';
-        case 2:
-            return '私密';
-        case 3:
-            return '删除';
-        case 4:
-            return '待审核';
-        case 5:
-            return '已完结';
-        case 6:
-            return '拒审待修改'
-        default:
-            return '未知';
     }
 }
 

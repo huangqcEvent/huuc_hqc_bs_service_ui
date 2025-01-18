@@ -48,24 +48,21 @@
 
                 <el-table-column prop="type" label="类型">
                     <template #default="scope">
-                        <el-tag :type="scope.row.type === 1 ? 'success' : 'danger'">{{ scope.row.type === 1 ? '寻物' :
-                            '寻主'
-                            }}</el-tag>
+                        <el-tag :type="scope.row.type === 1 ? 'success' : 'danger'">{{ scope.row.typeName}}</el-tag>
                     </template>
                 </el-table-column>
 
                 <el-table-column prop="status" label="状态">
                     <template #default="scope">
                         <el-tag :type="getStatusType(scope.row.status)">
-                            {{ getStatusLabel(scope.row.status) }}
+                            {{ scope.row.statusName }}
                         </el-tag>
                     </template>
                 </el-table-column>
 
                 <el-table-column prop="isTop" label="是否置顶">
                     <template #default="scope">
-                        <el-tag :type="scope.row.isTop ? 'success' : 'danger'">{{ scope.row.isTop === 1 ? '是' : '否'
-                            }}</el-tag>
+                        <el-tag :type="scope.row.isTop ? 'success' : 'danger'">{{ scope.row.isTopName}}</el-tag>
                     </template>
                 </el-table-column>
 
@@ -109,7 +106,7 @@
                         <p><strong>丢失地点:</strong> {{ lostItemDetail.location }}</p>
                         <p><strong>描述:</strong> {{ lostItemDetail.itemDesc }}</p>
                         <p><strong>发布时间:</strong> {{ lostItemDetail.createTime }}</p>
-                        <p><strong>类型:</strong> {{ lostItemDetail.type == 1 ? '寻物' : '寻主' }}</p>
+                        <p><strong>类型:</strong> {{ lostItemDetail.typeName }}</p>
                         <p><strong>联系方式:</strong> {{ lostItemDetail.phone }}</p>
                         <div class="image-container">
                             <img v-if="lostItemDetail.image1" :src="lostItemDetail.image1" alt="Image 1">
@@ -132,16 +129,12 @@
 <script setup lang="ts" name="Notices">
 import Page from '@/common/Page.vue';
 import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
 import type { LostItem, Params } from '@/api/user/LostItemApi';
 import { lostItemPage, updateStatus } from '@/api/user/LostItemApi'
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { getDetailById, updateTopService } from '@/api/user/LostItemApi'
 import type { LostItemDetail } from '@/pages/user/Notices/LostItemDetail.vue';
 import '@/styles/modal.scss'
-
-// 获取用户身份参数
-const route = useRoute();
 
 // 接受数据
 let noticeList = ref<LostItem[]>([]);
@@ -275,26 +268,6 @@ function getStatusType(status: number): string {
             return 'error';
         default:
             return 'default';
-    }
-}
-
-// 获取状态标签文本
-function getStatusLabel(status: number): string {
-    switch (status) {
-        case 1:
-            return '发布';
-        case 2:
-            return '私密';
-        case 3:
-            return '删除';
-        case 4:
-            return '待审核';
-        case 5:
-            return '已完结';
-        case 6:
-            return '拒审待修改'
-        default:
-            return '未知';
     }
 }
 </script>

@@ -6,7 +6,7 @@
                 <el-table-column prop="postType" label="贴大类型">
                     <template #default="scope">
                         <el-tag :type="getStatusType(scope.row.postType)">
-                            {{ getStatusLabel(scope.row.postType) }}
+                            {{ scope.row.postTypeName }}
                         </el-tag>
                     </template>
                 </el-table-column>
@@ -52,21 +52,6 @@ function getStatusType(status: number): string {
             return 'default'
     }
 }
-
-// 获取状态标签文本
-function getStatusLabel(status: number): string {
-    switch (status) {
-        case 1:
-            return '表白墙';
-        case 2:
-            return '寻物';
-        case 3:
-            return '社团';
-        default:
-            return '未知';
-    }
-}
-
 
 // 获取状态标签类型
 function getStatusSubType(status: number): string {

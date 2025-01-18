@@ -1,5 +1,4 @@
 import request from '@/utils/axiosUtils'
-import type { NumberLiteralType } from 'typescript';
 
 export interface Club {
     title: string;//标题
@@ -34,10 +33,13 @@ export interface ClubList {
     clubName: string;
     title: string;
     type: number;
+    typeName: string;
     status: number;
+    statusName: string;
     number: number;
     already: number;
     timeType: number;
+    timeTypeName: string;
     startTime: string;
     endTime: string;
     createTime: string;

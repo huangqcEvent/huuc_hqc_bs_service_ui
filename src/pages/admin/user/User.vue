@@ -50,13 +50,13 @@
         <el-table-column prop="userName" label="用户名"></el-table-column>
         <el-table-column prop="state" label="状态">
           <template #default="scope">
-            <el-tag :type="scope.row.state ? 'success' : 'danger'">{{ scope.row.state ? '正常' : '停用' }}</el-tag>
+            <el-tag :type="scope.row.state ? 'success' : 'danger'">{{ scope.row.stateName }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="identity" label="身份">
           <template #default="scope">
             <el-tag :type="getType(scope.row.identity)">
-              {{ getDisplayName(scope.row.identity) }}
+              {{ scope.row.identityName }}
             </el-tag>
           </template>
         </el-table-column>
@@ -102,8 +102,10 @@ let identity = ref(Number(route.query.identity)); // 确保 identity 是数字
 interface User {
   id: string;
   userName: string;
-  state: boolean;
+  state: number;
+  stateName: string;
   identity: number;
+  identityName: string;
   createTime: string;
   downTime: string;
   downReason: string;

@@ -46,30 +46,28 @@
 
                 <el-table-column prop="type" label="类型">
                     <template #default="scope">
-                        <el-tag :type="scope.row.type ? 'success' : 'danger'">{{ scope.row.type === 1 ? '找对象贴' : '表白帖'
-                            }}</el-tag>
+                        <el-tag :type="scope.row.type ? 'success' : 'danger'">{{ scope.row.typeName }}</el-tag>
                     </template>
                 </el-table-column>
 
                 <el-table-column prop="isAnonymous" label="是否匿名">
                     <template #default="scope">
-                        <el-tag :type="scope.row.isAnonymous ? 'success' : 'danger'">{{ scope.row.isAnonymous === 1 ?
-                            '是' : '否' }}</el-tag>
+                        <el-tag :type="scope.row.isAnonymous ? 'success' : 'danger'">{{
+                            scope.row.isAnonymousName }}</el-tag>
                     </template>
                 </el-table-column>
 
                 <el-table-column prop="status" label="状态">
                     <template #default="scope">
                         <el-tag :type="getStatusType(scope.row.status)">
-                            {{ getStatusLabel(scope.row.status) }}
+                            {{ scope.row.statusName }}
                         </el-tag>
                     </template>
                 </el-table-column>
 
                 <el-table-column prop="isTop" label="是否置顶">
                     <template #default="scope">
-                        <el-tag :type="scope.row.isTop ? 'success' : 'danger'">{{ scope.row.isTop === 1 ? '是' : '否'
-                            }}</el-tag>
+                        <el-tag :type="scope.row.isTop ? 'success' : 'danger'">{{ scope.row.isTopName }}</el-tag>
                     </template>
                 </el-table-column>
 
@@ -136,15 +134,11 @@
 <script setup lang="ts" name="DownLog">
 import Page from '@/common/Page.vue';
 import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
 import { cardQuery, updateConfessionStatus, updateTopService } from '@/api/user/ConfessionWallApi';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import type { ConfessionDetail } from '@/pages/user/ConfessionWalls/CardDetail.vue';
 import { getDetailById } from '@/api/user/ConfessionWallApi';
 import '@/styles/modal.scss'
-
-// 获取用户身份参数
-const route = useRoute();
 
 // 列表数据
 interface Confession {
@@ -152,10 +146,14 @@ interface Confession {
     userId: string;
     realName: string;
     type: number;
+    typeName: string;
     isAnonymous: number;
+    isAnonymousName: string;
     isTop: number;
+    isTopName: string;
     createTime: string;
     status: number;
+    statusName: string;
     identity: number; // 添加 identity 字段
 }
 
@@ -302,26 +300,6 @@ function getStatusType(status: number): string {
             return 'error';
         default:
             return 'default';
-    }
-}
-
-// 获取状态标签文本
-function getStatusLabel(status: number): string {
-    switch (status) {
-        case 1:
-            return '发布';
-        case 2:
-            return '私密';
-        case 3:
-            return '删除';
-        case 4:
-            return '待审核';
-        case 5:
-            return '已完结';
-        case 6:
-            return '拒审待修改'
-        default:
-            return '未知';
     }
 }
 

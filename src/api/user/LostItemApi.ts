@@ -5,6 +5,7 @@ export interface LostItem {
     userName?: string;
     itemName: string;
     type: number | null;
+    typeName:string;
     itemDesc: string;
     location: string;
     phone: string;

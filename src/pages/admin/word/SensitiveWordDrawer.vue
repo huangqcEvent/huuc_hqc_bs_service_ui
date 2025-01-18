@@ -59,7 +59,6 @@
 
 <script setup lang="ts">
 import { ref, watch, reactive } from 'vue';
-import { ElMessage } from 'element-plus';
 import { confirm } from '@/utils/confirmUtils';
 import { deleteWhite, deleteBlack, saveWord } from '@/api/admin/user/userApi';
 
