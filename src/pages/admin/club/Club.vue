@@ -107,6 +107,11 @@
                         <el-tag v-else type="info">状态不可切换</el-tag>
                     </template>
                 </el-table-column>
+                <el-table-column label="详情">
+                    <template #default="scope">
+                        <el-button @click="pushDetail(scope.row.clubId, scope.row.id, 3, null)">查看详情</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
         </div>
         <div class="pagination">
@@ -118,9 +123,12 @@
 <script setup lang="ts" name="Club">
 import Page from '@/common/Page.vue';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import '@/styles/modal.scss'
 import { type ClubPage, type ClubList, pageQuery, updateToStatus, updateSort } from '@/api/user/Club'
 import { ElMessage, ElMessageBox } from 'element-plus';
+
+const router = useRouter();
 
 // 接受数据
 let clubList = ref<ClubList[]>([]);
@@ -238,5 +246,10 @@ function updateToSort(id: string, sort: number) {
     updateSort({ id, sort }, 'admin').then(() => {
         fetchData();
     })
+}
+
+//跳转详情
+function pushDetail(userId: string, postId: string, postType: number, id: string | null) {
+    router.push(`/adminIndex/detail/${userId}/${postId}/${postType}/${id}`)
 }
 </script>

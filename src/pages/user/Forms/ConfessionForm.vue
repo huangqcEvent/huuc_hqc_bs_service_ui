@@ -13,8 +13,8 @@
       <el-form-item label="概要" prop="summary">
         <el-input v-model="form.summary" placeholder="请输入概要" maxlength="20" show-word-limit></el-input>
       </el-form-item>
-      <el-form-item :label="form.type == 1 ? '描述' : '期望'" prop="toUserInfo">
-        <el-input v-model="form.toUserInfo" :placeholder="'请输入对他(她)的' + (form.type == 1 ? '描述' : '期望')" maxlength="25"
+      <el-form-item :label="form.type == 1 ? '期望' : '描述'" prop="toUserInfo">
+        <el-input v-model="form.toUserInfo" :placeholder="'请输入对他(她)的' + (form.type == 1 ? '期望' : '描述')" maxlength="25"
           show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="内容" prop="content">

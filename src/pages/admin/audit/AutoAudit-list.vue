@@ -20,10 +20,17 @@
                 <el-table-column prop="userName" label="用户名称" />
                 <el-table-column prop="title" label="标题" />
                 <el-table-column prop="createTime" label="提交时间" width="180" />
-                <el-table-column v-if="status === '2' || status === '3' "prop="autoAuditTime" label="机器审核时间" width="180" />
+                <el-table-column v-if="status === '2' || status === '3'" prop="autoAuditTime" label="机器审核时间"
+                    width="180" />
                 <el-table-column v-if="status === '3'" prop="auditTime" label="人工审核时间" width="180" />
                 <el-table-column v-if="status === '4' || status === '3'" prop="auditUserName" label="审核人名称" />
                 <el-table-column v-if="status === '4'" prop="reason" label="拒绝原因" />
+                <el-table-column label="详情">
+                    <template #default="scope">
+                        <el-button
+                            @click="pushDetail(scope.row.userId, scope.row.postId, scope.row.postType, scope.row.id)">查看详情</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
         </div>
     </div>
@@ -31,6 +38,9 @@
 
 <script lang="ts" setup name="AutoAuditList">
 import { type PageData } from '@/api/admin/audit/auditApi'
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 // 接收父组件传递的 props
 const props = defineProps<{
@@ -77,5 +87,9 @@ function getStatusSubLabel(bigType: number, summelType: number): string {
         default:
             return '未知';
     }
+}
+
+function pushDetail(userId: string, postId: string, postType: number, id: string) {
+    router.push(`/adminIndex/detail/${userId}/${postId}/${postType}/${id}`)
 }
 </script>

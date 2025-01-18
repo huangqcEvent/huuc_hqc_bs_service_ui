@@ -48,7 +48,7 @@
 
                 <el-table-column prop="type" label="类型">
                     <template #default="scope">
-                        <el-tag :type="scope.row.type === 1 ? 'success' : 'danger'">{{ scope.row.typeName}}</el-tag>
+                        <el-tag :type="scope.row.type === 1 ? 'success' : 'danger'">{{ scope.row.typeName }}</el-tag>
                     </template>
                 </el-table-column>
 
@@ -62,7 +62,7 @@
 
                 <el-table-column prop="isTop" label="是否置顶">
                     <template #default="scope">
-                        <el-tag :type="scope.row.isTop ? 'success' : 'danger'">{{ scope.row.isTopName}}</el-tag>
+                        <el-tag :type="scope.row.isTop ? 'success' : 'danger'">{{ scope.row.isTopName }}</el-tag>
                     </template>
                 </el-table-column>
 
@@ -79,9 +79,7 @@
                 </el-table-column>
                 <el-table-column label="详情">
                     <template #default="scope">
-                        <el-button type="primary" plain @click.stop="showDetails(scope.row.id)">
-                            查看详情
-                        </el-button>
+                        <el-button @click="pushDetail(scope.row.userId, scope.row.id, 2, null)">查看详情</el-button>
                     </template>
                 </el-table-column>
                 <el-table-column label="排序">
@@ -93,54 +91,27 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <!-- 自定义模态框 -->
-            <div v-if="dialogVisible" class="modal-overlay">
-                <div class="modal-content">
-                    <div v-if="lostItemDetail">
-                        <h3>{{ lostItemDetail.itemName }}</h3>
-                        <p><strong>用户名:</strong> {{ lostItemDetail.userName }}</p>
-                        <p><strong>用户头像:</strong> <img :src="lostItemDetail.head" alt="User Head"
-                                style="max-width: 50px;">
-                        </p>
-                        <p><strong>失物名称:</strong> {{ lostItemDetail.itemName }}</p>
-                        <p><strong>丢失地点:</strong> {{ lostItemDetail.location }}</p>
-                        <p><strong>描述:</strong> {{ lostItemDetail.itemDesc }}</p>
-                        <p><strong>发布时间:</strong> {{ lostItemDetail.createTime }}</p>
-                        <p><strong>类型:</strong> {{ lostItemDetail.typeName }}</p>
-                        <p><strong>联系方式:</strong> {{ lostItemDetail.phone }}</p>
-                        <div class="image-container">
-                            <img v-if="lostItemDetail.image1" :src="lostItemDetail.image1" alt="Image 1">
-                            <img v-if="lostItemDetail.image2" :src="lostItemDetail.image2" alt="Image 2">
-                            <img v-if="lostItemDetail.image3" :src="lostItemDetail.image3" alt="Image 3">
-                        </div>
-                    </div>
-                    <span class="modal-footer">
-                        <el-button @click="dialogVisible = false">关闭</el-button>
-                    </span>
-                </div>
+            <div class="pagination">
+                <Page :total="total" :pageChange="pageChange" />
             </div>
-        </div>
-        <div class="pagination">
-            <Page :total="total" :pageChange="pageChange" />
         </div>
     </div>
 </template>
 
 <script setup lang="ts" name="Notices">
 import Page from '@/common/Page.vue';
+import { useRouter } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import type { LostItem, Params } from '@/api/user/LostItemApi';
 import { lostItemPage, updateStatus } from '@/api/user/LostItemApi'
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { getDetailById, updateTopService } from '@/api/user/LostItemApi'
-import type { LostItemDetail } from '@/pages/user/Notices/LostItemDetail.vue';
+import { updateTopService } from '@/api/user/LostItemApi'
 import '@/styles/modal.scss'
 
+const router = useRouter();
 // 接受数据
 let noticeList = ref<LostItem[]>([]);
 let total = ref(0);
-let dialogVisible = ref(false);
-let lostItemDetail = ref<LostItemDetail | null>(null);
 
 // 过滤条件表单
 const filterForm = ref<Params>({
@@ -185,13 +156,6 @@ function clearFilters() {
         dateRange: ['', '']
     };
     fetchData();
-}
-
-function showDetails(id: string) {
-    getDetailById(id, 'admin').then((response) => {
-        lostItemDetail.value = response.data.data;
-        dialogVisible.value = true;
-    });
 }
 
 const applyFilters = () => {
@@ -269,5 +233,10 @@ function getStatusType(status: number): string {
         default:
             return 'default';
     }
+}
+
+//跳转详情
+function pushDetail(userId: string, postId: string, postType: number, id: string | null) {
+    router.push(`/adminIndex/detail/${userId}/${postId}/${postType}/${id}`)
 }
 </script>

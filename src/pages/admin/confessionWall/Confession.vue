@@ -92,54 +92,26 @@
                 </el-table-column>
                 <el-table-column label="详情">
                     <template #default="scope">
-                        <el-button type="primary" plain @click.stop="showDetails(scope.row.id)">
-                            查看详情
-                        </el-button>
+                        <el-button @click="pushDetail(scope.row.userId, scope.row.id, 1, null)">查看详情</el-button>
                     </template>
                 </el-table-column>
             </el-table>
-            <!-- 自定义模态框 -->
-            <div v-if="dialogVisible" class="modal-overlay">
-                <div class="modal-content">
-                    <div v-if="confessionDetail">
-                        <h3>{{ confessionDetail.title }}</h3>
-                        <p><strong>用户名:</strong> {{ confessionDetail.userName }}</p>
-                        <p><strong>用户头像:</strong> <img :src="confessionDetail.userHead" alt="User Head"
-                                style="max-width: 50px;">
-                        </p>
-                        <p><strong>内容:</strong> {{ confessionDetail.content }}</p>
-                        <p><strong>摘要:</strong> {{ confessionDetail.summary }}</p>
-                        <p><strong>创建时间:</strong> {{ confessionDetail.createTime }}</p>
-                        <p><strong>类型:</strong> {{ confessionDetail.typeStr }}</p>
-                        <p><strong>接收者信息:</strong> {{ confessionDetail.toUserInfo }}</p>
-                        <div class="image-container">
-                            <img v-if="confessionDetail.image1" :src="confessionDetail.image1" alt="Image 1">
-                            <img v-if="confessionDetail.image2" :src="confessionDetail.image2" alt="Image 2">
-                            <img v-if="confessionDetail.image3" :src="confessionDetail.image3" alt="Image 3">
-                        </div>
-                    </div>
-                    <span class="modal-footer">
-                        <el-button @click="dialogVisible = false">关闭</el-button>
-                    </span>
-                </div>
-            </div>
         </div>
-
-        <div class="pagination">
-            <Page :total="total" :pageChange="pageChange" />
-        </div>
+    </div>
+    <div class="pagination">
+        <Page :total="total" :pageChange="pageChange" />
     </div>
 </template>
 
 <script setup lang="ts" name="DownLog">
 import Page from '@/common/Page.vue';
+import { useRouter } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import { cardQuery, updateConfessionStatus, updateTopService } from '@/api/user/ConfessionWallApi';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import type { ConfessionDetail } from '@/pages/user/ConfessionWalls/CardDetail.vue';
-import { getDetailById } from '@/api/user/ConfessionWallApi';
 import '@/styles/modal.scss'
 
+const router = useRouter();
 // 列表数据
 interface Confession {
     id: string;
@@ -172,10 +144,6 @@ const filterForm = ref({
     type: '',
     createTimeRange: ['', ''] as [string, string]
 });
-
-// 详情模态框相关
-let dialogVisible = ref(false);
-let confessionDetail = ref<ConfessionDetail | null>(null);
 
 // 初始加载数据
 onMounted(() => {
@@ -275,14 +243,6 @@ function updateTop(id: string, newTop: number, userId: string) {
         })
 }
 
-// 显示详细信息
-function showDetails(id: string) {
-    getDetailById(id, 'admin').then((response) => {
-        confessionDetail.value = response.data.data;
-        dialogVisible.value = true;
-    });
-}
-
 // 获取状态标签类型
 function getStatusType(status: number): string {
     switch (status) {
@@ -325,5 +285,10 @@ function getNextStatusLabel(currentStatus: number): string {
         default:
             return '状态不可切换';
     }
+}
+
+//跳转详情
+function pushDetail(userId: string, postId: string, postType: number, id: string | null) {
+    router.push(`/adminIndex/detail/${userId}/${postId}/${postType}/${id}`)
 }
 </script>

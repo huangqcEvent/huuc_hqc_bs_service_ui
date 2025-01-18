@@ -20,6 +20,7 @@ import LostItemDetail from "@/pages/user/Notices/LostItemDetail.vue";
 import { ElMessageBox } from 'element-plus'
 import type { Action } from 'element-plus'
 import PostAudit from "@/pages/admin/audit/PostAudit.vue";
+import Detail from "@/pages/admin/detail/Detail.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -104,6 +105,10 @@ const router = createRouter({
                 {
                     path: 'club',
                     component: Club1
+                },
+                {
+                    path: 'detail/:userId/:postId/:postType/:id?',
+                    component: Detail
                 }
             ]
         },

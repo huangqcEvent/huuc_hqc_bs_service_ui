@@ -93,7 +93,7 @@
       </el-aside>
 
       <!-- 主要内容区域 -->
-      <el-main class="content">
+      <el-main >
         <router-view />
       </el-main>
     </el-container>
