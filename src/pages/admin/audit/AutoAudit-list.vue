@@ -1,38 +1,35 @@
 <template>
     <div class="container">
-        <div class="content">
-            <el-table :data="pageData">
-                <el-table-column prop="id" label="流水号" width="180" />
-                <el-table-column prop="postType" label="贴大类型">
-                    <template #default="scope">
-                        <el-tag :type="getStatusType(scope.row.postType)">
-                            {{ scope.row.postTypeName }}
-                        </el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="postSubType" label="贴小类型">
-                    <template #default="scope">
-                        <el-tag :type="getStatusSubType(scope.row.postSubType)">
-                            {{ getStatusSubLabel(scope.row.postType, scope.row.postSubType) }}
-                        </el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="userName" label="用户名称" />
-                <el-table-column prop="title" label="标题" />
-                <el-table-column prop="createTime" label="提交时间" width="180" />
-                <el-table-column v-if="status === '2' || status === '3'" prop="autoAuditTime" label="机器审核时间"
-                    width="180" />
-                <el-table-column v-if="status === '3'" prop="auditTime" label="人工审核时间" width="180" />
-                <el-table-column v-if="status === '4' || status === '3'" prop="auditUserName" label="审核人名称" />
-                <el-table-column v-if="status === '4'" prop="reason" label="拒绝原因" />
-                <el-table-column label="详情">
-                    <template #default="scope">
-                        <el-button
-                            @click="pushDetail(scope.row.userId, scope.row.postId, scope.row.postType, scope.row.id, scope.row.status)">查看详情</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </div>
+        <el-table :data="pageData">
+            <el-table-column prop="id" label="流水号" width="180" />
+            <el-table-column prop="postType" label="贴大类型">
+                <template #default="scope">
+                    <el-tag :type="getStatusType(scope.row.postType)">
+                        {{ scope.row.postTypeName }}
+                    </el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column prop="postSubType" label="贴小类型">
+                <template #default="scope">
+                    <el-tag :type="getStatusSubType(scope.row.postSubType)">
+                        {{ getStatusSubLabel(scope.row.postType, scope.row.postSubType) }}
+                    </el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column prop="userName" label="用户名称" />
+            <el-table-column prop="title" label="标题" />
+            <el-table-column prop="createTime" label="提交时间" width="180" />
+            <el-table-column v-if="status === '2' || status === '3'" prop="autoAuditTime" label="机器审核时间" width="180" />
+            <el-table-column v-if="status === '3'" prop="auditTime" label="人工审核时间" width="180" />
+            <el-table-column v-if="status === '4' || status === '3'" prop="auditUserName" label="审核人名称" />
+            <el-table-column v-if="status === '4'" prop="reason" label="拒绝原因" />
+            <el-table-column label="详情">
+                <template #default="scope">
+                    <el-button
+                        @click="pushDetail(scope.row.userId, scope.row.postId, scope.row.postType, scope.row.id, scope.row.status)">查看详情</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
     </div>
 </template>
 

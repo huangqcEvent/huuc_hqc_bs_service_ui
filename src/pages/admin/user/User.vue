@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="content">
     <!-- 过滤条件表单 -->
     <div class="filter-form">
       <el-form :model="filterForm" inline>
@@ -40,7 +40,7 @@
     </div>
 
     <!-- 用户列表 -->
-    <div class="content">
+    <div class="container">
       <el-table :data="userList">
         <el-table-column prop="head" label="头像">
           <template #default="scope">
@@ -324,14 +324,4 @@ function canBanUser(userIdentity: number): boolean {
 }
 </script>
 <style scoped lang="scss">
-.content {
-  flex: 1;
-  margin-top: 0px;
-  /* 减少表格与过滤表单之间的间距 */
-  margin-bottom: 20px;
-  /* 减少表格与分页条之间的间距 */
-  overflow-y: auto;
-  height: calc(100vh - 150px);
-  /* 高度占满页面剩余空间，减去顶部和底部的空间 */
-}
 </style>

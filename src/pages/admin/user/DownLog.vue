@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="content">
     <!-- 过滤条件表单 -->
     <div class="filter-form">
       <el-form :model="filterForm" inline>
@@ -28,7 +28,7 @@
       </el-form>
     </div>
     <!-- 用户列表 -->
-    <div class="content">
+    <div class="container">
       <el-table :data="downLogList">
         <el-table-column prop="userName" label="用户名"></el-table-column>
 
