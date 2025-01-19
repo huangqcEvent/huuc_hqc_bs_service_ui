@@ -107,7 +107,7 @@ const router = createRouter({
                     component: Club1
                 },
                 {
-                    path: 'detail/:userId/:postId/:postType/:id?',
+                    path: 'detail/:userId/:postId/:postType/:id?/:status',
                     component: Detail
                 }
             ]

@@ -37,3 +37,9 @@ export function auditPage(params: AuditPage, userType: string) {
         userType: userType
     })
 }
+
+export function peopleAudit(params:any){
+    return request.post('/admin/audit',params,{
+        userType:'admin'
+    })
+}

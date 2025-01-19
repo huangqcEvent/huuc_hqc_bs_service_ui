@@ -28,7 +28,7 @@
                 <el-table-column label="详情">
                     <template #default="scope">
                         <el-button
-                            @click="pushDetail(scope.row.userId, scope.row.postId, scope.row.postType, scope.row.id)">查看详情</el-button>
+                            @click="pushDetail(scope.row.userId, scope.row.postId, scope.row.postType, scope.row.id, scope.row.status)">查看详情</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -89,7 +89,7 @@ function getStatusSubLabel(bigType: number, summelType: number): string {
     }
 }
 
-function pushDetail(userId: string, postId: string, postType: number, id: string) {
-    router.push(`/adminIndex/detail/${userId}/${postId}/${postType}/${id}`)
+function pushDetail(userId: string, postId: string, postType: number, id: string, status: number) {
+    router.push(`/adminIndex/detail/${userId}/${postId}/${postType}/${id}/${status}`)
 }
 </script>

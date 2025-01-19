@@ -79,7 +79,7 @@
                 </el-table-column>
                 <el-table-column label="详情">
                     <template #default="scope">
-                        <el-button @click="pushDetail(scope.row.userId, scope.row.id, 2, null)">查看详情</el-button>
+                        <el-button @click="pushDetail(scope.row.userId, scope.row.id, 2, null,scope.row.status)">查看详情</el-button>
                     </template>
                 </el-table-column>
                 <el-table-column label="排序">
@@ -236,7 +236,7 @@ function getStatusType(status: number): string {
 }
 
 //跳转详情
-function pushDetail(userId: string, postId: string, postType: number, id: string | null) {
-    router.push(`/adminIndex/detail/${userId}/${postId}/${postType}/${id}`)
+function pushDetail(userId: string, postId: string, postType: number, id: string | null,status:number) {
+    router.push(`/adminIndex/detail/${userId}/${postId}/${postType}/${id}/${status}`)
 }
 </script>

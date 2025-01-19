@@ -12,7 +12,7 @@
             <LostItem :lostItemInfoData="detailData?.lostItemInfo" v-if="detailData?.lostItemInfo" />
             <ConfessionInfo :confessionInfoData="detailData?.confessionInfo" v-if="detailData?.confessionInfo" />
             <AuditInfo :auditInfoData="detailData?.auditInfo" v-if="detailData?.auditInfo" />
-            <AuditStart :id="id" v-if="id != 'null'" />
+            <AuditStart :id="id" v-if="id != 'null' && status == 2" />
         </div>
     </div>
 </template>
@@ -34,6 +34,7 @@ const router = useRouter();
 const userId = route.params.userId as string;
 const postId = route.params.postId as string;
 const postType = parseInt(route.params.postType as string);
+const status = parseInt(route.params.status as string);
 
 // 流水号
 const id = route.params.id as string;
@@ -62,11 +63,14 @@ onMounted(() => {
 
 <style scoped>
 .scroll-container {
-    height: calc(100vh - 60px); /* 减去面包屑的高度 */
+    height: calc(100vh - 60px);
+    /* 减去面包屑的高度 */
     overflow-y: auto;
     position: relative;
-    padding: 16px; /* 添加内边距 */
-    box-sizing: border-box; /* 确保内边距和边框包含在高度内 */
+    padding: 16px;
+    /* 添加内边距 */
+    box-sizing: border-box;
+    /* 确保内边距和边框包含在高度内 */
 }
 
 .bold-text {

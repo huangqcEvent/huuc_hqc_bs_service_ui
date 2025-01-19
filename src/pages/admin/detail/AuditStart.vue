@@ -26,8 +26,10 @@
 
 <script setup lang="ts" name="AuditStart">
 import { ref } from 'vue';
-import { defineProps } from 'vue';
+import { peopleAudit } from '@/api/admin/audit/auditApi'
+import { useRouter } from 'vue-router'
 
+const router = useRouter();
 const props = defineProps<{
     id: string;
 }>();
@@ -39,7 +41,13 @@ const from = ref({
 });
 
 function audit() {
-    console.log(from.value)
+    peopleAudit(from.value).then(
+        goBack
+    )
+}
+
+function goBack() {
+    router.back();
 }
 </script>
 
