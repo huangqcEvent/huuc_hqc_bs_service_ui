@@ -93,11 +93,6 @@ const userInfo = reactive({
 });
 const isLoggedIn = ref(false);
 
-// 监听消息变化，更新消息总数
-watch(messages, (newMessages) => {
-  msgTotal.value = newMessages.length;
-});
-
 // 登录逻辑
 const login = () => {
   if (localStorage.getItem('userInfo') == null) {
@@ -147,8 +142,6 @@ onMounted(() => {
   }
 
   webSocketStore.loadMessages(userInfo.id)
-  // 初始化消息数量
-  msgTotal.value = messages.value.length;
 });
 </script>
 

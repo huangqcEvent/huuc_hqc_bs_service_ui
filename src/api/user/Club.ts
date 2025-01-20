@@ -25,6 +25,7 @@ export interface ClubPage {
     timeType: number | null;
     createTimeStart: string;
     createTimeEnd: string;
+    clubName:string;
 }
 
 export interface ClubList {

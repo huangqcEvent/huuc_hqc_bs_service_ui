@@ -14,6 +14,10 @@
                     <el-input v-model="filterForm.title" placeholder="请输入标题"></el-input>
                 </el-form-item>
 
+                <el-form-item label="社团名称">
+                    <el-input v-model="filterForm.clubName" placeholder="请输入社团名称"></el-input>
+                </el-form-item>
+
                 <el-form-item label="期限" v-if="filterForm.type == 1">
                     <el-select v-model="filterForm.timeType" placeholder="全部">
                         <el-option label="全部" value=""></el-option>
@@ -140,6 +144,7 @@ let dateRange = ref(["", ""])
 const filterForm = ref<ClubPage>({
     pageNumber: 1,
     pageSize: 10,
+    clubName:'',
     title: '',
     type: null,
     status: null,
@@ -178,7 +183,8 @@ function clearFilters() {
         status: null,
         timeType: null,
         createTimeStart: dateRange.value[0],
-        createTimeEnd: dateRange.value[1]
+        createTimeEnd: dateRange.value[1],
+        clubName:''
     };
     fetchData();
 }

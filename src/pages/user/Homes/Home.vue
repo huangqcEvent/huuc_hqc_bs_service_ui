@@ -21,52 +21,63 @@ const images = ref([
 </script>
 
 <style scoped lang="scss">
+.block {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.el-carousel {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 .carousel-image {
-  width: 100%  ;
-  height: 100%  ;
-  object-fit: cover  ;
-  /* 使图片覆盖整个轮播图区域 */
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 确保图片覆盖整个容器 */
 }
 
-#app {
-  margin-top: 20px  ; /* 添加一些间距，确保问答组件不被轮播图遮挡 */
+.el-carousel__button {
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
 }
 
-.custom-prev-button,
-.custom-next-button {
-  position: absolute  ;
-  top: 50%  ;
-  transform: translateY(-50%)  ;
-  background-color: rgba(0, 0, 0, 0.5)  ;
-  color: white  ;
-  border: none  ;
-  padding: 10px 20px  ;
-  cursor: pointer  ;
-  z-index: 10  ;
-  font-size: 16px  ;
+.el-carousel__arrow {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 20px;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
-.custom-prev-button {
-  left: 10px  ;
+.el-carousel__arrow--left {
+  left: 20px;
 }
 
-.custom-next-button {
-  right: 10px  ;
+.el-carousel__arrow--right {
+  right: 20px;
 }
 
-.el-carousel__item h3 {
-  color: #475669  ;
-  opacity: 0.75  ;
-  line-height: 200px  ;
-  margin: 0  ;
-  text-align: center  ;
+.el-carousel__indicators {
+  bottom: 20px;
 }
 
-.el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf  ;
+.el-carousel__indicator {
+  button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
 }
 
-.el-carousel__item:nth-child(2n + 1) {
-  background-color: #d3dce6  ;
+.el-carousel__indicator.is-active button {
+  background-color: #409EFF;
 }
 </style>

@@ -194,7 +194,7 @@ function clearFilters() {
 // 修改表白墙状态
 function updateStatus(id: string, oldStatus: number, newStatus: number, userId: string) {
     ElMessageBox.prompt(
-        `确定要将此表白贴的状态修改为${getNextStatusLabel(newStatus)}吗？`,
+        `确定要将此表白贴的状态修改为${getNextStatusLabel(oldStatus)}吗？`,
         '请输入原因并确定',
         {
             confirmButtonText: '确定',
