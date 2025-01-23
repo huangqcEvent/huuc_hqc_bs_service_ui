@@ -193,21 +193,20 @@ function clearFilters() {
 
 // 修改表白墙状态
 function updateStatus(id: string, oldStatus: number, newStatus: number, userId: string) {
-    ElMessageBox.prompt(
+    ElMessageBox.confirm(
         `确定要将此表白贴的状态修改为${getNextStatusLabel(oldStatus)}吗？`,
-        '请输入原因并确定',
+        '修改状态',
         {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning',
         }
-    ).then((value) => {
+    ).then(() => {
         const params = {
             confessionId: id,
             oldStatus: oldStatus,
             userId: userId,
             newStatus: newStatus,
-            updateReason: value.value
         }
         updateConfessionStatus(params, 'admin').then(() => {
             fetchData();

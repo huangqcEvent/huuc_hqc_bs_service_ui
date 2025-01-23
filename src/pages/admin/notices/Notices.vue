@@ -179,7 +179,7 @@ function updateTop(id: string, newTop: number) {
     }
     ElMessageBox.confirm(
         '确定要' + (newTop == 1 ? '设为置顶吗' : '取消置顶吗'),
-        'Warning',
+        '修改状态',
         {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
