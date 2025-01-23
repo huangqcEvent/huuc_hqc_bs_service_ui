@@ -25,7 +25,7 @@ export interface ClubPage {
     timeType: number | null;
     createTimeStart: string;
     createTimeEnd: string;
-    clubName:string;
+    clubName: string;
 }
 
 export interface ClubList {
@@ -47,6 +47,29 @@ export interface ClubList {
     sort: number;
 }
 
+export interface Detail {
+    id: string;
+    title: string;
+    type: number;
+    clubId: string;
+    clubName: string;
+    clubHead: string;
+    typeName: string;
+    daily: string;
+    welfare: string;
+    claim: string;
+    number: number;
+    already: number;
+    timeType: number;
+    timeTypeName: string;
+    startTime: Date;
+    endTime: Date;
+    createTime: Date;
+    image1: string;
+    image2: string;
+    image3: string;
+}
+
 export function save(params: Club) {
     return request.post('/user/club/save', params);
 }
@@ -63,4 +86,8 @@ export function updateToStatus(params: any, userType?: string) {
 
 export function updateSort(params: any, userType?: string) {
     return request.put("/admin/club/updateSort", params, { userType })
+}
+
+export function getDetailById(id: string, userType?: string) {
+    return request.get(`/user/club/getDetail/${id}`, { userType })
 }

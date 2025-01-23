@@ -16,7 +16,8 @@
             </el-form>
           </div>
           <div class="scroll-container">
-            <el-card v-for="recruitment in clubList1" :key="recruitment.id" class="box-card">
+            <el-card v-for="recruitment in clubList1" :key="recruitment.id" class="box-card"
+              @click="goToDetail(recruitment.id)">
               <div class="card-header">
                 <div class="header-left">
                   <span>{{ recruitment.clubName }}</span>
@@ -70,7 +71,8 @@
             </el-form>
           </div>
           <div class="scroll-container">
-            <el-card v-for="announcement in clubList2" :key="announcement.id" class="box-card">
+            <el-card v-for="announcement in clubList2" :key="announcement.id" class="box-card"
+              @click="goToDetail(announcement.id)">
               <div class="card-header">
                 <div class="header-left">
                   <span>{{ announcement.clubName }}</span>
@@ -99,7 +101,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { type ClubList, type ClubPage, pageQuery } from '@/api/user/Club';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 // 接受数据
 let clubList1 = ref<ClubList[]>([]);
 let total1 = ref(0);
@@ -154,36 +158,8 @@ function fetchData2() {
     });
 }
 
-function clearFilters1() {
-  filterForm1.value = {
-    pageNumber: 1,
-    pageSize: pageSize,
-    clubName: '',
-    title: '',
-    type: 1,
-    status: 1,
-    timeType: null,
-    createTimeStart: '',
-    createTimeEnd: ''
-  };
-  pageNumber1.value = 1;
-  fetchData1();
-}
-
-function clearFilters2() {
-  filterForm2.value = {
-    pageNumber: 1,
-    pageSize: pageSize,
-    clubName: '',
-    title: '',
-    type: 2,
-    status: 1,
-    timeType: null,
-    createTimeStart: '',
-    createTimeEnd: ''
-  };
-  pageNumber2.value = 1;
-  fetchData2();
+function goToDetail(id: string) {
+  router.push({ name: 'ClubDetail', params: { id } });
 }
 
 onMounted(() => {
@@ -246,8 +222,10 @@ onMounted(() => {
 
 .scroll-container {
   flex: 1;
-  padding-bottom: 60px; /* 为分页条留出空间 */
-  max-height: calc(100vh - 230px); /* 减去顶部横幅和过滤表单的高度 */
+  padding-bottom: 60px;
+  /* 为分页条留出空间 */
+  max-height: calc(100vh - 230px);
+  /* 减去顶部横幅和过滤表单的高度 */
   overflow-y: auto;
 }
 
@@ -346,7 +324,8 @@ onMounted(() => {
 .el-pagination {
   margin-top: 20px;
   text-align: center;
-  margin-left: 240px; /* 移除不必要的左边距 */
+  margin-left: 240px;
+  /* 移除不必要的左边距 */
   position: absolute;
   bottom: 10px;
   width: 100%;

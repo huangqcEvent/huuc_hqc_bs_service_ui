@@ -21,6 +21,7 @@ import { ElMessageBox } from 'element-plus'
 import type { Action } from 'element-plus'
 import PostAudit from "@/pages/admin/audit/PostAudit.vue";
 import Detail from "@/pages/admin/detail/Detail.vue";
+import ClubDetail from "@/pages/user/Clubs/ClubDetail.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -45,6 +46,11 @@ const router = createRouter({
                 {
                     path: 'lostItemDetail/:id',
                     component: LostItemDetail
+                },
+                {
+                    path: 'clubDetail/:id',
+                    name: 'ClubDetail',
+                    component: ClubDetail
                 },
                 {
                     path: 'club',
