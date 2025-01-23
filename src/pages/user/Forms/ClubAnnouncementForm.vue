@@ -28,7 +28,7 @@
         <el-input type="textarea" v-model="form.welfare" placeholder="社团福利" maxlength="1000" show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="计划纳新人数" prop="number">
-        <el-input v-model="form.number" placeholder="请输入计划纳新人数" maxlength="10" show-word-limit></el-input>
+        <el-input v-model="form.number" placeholder="请输入计划纳新人数" maxlength="3" show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="招聘计划" prop="timeType">
         <el-radio-group v-model="form.timeType">

@@ -55,11 +55,11 @@
                             </span>
                         </div>
                     </el-col>
-                    <el-col v-if="clubDataInfo.timeType == 1" :span="12">
+                    <el-col v-if="clubDataInfo.timeType == 2" :span="12">
                         <div class="base-item">
                             <span class="base-item-label">时间范围</span>
                             <span class="base-item-content">
-                                {{ clubDataInfo.startTime }} -- {{ clubDataInfo.endTime }}
+                                {{ clubDataInfo.startTime }} 至 {{ clubDataInfo.endTime }}
                             </span>
                         </div>
                     </el-col>
