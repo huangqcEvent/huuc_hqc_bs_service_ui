@@ -91,3 +91,7 @@ export function updateSort(params: any, userType?: string) {
 export function getDetailById(id: string, userType?: string) {
     return request.get(`/user/club/getDetail/${id}`, { userType })
 }
+
+export function addResume(params:any){
+    return request.post("/user/news/save",params)
+}

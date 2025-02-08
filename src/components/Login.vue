@@ -40,8 +40,6 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { useWebSocketStore } from '@/stores/webSocket';
-import { onMounted } from 'vue';
-import { useData } from 'element-plus/es/components/table-v2/src/composables/use-data.mjs';
 
 // Data
 const loginForm = ref({
