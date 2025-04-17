@@ -7,7 +7,7 @@
             alt="Logo" />
         </el-col>
         <el-col :span="8" class="nav">
-          <el-menu mode="horizontal" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b"
+          <el-menu mode="horizontal" background-color="#0056b3" text-color="#fff" active-text-color="#ffd04b"
             :router="true">
             <el-menu-item index="/userIndex/home">首页</el-menu-item>
             <el-menu-item index="/userIndex/confessionWall">校园表白墙</el-menu-item>
@@ -154,7 +154,7 @@ onMounted(() => {
 
 /* 顶部横幅样式 */
 .banner {
-  background-color: #545c64;
+  background-color: #0056b3;
   padding: 10px 20px;
   display: flex;
   align-items: center;
@@ -197,12 +197,12 @@ onMounted(() => {
 }
 
 .nav .el-menu-item:hover {
-  background-color: #4a5058;
+  background-color: #0056b3;
   color: #ffd04b;
 }
 
 .nav .el-menu-item.is-active {
-  background-color: #4a5058;
+  background-color: #0056b3;
   color: #ffd04b;
 }
 
@@ -280,7 +280,7 @@ onMounted(() => {
 
 /* 弹出框样式 */
 .user-popover {
-  background-color: #545c64;
+  background-color: #0056b3;
   color: #fff;
   padding: 10px;
   border-radius: 5px;

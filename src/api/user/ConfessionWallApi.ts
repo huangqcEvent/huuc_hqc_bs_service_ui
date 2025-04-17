@@ -29,3 +29,8 @@ export function updateTopService(params: any, type: string) {
 export function chat(question: string) {
     return request.post('/user/ai/chat', {}, { params: { question } })
 }
+
+//协同过滤接口
+export function getRecommend() {
+    return request.get('/user/postInteraction/interaction')
+}

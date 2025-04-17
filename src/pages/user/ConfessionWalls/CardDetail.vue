@@ -76,7 +76,7 @@ const toggleComments = () => {
 };
 
 const goBack = () => {
-    router.push({ path: '/userIndex/confessionWall' });
+    router.back();
 }
 
 // 初始加载，获取详情数据

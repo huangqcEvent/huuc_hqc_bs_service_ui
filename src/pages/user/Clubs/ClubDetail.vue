@@ -30,6 +30,7 @@
                 <div class="image-container">
                     <Image v-for="(image, index) in images" :key="index" :src="image" :width="200" class="image" />
                 </div>
+                <font-awesome-icon :icon="['fas', 'thumbs-up']" beat />
             </div>
             <div v-else class="loading">
                 <div class="spinner"></div>
@@ -38,7 +39,7 @@
         </div>
         <ElButton v-if="clubDetail?.type == 1" @click="toSetMy" class="showButton">投递简历</ElButton>
         <ElButton @click="toggleComments" class="showButton">查看评论</ElButton>
-        <CommentComponent v-if="isShow" :postId="id" :isShow="isShow" :postType="1" @update:isShow="isShow = $event" />
+        <CommentComponent :postId="id" :isShow="isShow" :postType=3 @update:isShow="isShow = $event" />
         <el-dialog title="投递简历" width="50%" v-model="myFile" @close="handleClose">
             <el-form :model="form" :rules="rules" label-width="100px" class="confession-form" ref="formRef">
                 <el-form-item label="姓名" prop="name">
@@ -133,7 +134,7 @@ const toSetMy = () => {
 };
 
 const goBack = () => {
-    router.push({ path: '/userIndex/club' });
+    router.back();
 };
 
 const images = computed(() => {
