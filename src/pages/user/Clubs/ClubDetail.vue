@@ -2,8 +2,7 @@
     <div>
         <el-page-header @back="goBack">
             <template #content>
-                <span class="text-large font-600 mr-3">来自 {{ clubDetail?.clubName }} 的 {{ clubDetail?.typeName }}贴
-                </span>
+                <span class="text-large font-600 mr-3">来自 {{ clubDetail?.clubName }} 的 {{ clubDetail?.typeName }}贴</span>
             </template>
         </el-page-header>
         <div class="card-detail-container">
@@ -30,7 +29,16 @@
                 <div class="image-container">
                     <Image v-for="(image, index) in images" :key="index" :src="image" :width="200" class="image" />
                 </div>
-                <font-awesome-icon :icon="['fas', 'thumbs-up']" beat />
+                <div class="action-buttons">
+                    <el-button @click="handleLike" :type="isLiked ? 'success' : 'default'">
+                        <font-awesome-icon :icon="['fas', 'thumbs-up']" />
+                        点赞
+                    </el-button>
+                    <el-button @click="handleCollect" :type="isFavored ? 'warning' : 'default'">
+                        <font-awesome-icon :icon="['fas', 'star']" />
+                        收藏
+                    </el-button>
+                </div>
             </div>
             <div v-else class="loading">
                 <div class="spinner"></div>
@@ -84,13 +92,13 @@
         </el-dialog>
     </div>
 </template>
-
 <script setup lang="ts">
 import { ref, onMounted, computed, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { type Detail, getDetailById, addResume } from '@/api/user/Club';
+import { type Detail, getDetailById, addResume  } from '@/api/user/Club';
 import Image from '@/common/Image.vue';
 import { ElButton, ElMessage, type UploadProps, type UploadUserFile, type FormInstance } from 'element-plus';
+import {likedOrCollect} from "@/api/commonApi/commonApi";
 import CommentComponent from '@/common/CommentComponent.vue';
 import '@/styles/cardDetail.scss';
 import { upload } from '@/api/commonApi/commonApi'; // 引入上传函数
@@ -119,11 +127,14 @@ const options = [
         value: '5',
         label: '研究生',
     },
-]
+];
+
 const id = ref<string>('');
 const clubDetail = ref<Detail | null>(null);
 const isShow = ref(false);
 const myFile = ref(false);
+const isLiked = ref<number>(0);
+const isFavored = ref<number>(0);
 
 const toggleComments = () => {
     isShow.value = !isShow.value;
@@ -146,6 +157,8 @@ onMounted(() => {
     getDetailById(id.value)
         .then((response) => {
             clubDetail.value = response.data.data;
+          isLiked.value = clubDetail.value?.isLiked?clubDetail.value?.isLiked:0;
+          isFavored.value = clubDetail.value?.isFavored?clubDetail.value?.isFavored:0;
         })
         .catch((error) => {
             console.error('获取详情数据失败:', error);
@@ -234,12 +247,14 @@ const submitForm = async () => {
                 'grade': form.grade,
                 'fileAddress': form.file,
                 'clubNewsId': clubDetail.value?.id
-            }
+            };
             // 假设有一个提交表单的API
-            await addResume(formData)
+            await addResume(formData);
             handleClose();
         }
     } catch (error) {
+        console.error('上传失败:', error);
+        ElMessage.error('上传失败，请稍后再试。');
     }
 };
 
@@ -249,4 +264,41 @@ const handleClose = () => {
     formRef.value?.resetFields(); // 重置表单
     form.file = ''; // 重置文件字段
 };
+
+const handleLike = async () => {
+    if (!clubDetail.value) return;
+
+    try {
+        const response = await likedOrCollect({
+          id: clubDetail.value.id,
+          postType: 3,
+          status: isLiked.value===0 ? 1 : 0,
+          updateType: 1
+        });
+        if (response.status === 200) {
+          isLiked.value = isLiked.value===0 ? 1 : 0
+        }
+    } catch (error) {
+        ElMessage.error('点赞失败，请稍后再试。');
+    }
+};
+
+const handleCollect = async () => {
+    if (!clubDetail.value) return;
+
+    try {
+        const response = await likedOrCollect({
+          id: clubDetail.value.id,
+          postType: 3,
+          status: isFavored.value===0 ? 1 : 0,
+          updateType: 2
+        });
+        if (response.status === 200) {
+          isFavored.value = isFavored.value===0 ? 1 : 0
+        }
+    } catch (error) {
+        ElMessage.error('收藏失败，请稍后再试。');
+    }
+};
 </script>
+

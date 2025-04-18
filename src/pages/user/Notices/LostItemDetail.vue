@@ -22,6 +22,16 @@
                 <Image v-if="lostItemDetail.image2" :src="lostItemDetail.image2" :width="200" class="image" />
                 <Image v-if="lostItemDetail.image3" :src="lostItemDetail.image3" :width="200" class="image" />
             </div>
+          <div class="action-buttons">
+            <el-button @click="handleLike" :type="isLiked ? 'success' : 'default'">
+              <font-awesome-icon :icon="['fas', 'thumbs-up']" />
+              点赞
+            </el-button>
+            <el-button @click="handleCollect" :type="isFavored ? 'warning' : 'default'">
+              <font-awesome-icon :icon="['fas', 'star']" />
+              收藏
+            </el-button>
+          </div>
         </div>
         <div v-else class="loading">
             <div class="spinner"></div>
@@ -37,9 +47,10 @@ import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { getDetailById } from '@/api/user/LostItemApi';
 import Image from '@/common/Image.vue';
-import { ElButton } from 'element-plus';
+import {ElButton, ElMessage} from 'element-plus';
 import CommentComponent from '@/common/CommentComponent.vue';
 import '@/styles/cardDetail.scss'
+import {likedOrCollect} from "@/api/commonApi/commonApi";
 
 // 详情接口类型
 export interface LostItemDetail {
@@ -57,10 +68,15 @@ export interface LostItemDetail {
     image1: string // 图片1
     image2: string // 图片2
     image3: string // 图片3
+    isLiked: number;
+    isFavored:number;
 }
 
 const route = useRoute();
 const router = useRouter();
+
+const isLiked = ref<number>(0);
+const isFavored = ref<number>(0);
 
 // 详情id
 const id = ref<string>('');
@@ -84,6 +100,45 @@ onMounted(() => {
     id.value = route.params.id as string;
     getDetailById(id.value).then((response) => {
         lostItemDetail.value = response.data.data;
+      isLiked.value = lostItemDetail.value?.isLiked?lostItemDetail.value?.isLiked:0;
+      isFavored.value = lostItemDetail.value?.isFavored?lostItemDetail.value?.isFavored:0;
     })
 });
+
+
+const handleLike = async () => {
+  if (!lostItemDetail.value) return;
+
+  try {
+    const response = await likedOrCollect({
+      id: lostItemDetail.value.id,
+      postType: 2,
+      status: isLiked.value===0 ? 1 : 0,
+      updateType: 1
+    });
+    if (response.status === 200) {
+      isLiked.value = isLiked.value===0 ? 1 : 0
+    }
+  } catch (error) {
+    ElMessage.error('点赞失败，请稍后再试。');
+  }
+};
+
+const handleCollect = async () => {
+  if (!lostItemDetail.value) return;
+
+  try {
+    const response = await likedOrCollect({
+      id: lostItemDetail.value.id,
+      postType: 2,
+      status: isFavored.value===0 ? 1 : 0,
+      updateType: 2
+    });
+    if (response.status === 200) {
+      isFavored.value = isFavored.value===0 ? 1 : 0
+    }
+  } catch (error) {
+    ElMessage.error('收藏失败，请稍后再试。');
+  }
+};
 </script>

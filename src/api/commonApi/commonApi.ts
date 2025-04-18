@@ -33,3 +33,8 @@ export function upload(file: File) {
         }
     });
 }
+
+//点赞，收藏
+export function likedOrCollect(params: any){
+    return request.post("/user/postInteraction/likedOrCollect",params);
+}

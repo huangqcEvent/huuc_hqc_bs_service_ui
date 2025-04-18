@@ -68,6 +68,8 @@ export interface Detail {
     image1: string;
     image2: string;
     image3: string;
+    isLiked: number;
+    isFavored: number;
 }
 
 export function save(params: Club) {

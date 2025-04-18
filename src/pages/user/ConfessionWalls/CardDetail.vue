@@ -23,6 +23,16 @@
                 <Image v-if="confessionDetail.image2" :src="confessionDetail.image2" :width="200" class="image" />
                 <Image v-if="confessionDetail.image3" :src="confessionDetail.image3" :width="200" class="image" />
             </div>
+          <div class="action-buttons">
+            <el-button @click="handleLike" :type="isLiked ? 'success' : 'default'">
+              <font-awesome-icon :icon="['fas', 'thumbs-up']" />
+              点赞
+            </el-button>
+            <el-button @click="handleCollect" :type="isFavored ? 'warning' : 'default'">
+              <font-awesome-icon :icon="['fas', 'star']" />
+              收藏
+            </el-button>
+          </div>
         </div>
         <div v-else class="loading">
             <div class="spinner"></div>
@@ -38,9 +48,10 @@ import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { getDetailById } from '@/api/user/ConfessionWallApi';
 import Image from '@/common/Image.vue';
-import { ElButton } from 'element-plus';
+import {ElButton, ElMessage} from 'element-plus';
 import CommentComponent from '@/common/CommentComponent.vue';
 import '@/styles/cardDetail.scss'
+import {likedOrCollect} from "@/api/commonApi/commonApi";
 
 // 详情接口类型
 export interface ConfessionDetail {
@@ -57,10 +68,14 @@ export interface ConfessionDetail {
     userHead: string;
     userId: string;
     userName: string;
+    isLiked: number;
+    isFavored: number;
 }
 
 const route = useRoute();
 const router = useRouter();
+const isLiked = ref<number>(0);
+const isFavored = ref<number>(0);
 
 // 详情id
 const id = ref<string>('');
@@ -84,6 +99,43 @@ onMounted(() => {
     id.value = route.params.id as string;
     getDetailById(id.value).then((response) => {
         confessionDetail.value = response.data.data;
+      isLiked.value = confessionDetail.value?.isLiked?confessionDetail.value?.isLiked:0;
+      isFavored.value = confessionDetail.value?.isFavored?confessionDetail.value?.isFavored:0;
     })
 });
+
+const handleLike = async () => {
+  if (!confessionDetail.value) return;
+  try {
+    const response = await likedOrCollect({
+      id: id.value,
+      postType: 1,
+      status: isLiked.value===0 ? 1 : 0,
+      updateType: 1
+    });
+    if (response.status === 200) {
+      isLiked.value = isLiked.value===0 ? 1 : 0
+    }
+  } catch (error) {
+    ElMessage.error('点赞失败，请稍后再试。');
+  }
+};
+
+const handleCollect = async () => {
+  if (!confessionDetail.value) return;
+
+  try {
+    const response = await likedOrCollect({
+      id: id.value,
+      postType: 1,
+      status: isFavored.value===0 ? 1 : 0,
+      updateType: 2
+    });
+    if (response.status === 200) {
+      isFavored.value = isFavored.value===0 ? 1 : 0
+    }
+  } catch (error) {
+    ElMessage.error('收藏失败，请稍后再试。');
+  }
+};
 </script>
