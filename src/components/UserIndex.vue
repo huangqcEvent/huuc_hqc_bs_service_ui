@@ -49,6 +49,7 @@
               <el-popover placement="bottom" width="200" trigger="hover" popper-class="user-popover">
                 <div class="popover-content">
                   <h1>{{ userInfo.username }}</h1>
+                  <el-button type="danger" @click="goToMyIndex" class="myIndex-btn">我的主页</el-button>
                   <el-button type="danger" @click="logout1" class="logout-btn">退出登录</el-button>
                 </div>
                 <template #reference>
@@ -71,12 +72,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed, watch } from 'vue';
+import { ref, reactive, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { logout } from '@/api/commonApi/commonApi';
 import { confirm } from '@/utils/confirmUtils';
 import { useWebSocketStore } from '@/stores/webSocket';
 import GuideQuestions from '@/pages/user/ai/GuideQuestions.vue';
+import {Message} from "@element-plus/icons-vue";
 
 const router = useRouter();
 const webSocketStore = useWebSocketStore();
@@ -132,6 +134,9 @@ const getmsg = () => {
 const goToPost = () => {
   router.push('/userIndex/post');
 };
+const goToMyIndex = () => {
+  router.push('/userIndex/myIndex')
+}
 
 // 页面加载时初始化
 onMounted(() => {
@@ -290,25 +295,23 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 .popover-content h1 {
-  margin: 0;
   font-size: 16px;
-  margin-bottom: 10px;
+  margin: 0 0 10px;
 }
 
 .popover-content .logout-btn {
   color: #fff;
   font-size: 14px;
-  transition: background-color 0.3s ease, color 0.3s ease;
   width: 100%;
-  text-align: center;
 }
-
-.popover-content .logout-btn:hover {
-  background-color: #f56c6c;
+.popover-content .myIndex-btn {
   color: #fff;
+  font-size: 14px;
+  width: 100%;
 }
 
 /* 消息弹出框样式 */
@@ -350,13 +353,13 @@ onMounted(() => {
 
 /* 内容容器样式 */
 .content {
-  padding: 0px;
+  padding: 0;
   min-height: 100%;
 }
 
 /* 滚动条样式 */
 .scrollbar {
   padding: 0;
-  height: calc(100vh - 60px); 
+  height: calc(100vh - 60px);
 }
 </style>

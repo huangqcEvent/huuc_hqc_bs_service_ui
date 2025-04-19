@@ -34,3 +34,8 @@ export function chat(question: string) {
 export function getRecommend() {
     return request.get('/user/postInteraction/interaction')
 }
+
+//词云数据
+export function getWordCloud() {
+    return request.get('/user/myIndex/getAllPost')
+}
