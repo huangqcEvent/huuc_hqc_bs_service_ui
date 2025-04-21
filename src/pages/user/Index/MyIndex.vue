@@ -3,6 +3,7 @@
   <div class="bestsellers-container">
     <ChartWordCloud :options="chartOptions" @word-click="handleWordClick" />
   </div>
+  <IndexList/>
 </template>
 
 <script setup lang="ts">
@@ -10,7 +11,7 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import ChartWordCloud from '@/common/ChartWordCloud.vue';
 import { getWordCloud } from '@/api/user/ConfessionWallApi';
-
+import IndexList from "@/pages/user/Index/IndexList.vue";
 interface WordCloudItem {
   name: string;
   value: number;

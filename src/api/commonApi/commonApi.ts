@@ -38,3 +38,20 @@ export function upload(file: File) {
 export function likedOrCollect(params: any){
     return request.post("/user/postInteraction/likedOrCollect",params);
 }
+
+//我的帖子
+export function myPostPage(params: any){
+    return request.post("/user/myIndex/myPostPage",params);
+}
+//
+export function myLiked(params: any){
+    return request.post("/user/myIndex/myLiked",params);
+}
+//
+export function myFavored(params: any){
+    return request.post("/user/myIndex/myFavored",params);
+}
+//
+export function myComment(params: any){
+    return request.post("/user/myIndex/myComment",params);
+}
